@@ -1,21 +1,24 @@
 <idea-plugin>
-    <id>com.adacore.Ada-IntelliJ</id>
-    <name>Ada support for IntelliJ IDEs</name>
-    <vendor email="soufi@adacore.com" url="https://www.adacore.com">YourCompany</vendor>
+	<id>com.adacore.Ada-IntelliJ</id>
+	<name>Ada support for IntelliJ IDEs</name>
+	<vendor email="soufi@adacore.com" url="https://www.adacore.com">YourCompany</vendor>
 	
 	<description><![CDATA[
 		IntelliJ plugin adding Ada support with functionalities ranging from syntax highlighting to building.
 	]]></description>
-
-    <!-- Allows compatibility with all IntelliJ IDEs -->
-    <!-- See https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
-    <depends>com.intellij.modules.lang</depends>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
-    </extensions>
-
-    <actions>
-        <!-- Add your actions here -->
-    </actions>
+	
+	<!-- Allows compatibility with all IntelliJ IDEs -->
+	<!-- See https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
+	<depends>com.intellij.modules.lang</depends>
+	
+	<extensions defaultExtensionNs="com.intellij">
+		<!-- Ada file type factory -->
+		<fileTypeFactory implementation="com.adacore.adaintellij.file.AdaFileTypeFactory"/>
+		<!-- Ada syntax highligher factory -->
+		<lang.syntaxHighlighterFactory language="AdaLanguage" implementationClass="com.adacore.adaintellij.lexanalysis.AdaSyntaxHighlighterFactory"/>
+	</extensions>
+	
+	<actions>
+		<!-- Add your actions here -->
+	</actions>
 </idea-plugin>
