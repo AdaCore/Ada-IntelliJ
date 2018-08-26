@@ -3,3 +3,7 @@
 
 # Gradle Wrapper downloaded files
 .gradle
+
+# Build files & generated binaries
+build
+out
