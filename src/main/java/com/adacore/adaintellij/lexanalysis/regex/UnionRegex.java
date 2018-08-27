@@ -1,8 +1,8 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Regex matching the union of two subregexes.
@@ -12,13 +12,13 @@ public final class UnionRegex implements OORegex {
 	/**
 	 * The union subregexes.
 	 */
-	private OORegex firstRegex;
-	private OORegex secondRegex;
+	public final OORegex FIRST_REGEX;
+	public final OORegex SECOND_REGEX;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	private final int PRIORITY;
+	public final int PRIORITY;
 	
 	/**
 	 * Constructs a new union regex given two subregexes.
@@ -39,9 +39,9 @@ public final class UnionRegex implements OORegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public UnionRegex(OORegex firstRegex, OORegex secondRegex, int priority) {
-		this.firstRegex  = firstRegex;
-		this.secondRegex = secondRegex;
-		this.PRIORITY    = priority;
+		FIRST_REGEX  = firstRegex;
+		SECOND_REGEX = secondRegex;
+		PRIORITY     = priority;
 	}
 	
 	/**
@@ -160,7 +160,7 @@ public final class UnionRegex implements OORegex {
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#nullable()
 	 */
 	@Override
-	public boolean nullable() { return firstRegex.nullable() || secondRegex.nullable(); }
+	public boolean nullable() { return FIRST_REGEX.nullable() || SECOND_REGEX.nullable(); }
 	
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
@@ -174,8 +174,8 @@ public final class UnionRegex implements OORegex {
 	@Override
 	public OORegex advanced(char character) {
 		
-		OORegex firstRegexAdvanced  = firstRegex.advanced(character);
-		OORegex secondRegexAdvanced = secondRegex.advanced(character);
+		OORegex firstRegexAdvanced  = FIRST_REGEX.advanced(character);
+		OORegex secondRegexAdvanced = SECOND_REGEX.advanced(character);
 		
 		if (firstRegexAdvanced == null && secondRegexAdvanced == null) {
 			
@@ -202,7 +202,7 @@ public final class UnionRegex implements OORegex {
 	 */
 	@Override
 	public OORegex clone() {
-		return new UnionRegex(firstRegex.clone(), secondRegex.clone(), PRIORITY);
+		return new UnionRegex(FIRST_REGEX.clone(), SECOND_REGEX.clone(), PRIORITY);
 	}
 	
 }

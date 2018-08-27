@@ -9,12 +9,12 @@ public class NotRegex implements OORegex {
 	/**
 	 * The negated subregex.
 	 */
-	private OORegex regex;
+	public final OORegex REGEX;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	private final int PRIORITY;
+	public final int PRIORITY;
 	
 	/**
 	 * Constructs a new not regex given a subregex.
@@ -30,15 +30,15 @@ public class NotRegex implements OORegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public NotRegex(OORegex regex, int priority) {
-		this.regex    = regex;
-		this.PRIORITY = priority;
+		REGEX    = regex;
+		PRIORITY = priority;
 	}
 	
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#nullable()
 	 */
 	@Override
-	public boolean nullable() { return !regex.nullable(); }
+	public boolean nullable() { return !REGEX.nullable(); }
 	
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
@@ -52,7 +52,7 @@ public class NotRegex implements OORegex {
 	@Override
 	public OORegex advanced(char character) {
 		
-		OORegex advancedRegex = regex.advanced(character);
+		OORegex advancedRegex = REGEX.advanced(character);
 		
 		return advancedRegex == null ? new UnitRegex("", PRIORITY) : null;
 		
@@ -62,6 +62,6 @@ public class NotRegex implements OORegex {
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
 	@Override
-	public OORegex clone() { return new NotRegex(regex.clone(), PRIORITY); }
+	public OORegex clone() { return new NotRegex(REGEX.clone(), PRIORITY); }
 	
 }

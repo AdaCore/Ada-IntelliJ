@@ -11,13 +11,13 @@ public class IntersectionRegex implements OORegex {
 	/**
 	 * The intersection subregexes.
 	 */
-	private OORegex firstRegex;
-	private OORegex secondRegex;
+	public final OORegex FIRST_REGEX;
+	public final OORegex SECOND_REGEX;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	private final int PRIORITY;
+	public final int PRIORITY;
 	
 	/**
 	 * Constructs a new intersection regex given two subregexes.
@@ -38,9 +38,9 @@ public class IntersectionRegex implements OORegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public IntersectionRegex(OORegex firstRegex, OORegex secondRegex, int priority) {
-		this.firstRegex  = firstRegex;
-		this.secondRegex = secondRegex;
-		this.PRIORITY    = priority;
+		FIRST_REGEX  = firstRegex;
+		SECOND_REGEX = secondRegex;
+		PRIORITY     = priority;
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public class IntersectionRegex implements OORegex {
 	 */
 	@Override
 	public boolean nullable() {
-		return firstRegex.nullable() && secondRegex.nullable();
+		return FIRST_REGEX.nullable() && SECOND_REGEX.nullable();
 	}
 	
 	/**
@@ -63,8 +63,8 @@ public class IntersectionRegex implements OORegex {
 	@Override
 	public OORegex advanced(char character) {
 		
-		OORegex firstRegexAdvanced  = firstRegex.advanced(character);
-		OORegex secondRegexAdvanced = secondRegex.advanced(character);
+		OORegex firstRegexAdvanced  = FIRST_REGEX.advanced(character);
+		OORegex secondRegexAdvanced = SECOND_REGEX.advanced(character);
 		
 		return firstRegexAdvanced != null && secondRegexAdvanced != null ?
 			new IntersectionRegex(firstRegexAdvanced, secondRegexAdvanced, PRIORITY) : null;
@@ -76,7 +76,7 @@ public class IntersectionRegex implements OORegex {
 	 */
 	@Override
 	public OORegex clone() {
-		return new IntersectionRegex(firstRegex.clone(), secondRegex.clone(), PRIORITY);
+		return new IntersectionRegex(FIRST_REGEX.clone(), SECOND_REGEX.clone(), PRIORITY);
 	}
 	
 }

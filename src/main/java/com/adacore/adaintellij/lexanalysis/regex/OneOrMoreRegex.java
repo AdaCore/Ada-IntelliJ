@@ -9,12 +9,12 @@ public class OneOrMoreRegex implements OORegex {
 	/**
 	 * The subregex to be matched one or more times.
 	 */
-	private OORegex regex;
+	public final OORegex REGEX;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	private final int PRIORITY;
+	public final int PRIORITY;
 	
 	/**
 	 * Constructs a new one or more regex given a subregex.
@@ -31,15 +31,15 @@ public class OneOrMoreRegex implements OORegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public OneOrMoreRegex(OORegex regex, int priority) {
-		this.regex    = regex;
-		this.PRIORITY = priority;
+		REGEX    = regex;
+		PRIORITY = priority;
 	}
 	
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#nullable()
 	 */
 	@Override
-	public boolean nullable() { return regex.nullable(); }
+	public boolean nullable() { return REGEX.nullable(); }
 	
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
@@ -53,12 +53,12 @@ public class OneOrMoreRegex implements OORegex {
 	@Override
 	public OORegex advanced(char character) {
 		
-		OORegex advancedRegex = regex.advanced(character);
+		OORegex advancedRegex = REGEX.advanced(character);
 		
 		return advancedRegex == null ? null :
 			new ConcatRegex(
 				advancedRegex,
-				new ZeroOrMoreRegex(regex.clone(), PRIORITY),
+				new ZeroOrMoreRegex(REGEX.clone(), PRIORITY),
 				PRIORITY
 			);
 		
@@ -68,6 +68,6 @@ public class OneOrMoreRegex implements OORegex {
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
 	@Override
-	public OORegex clone() { return new OneOrMoreRegex(regex.clone(), PRIORITY); }
+	public OORegex clone() { return new OneOrMoreRegex(REGEX.clone(), PRIORITY); }
 	
 }

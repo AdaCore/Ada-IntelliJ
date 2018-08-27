@@ -1,10 +1,10 @@
 package com.adacore.adaintellij.lexanalysis;
 
+import java.util.*;
+
 import com.intellij.lexer.LexerBase;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.*;
-
-import java.util.*;
 
 import com.adacore.adaintellij.lexanalysis.regex.*;
 

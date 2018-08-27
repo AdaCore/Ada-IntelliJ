@@ -1,7 +1,8 @@
 package com.adacore.adaintellij.file;
 
-import com.adacore.adaintellij.AdaLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
+
+import com.adacore.adaintellij.AdaLanguage;
 
 /**
  * Any file type specific to the Ada language.

@@ -10,12 +10,12 @@ public final class UnitRegex implements OORegex {
 	/**
 	 * The sequence of characters matched by this regex.
 	 */
-	private String sequence;
+	public final String SEQUENCE;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	private final int PRIORITY;
+	public final int PRIORITY;
 	
 	/**
 	 * Constructs a new unit regex given a sequence of characters.
@@ -32,15 +32,15 @@ public final class UnitRegex implements OORegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public UnitRegex(String sequence, int priority) {
-		this.sequence = sequence;
-		this.PRIORITY = priority;
+		SEQUENCE = sequence;
+		PRIORITY = priority;
 	}
 	
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#nullable()
 	 */
 	@Override
-	public boolean nullable() { return sequence.length() == 0; }
+	public boolean nullable() { return SEQUENCE.length() == 0; }
 	
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
@@ -53,14 +53,14 @@ public final class UnitRegex implements OORegex {
 	 */
 	@Override
 	public OORegex advanced(char character) {
-		return nullable() || sequence.charAt(0) != character ?
-			null : new UnitRegex(sequence.substring(1), PRIORITY);
+		return nullable() || SEQUENCE.charAt(0) != character ?
+			null : new UnitRegex(SEQUENCE.substring(1), PRIORITY);
 	}
 	
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
 	@Override
-	public OORegex clone() { return new UnitRegex(sequence, PRIORITY); }
+	public OORegex clone() { return new UnitRegex(SEQUENCE, PRIORITY); }
 	
 }

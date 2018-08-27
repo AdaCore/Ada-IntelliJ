@@ -1,8 +1,8 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Regex matching the concatenation of two subregexes.
@@ -12,13 +12,13 @@ public final class ConcatRegex implements OORegex {
 	/**
 	 * The concatenation subregexes.
 	 */
-	private OORegex firstRegex;
-	private OORegex secondRegex;
+	public final OORegex FIRST_REGEX;
+	public final OORegex SECOND_REGEX;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	private final int PRIORITY;
+	public final int PRIORITY;
 	
 	/**
 	 * Constructs a new concatenation regex given two subregexes.
@@ -39,9 +39,9 @@ public final class ConcatRegex implements OORegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public ConcatRegex(OORegex firstRegex, OORegex secondRegex, int priority) {
-		this.firstRegex  = firstRegex;
-		this.secondRegex = secondRegex;
-		this.PRIORITY    = priority;
+		FIRST_REGEX  = firstRegex;
+		SECOND_REGEX = secondRegex;
+		PRIORITY     = priority;
 	}
 	
 	/**
@@ -113,7 +113,7 @@ public final class ConcatRegex implements OORegex {
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#nullable()
 	 */
 	@Override
-	public boolean nullable() { return firstRegex.nullable() && secondRegex.nullable(); }
+	public boolean nullable() { return FIRST_REGEX.nullable() && SECOND_REGEX.nullable(); }
 	
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
@@ -127,11 +127,11 @@ public final class ConcatRegex implements OORegex {
 	@Override
 	public OORegex advanced(char character) {
 		
-		OORegex firstRegexAdvanced  = firstRegex.advanced(character);
+		OORegex firstRegexAdvanced  = FIRST_REGEX.advanced(character);
 		
-		if (firstRegex.nullable()) {
+		if (FIRST_REGEX.nullable()) {
 			
-			OORegex secondRegexAdvanced = secondRegex.advanced(character);
+			OORegex secondRegexAdvanced = SECOND_REGEX.advanced(character);
 			
 			if (firstRegexAdvanced == null && secondRegexAdvanced == null) {
 				
@@ -143,12 +143,12 @@ public final class ConcatRegex implements OORegex {
 			
 			} else if (secondRegexAdvanced == null) {
 			
-				return new ConcatRegex(firstRegexAdvanced, secondRegex.clone(), PRIORITY);
+				return new ConcatRegex(firstRegexAdvanced, SECOND_REGEX.clone(), PRIORITY);
 			
 			} else {
 			
 				return new UnionRegex(
-					new ConcatRegex(firstRegexAdvanced, secondRegex.clone(), PRIORITY),
+					new ConcatRegex(firstRegexAdvanced, SECOND_REGEX.clone(), PRIORITY),
 					secondRegexAdvanced,
 					PRIORITY
 				);
@@ -163,7 +163,7 @@ public final class ConcatRegex implements OORegex {
 				
 			} else {
 				
-				return new ConcatRegex(firstRegexAdvanced, secondRegex.clone(), PRIORITY);
+				return new ConcatRegex(firstRegexAdvanced, SECOND_REGEX.clone(), PRIORITY);
 				
 			}
 		}
@@ -175,7 +175,7 @@ public final class ConcatRegex implements OORegex {
 	 */
 	@Override
 	public OORegex clone() {
-		return new ConcatRegex(firstRegex.clone(), secondRegex.clone(), PRIORITY);
+		return new ConcatRegex(FIRST_REGEX.clone(), SECOND_REGEX.clone(), PRIORITY);
 	}
 	
 }

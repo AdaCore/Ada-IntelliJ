@@ -14,18 +14,18 @@ public class GeneralCategoryRegex implements OORegex {
 	 * The internal pattern used to match a character
 	 * based on its general category.
 	 */
-	private Pattern pattern;
+	public final Pattern PATTERN;
 	
 	/**
 	 * The pattern string used to compile the Java pattern.
 	 * Stored for cloning purposes.
 	 */
-	private final String GENERAL_CATEGORY;
+	public final String GENERAL_CATEGORY;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	private final int PRIORITY;
+	public final int PRIORITY;
 	
 	/**
 	 * Constructs a new general category regex given a general category
@@ -44,9 +44,9 @@ public class GeneralCategoryRegex implements OORegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public GeneralCategoryRegex(String generalCategory, int priority) {
-		this.pattern          = Pattern.compile(String.format("\\p{%s}", generalCategory));
-		this.GENERAL_CATEGORY = generalCategory;
-		this.PRIORITY         = priority;
+		PATTERN          = Pattern.compile(String.format("\\p{%s}", generalCategory));
+		GENERAL_CATEGORY = generalCategory;
+		PRIORITY         = priority;
 	}
 	
 	/**
@@ -67,7 +67,7 @@ public class GeneralCategoryRegex implements OORegex {
 	@Override
 	public OORegex advanced(char character) {
 		
-		return pattern.matcher(String.valueOf(character)).find() ?
+		return PATTERN.matcher(String.valueOf(character)).find() ?
 			new UnitRegex("") : null;
 		
 	}

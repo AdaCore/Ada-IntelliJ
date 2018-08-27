@@ -9,12 +9,12 @@ public final class ZeroOrMoreRegex implements OORegex {
 	/**
 	 * The subregex to be matched zero or more times.
 	 */
-	private OORegex regex;
+	public final OORegex REGEX;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	private final int PRIORITY;
+	public final int PRIORITY;
 	
 	/**
 	 * Constructs a new zero or more regex given a subregex.
@@ -31,8 +31,8 @@ public final class ZeroOrMoreRegex implements OORegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public ZeroOrMoreRegex(OORegex regex, int priority) {
-		this.regex    = regex;
-		this.PRIORITY = priority;
+		REGEX    = regex;
+		PRIORITY = priority;
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public final class ZeroOrMoreRegex implements OORegex {
 	@Override
 	public OORegex advanced(char character) {
 		
-		OORegex advancedRegex = regex.advanced(character);
+		OORegex advancedRegex = REGEX.advanced(character);
 		
 		return advancedRegex == null ? null :
 			new ConcatRegex(advancedRegex, clone(), PRIORITY);
@@ -64,6 +64,6 @@ public final class ZeroOrMoreRegex implements OORegex {
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
 	@Override
-	public OORegex clone() { return new ZeroOrMoreRegex(regex.clone(), PRIORITY); }
+	public OORegex clone() { return new ZeroOrMoreRegex(REGEX.clone(), PRIORITY); }
 	
 }

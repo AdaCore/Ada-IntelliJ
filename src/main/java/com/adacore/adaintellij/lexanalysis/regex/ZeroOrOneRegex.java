@@ -9,12 +9,12 @@ public class ZeroOrOneRegex implements OORegex {
 	/**
 	 * The subregex to be matched zero or one times.
 	 */
-	private OORegex regex;
+	public final OORegex REGEX;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	private final int PRIORITY;
+	public final int PRIORITY;
 	
 	/**
 	 * Constructs a new zero or one regex given a subregex.
@@ -31,8 +31,8 @@ public class ZeroOrOneRegex implements OORegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public ZeroOrOneRegex(OORegex regex, int priority) {
-		this.regex    = regex;
-		this.PRIORITY = priority;
+		REGEX    = regex;
+		PRIORITY = priority;
 	}
 	
 	/**
@@ -51,12 +51,12 @@ public class ZeroOrOneRegex implements OORegex {
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
 	 */
 	@Override
-	public OORegex advanced(char character) { return regex.advanced(character); }
+	public OORegex advanced(char character) { return REGEX.advanced(character); }
 	
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
 	@Override
-	public OORegex clone() { return new ZeroOrOneRegex(regex.clone(), PRIORITY); }
+	public OORegex clone() { return new ZeroOrOneRegex(REGEX.clone(), PRIORITY); }
 	
 }

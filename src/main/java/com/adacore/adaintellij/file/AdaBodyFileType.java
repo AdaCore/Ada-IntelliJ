@@ -1,9 +1,9 @@
 package com.adacore.adaintellij.file;
 
+import javax.swing.*;
+
 import com.intellij.openapi.util.IconLoader;
 import org.jetbrains.annotations.*;
-
-import javax.swing.*;
 
 /**
  * Internal representation of the Ada body file type.
