@@ -13,9 +13,13 @@ import com.adacore.adaintellij.lexanalysis.regex.*;
  *
  * TODO: Consider normalizing text?!
  */
-public class AdaLexer extends LexerBase {
+public final class AdaLexer extends LexerBase {
 	
-	// Constants
+	/*
+		Constants
+	*/
+	
+	// Whitespaces
 	
 	/**
 	 * Regex defining a sequence of whitespaces in Ada.
@@ -23,7 +27,7 @@ public class AdaLexer extends LexerBase {
 	 * TODO: Figure out how exactly to define the whitespaces regex
 	 *       (the spec is not clear/explicit enough about whitespaces)
 	 */
-	private static final OORegex WHITE_SPACES_REGEX =
+	private static final OORegex WHITESPACES_REGEX =
 		new OneOrMoreRegex(
 			UnionRegex.fromRegexes(
 				new UnitRegex("\n"),
@@ -32,6 +36,8 @@ public class AdaLexer extends LexerBase {
 				new UnitRegex(" ")
 			)
 		);
+	
+	// Delimiters
 	
 	/**
 	 * Unit regexes for matching Ada single delimiters.
@@ -403,6 +409,8 @@ public class AdaLexer extends LexerBase {
 	 */
 	private static final OORegex PRAGMA_REGEX = null;
 	
+	// Keywords
+	
 	/**
 	 * Unit regexes for matching Ada keywords.
 	 */
@@ -498,6 +506,8 @@ public class AdaLexer extends LexerBase {
 	
 	private static final OORegex XOR_KEYWORD_REGEX          = new UnitRegex("xor"         , 1);
 	
+	// Lexer data
+	
 	/**
 	 * A map associating root regexes with the token types
 	 * they represent.
@@ -509,7 +519,9 @@ public class AdaLexer extends LexerBase {
 	 */
 	private static final Set<OORegex> ROOT_REGEXES;
 	
-	// Static Initializer
+	/*
+		Static Initializer
+	*/
 	
 	static {
 		
@@ -517,7 +529,7 @@ public class AdaLexer extends LexerBase {
 		
 		REGEX_TOKEN_TYPES = new HashMap<>();
 		
-		REGEX_TOKEN_TYPES.put(WHITE_SPACES_REGEX        , AdaTokenTypes.WHITE_SPACES);
+		REGEX_TOKEN_TYPES.put(WHITESPACES_REGEX         , AdaTokenTypes.WHITESPACES);
 		
 		REGEX_TOKEN_TYPES.put(AMPERSAND_REGEX           , AdaTokenTypes.AMPERSAND);
 		REGEX_TOKEN_TYPES.put(APOSTROPHE_REGEX          , AdaTokenTypes.APOSTROPHE);
@@ -653,7 +665,9 @@ public class AdaLexer extends LexerBase {
 		
 	}
 	
-	// Fields
+	/*
+		Fields
+	*/
 	
 	/**
 	 * The text to be analysed.
@@ -690,14 +704,18 @@ public class AdaLexer extends LexerBase {
 	 */
 	private int tokenEnd;
 	
-	// Constructor
+	/*
+		Constructor
+	*/
 	
 	/**
 	 * Constructs a new Ada Lexer.
 	 */
 	protected AdaLexer() {}
 	
-	// Methods
+	/*
+		Methods
+	*/
 	
 	/**
 	 * @see com.intellij.lexer.Lexer#start(CharSequence, int, int, int)

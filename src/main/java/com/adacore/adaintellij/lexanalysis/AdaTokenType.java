@@ -10,7 +10,7 @@ import com.adacore.adaintellij.AdaLanguage;
 /**
  * Ada 2012 token type.
  */
-public class AdaTokenType extends IElementType {
+public final class AdaTokenType extends IElementType {
 	
 	/**
 	 * Constructs a new Ada token type.

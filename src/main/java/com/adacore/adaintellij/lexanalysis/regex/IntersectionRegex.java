@@ -1,12 +1,14 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
+import org.jetbrains.annotations.*;
+
 /**
  * Regex matching the intersection of two subregexes.
  * In other words, a regex of this class will advance by a character
  * only if the two intersection subregexes can both advance by that
  * character.
  */
-public class IntersectionRegex implements OORegex {
+public final class IntersectionRegex implements OORegex {
 	
 	/**
 	 * The intersection subregexes.
@@ -25,7 +27,7 @@ public class IntersectionRegex implements OORegex {
 	 * @param firstRegex The first subregex.
 	 * @param secondRegex The second subregex.
 	 */
-	public IntersectionRegex(OORegex firstRegex, OORegex secondRegex) {
+	public IntersectionRegex(@NotNull OORegex firstRegex, @NotNull OORegex secondRegex) {
 		this(firstRegex, secondRegex, 0);
 	}
 	
@@ -37,7 +39,7 @@ public class IntersectionRegex implements OORegex {
 	 * @param secondRegex The second subregex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public IntersectionRegex(OORegex firstRegex, OORegex secondRegex, int priority) {
+	public IntersectionRegex(@NotNull OORegex firstRegex, @NotNull OORegex secondRegex, int priority) {
 		FIRST_REGEX  = firstRegex;
 		SECOND_REGEX = secondRegex;
 		PRIORITY     = priority;
@@ -47,8 +49,19 @@ public class IntersectionRegex implements OORegex {
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#nullable()
 	 */
 	@Override
-	public boolean nullable() {
-		return FIRST_REGEX.nullable() && SECOND_REGEX.nullable();
+	public boolean nullable() { return FIRST_REGEX.nullable() && SECOND_REGEX.nullable(); }
+	
+	/**
+	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 */
+	@Override
+	public int charactersMatched() {
+		
+		int firstRegexCharacters  = FIRST_REGEX.charactersMatched();
+		int secondRegexCharacters = SECOND_REGEX.charactersMatched();
+		
+		return firstRegexCharacters != secondRegexCharacters ? -1 : firstRegexCharacters;
+		
 	}
 	
 	/**
@@ -60,6 +73,7 @@ public class IntersectionRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
 	 */
+	@Nullable
 	@Override
 	public OORegex advanced(char character) {
 		
@@ -74,6 +88,7 @@ public class IntersectionRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
+	@NotNull
 	@Override
 	public OORegex clone() {
 		return new IntersectionRegex(FIRST_REGEX.clone(), SECOND_REGEX.clone(), PRIORITY);

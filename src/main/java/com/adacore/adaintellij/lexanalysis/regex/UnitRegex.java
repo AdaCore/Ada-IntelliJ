@@ -1,5 +1,7 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
+import org.jetbrains.annotations.*;
+
 /**
  * Unit regex matching a specific sequence of characters,
  * unlike other types of regexes that are defined recursively
@@ -22,7 +24,7 @@ public final class UnitRegex implements OORegex {
 	 *
 	 * @param sequence The sequence of characters to match.
 	 */
-	public UnitRegex(String sequence) { this(sequence, 0); }
+	public UnitRegex(@NotNull String sequence) { this(sequence, 0); }
 	
 	/**
 	 * Constructs a new unit regex given a sequence of characters and
@@ -31,7 +33,7 @@ public final class UnitRegex implements OORegex {
 	 * @param sequence The sequence of characters to match.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public UnitRegex(String sequence, int priority) {
+	public UnitRegex(@NotNull String sequence, int priority) {
 		SEQUENCE = sequence;
 		PRIORITY = priority;
 	}
@@ -43,6 +45,12 @@ public final class UnitRegex implements OORegex {
 	public boolean nullable() { return SEQUENCE.length() == 0; }
 	
 	/**
+	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 */
+	@Override
+	public int charactersMatched() { return SEQUENCE.length(); }
+	
+	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
 	 */
 	@Override
@@ -51,15 +59,17 @@ public final class UnitRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
 	 */
+	@Nullable
 	@Override
 	public OORegex advanced(char character) {
-		return nullable() || SEQUENCE.charAt(0) != character ?
+		return SEQUENCE.length() == 0 || SEQUENCE.charAt(0) != character ?
 			null : new UnitRegex(SEQUENCE.substring(1), PRIORITY);
 	}
 	
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
+	@NotNull
 	@Override
 	public OORegex clone() { return new UnitRegex(SEQUENCE, PRIORITY); }
 	

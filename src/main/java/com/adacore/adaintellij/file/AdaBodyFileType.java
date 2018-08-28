@@ -8,7 +8,7 @@ import org.jetbrains.annotations.*;
 /**
  * Internal representation of the Ada body file type.
  */
-public class AdaBodyFileType extends AdaFileType {
+public final class AdaBodyFileType extends AdaFileType {
 	
 	/**
 	 * Unique instance representing the Ada body file type.

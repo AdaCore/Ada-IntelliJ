@@ -2,7 +2,7 @@ package com.adacore.adaintellij.lexanalysis.regex;
 
 import java.util.*;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.*;
 
 /**
  * Regex matching the union of two subregexes.
@@ -26,7 +26,7 @@ public final class UnionRegex implements OORegex {
 	 * @param firstRegex The first subregex.
 	 * @param secondRegex The second subregex.
 	 */
-	public UnionRegex(OORegex firstRegex, OORegex secondRegex) {
+	public UnionRegex(@NotNull OORegex firstRegex, @NotNull OORegex secondRegex) {
 		this(firstRegex, secondRegex, 0);
 	}
 	
@@ -38,7 +38,7 @@ public final class UnionRegex implements OORegex {
 	 * @param secondRegex The second subregex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public UnionRegex(OORegex firstRegex, OORegex secondRegex, int priority) {
+	public UnionRegex(@NotNull OORegex firstRegex, @NotNull OORegex secondRegex, int priority) {
 		FIRST_REGEX  = firstRegex;
 		SECOND_REGEX = secondRegex;
 		PRIORITY     = priority;
@@ -132,6 +132,7 @@ public final class UnionRegex implements OORegex {
 	 * @param toChar The upper bound character of the range.
 	 * @param priority The priority to assign to the regexes in the hierarchy.
 	 * @return A hierarchy of union regexes matching a range of characters.
+	 * @throws IllegalArgumentException If fromChar is greater than toChar.
 	 */
 	public static OORegex fromRange(char fromChar, char toChar, int priority) {
 		
@@ -163,6 +164,19 @@ public final class UnionRegex implements OORegex {
 	public boolean nullable() { return FIRST_REGEX.nullable() || SECOND_REGEX.nullable(); }
 	
 	/**
+	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 */
+	@Override
+	public int charactersMatched() {
+		
+		int firstRegexCharacters  = FIRST_REGEX.charactersMatched();
+		int secondRegexCharacters = SECOND_REGEX.charactersMatched();
+		
+		return firstRegexCharacters != secondRegexCharacters ? -1 : firstRegexCharacters;
+		
+	}
+	
+	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
 	 */
 	@Override
@@ -171,6 +185,7 @@ public final class UnionRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
 	 */
+	@Nullable
 	@Override
 	public OORegex advanced(char character) {
 		
@@ -200,6 +215,7 @@ public final class UnionRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
+	@NotNull
 	@Override
 	public OORegex clone() {
 		return new UnionRegex(FIRST_REGEX.clone(), SECOND_REGEX.clone(), PRIORITY);

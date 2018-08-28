@@ -2,7 +2,7 @@ package com.adacore.adaintellij.lexanalysis.regex;
 
 import java.util.*;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.*;
 
 /**
  * Regex matching the concatenation of two subregexes.
@@ -26,7 +26,7 @@ public final class ConcatRegex implements OORegex {
 	 * @param firstRegex The first subregex.
 	 * @param secondRegex The second subregex.
 	 */
-	public ConcatRegex(OORegex firstRegex, OORegex secondRegex) {
+	public ConcatRegex(@NotNull OORegex firstRegex, @NotNull OORegex secondRegex) {
 		this(firstRegex, secondRegex, 0);
 	}
 	
@@ -38,7 +38,7 @@ public final class ConcatRegex implements OORegex {
 	 * @param secondRegex The second subregex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public ConcatRegex(OORegex firstRegex, OORegex secondRegex, int priority) {
+	public ConcatRegex(@NotNull OORegex firstRegex, @NotNull OORegex secondRegex, int priority) {
 		FIRST_REGEX  = firstRegex;
 		SECOND_REGEX = secondRegex;
 		PRIORITY     = priority;
@@ -116,6 +116,20 @@ public final class ConcatRegex implements OORegex {
 	public boolean nullable() { return FIRST_REGEX.nullable() && SECOND_REGEX.nullable(); }
 	
 	/**
+	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 */
+	@Override
+	public int charactersMatched() {
+		
+		int firstRegexCharacters  = FIRST_REGEX.charactersMatched();
+		int secondRegexCharacters = SECOND_REGEX.charactersMatched();
+		
+		return firstRegexCharacters == -1 || secondRegexCharacters == -1 ? -1 :
+			firstRegexCharacters + secondRegexCharacters;
+		
+	}
+	
+	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
 	 */
 	@Override
@@ -124,6 +138,7 @@ public final class ConcatRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
 	 */
+	@Nullable
 	@Override
 	public OORegex advanced(char character) {
 		
@@ -173,6 +188,7 @@ public final class ConcatRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
+	@NotNull
 	@Override
 	public OORegex clone() {
 		return new ConcatRegex(FIRST_REGEX.clone(), SECOND_REGEX.clone(), PRIORITY);

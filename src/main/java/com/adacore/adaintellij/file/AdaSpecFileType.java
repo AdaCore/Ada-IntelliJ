@@ -8,7 +8,7 @@ import org.jetbrains.annotations.*;
 /**
  * Internal representation of the Ada specification file type.
  */
-public class AdaSpecFileType extends AdaFileType {
+public final class AdaSpecFileType extends AdaFileType {
 	
 	/**
 	 * Unique instance representing the Ada specification file type.

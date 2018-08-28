@@ -1,5 +1,7 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
+import org.jetbrains.annotations.*;
+
 /**
  * Regex matching zero or more occurrences of a sequence
  * of characters matched by a subregex.
@@ -21,7 +23,7 @@ public final class ZeroOrMoreRegex implements OORegex {
 	 *
 	 * @param regex The subregex for the zero or more regex.
 	 */
-	public ZeroOrMoreRegex(OORegex regex) { this(regex, 0); }
+	public ZeroOrMoreRegex(@NotNull OORegex regex) { this(regex, 0); }
 	
 	/**
 	 * Constructs a new zero or more regex given a subregex and
@@ -30,7 +32,7 @@ public final class ZeroOrMoreRegex implements OORegex {
 	 * @param regex The subregex for the zero or more regex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public ZeroOrMoreRegex(OORegex regex, int priority) {
+	public ZeroOrMoreRegex(@NotNull OORegex regex, int priority) {
 		REGEX    = regex;
 		PRIORITY = priority;
 	}
@@ -42,6 +44,12 @@ public final class ZeroOrMoreRegex implements OORegex {
 	public boolean nullable() { return true; }
 	
 	/**
+	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 */
+	@Override
+	public int charactersMatched() { return -1; }
+	
+	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
 	 */
 	@Override
@@ -50,6 +58,7 @@ public final class ZeroOrMoreRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
 	 */
+	@Nullable
 	@Override
 	public OORegex advanced(char character) {
 		
@@ -63,6 +72,7 @@ public final class ZeroOrMoreRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
+	@NotNull
 	@Override
 	public OORegex clone() { return new ZeroOrMoreRegex(REGEX.clone(), PRIORITY); }
 	

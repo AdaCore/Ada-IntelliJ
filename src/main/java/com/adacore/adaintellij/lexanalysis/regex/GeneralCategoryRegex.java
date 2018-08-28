@@ -2,13 +2,15 @@ package com.adacore.adaintellij.lexanalysis.regex;
 
 import java.util.regex.Pattern;
 
+import org.jetbrains.annotations.*;
+
 /**
  * Regex matching a single character from a specific "General Category",
  * as defined by the Unicode standard.
  * Internally, a regex of this class stores a Java pattern compiled to
  * match only characters from a specific general category.
  */
-public class GeneralCategoryRegex implements OORegex {
+public final class GeneralCategoryRegex implements OORegex {
 	
 	/**
 	 * The internal pattern used to match a character
@@ -33,7 +35,7 @@ public class GeneralCategoryRegex implements OORegex {
 	 *
 	 * @param generalCategory The general category identifier string.
 	 */
-	public GeneralCategoryRegex(String generalCategory) { this(generalCategory, 0); }
+	public GeneralCategoryRegex(@NotNull String generalCategory) { this(generalCategory, 0); }
 	
 	/**
 	 * Constructs a new general category regex given a general category
@@ -43,7 +45,7 @@ public class GeneralCategoryRegex implements OORegex {
 	 * @param generalCategory The general category identifier string.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public GeneralCategoryRegex(String generalCategory, int priority) {
+	public GeneralCategoryRegex(@NotNull String generalCategory, int priority) {
 		PATTERN          = Pattern.compile(String.format("\\p{%s}", generalCategory));
 		GENERAL_CATEGORY = generalCategory;
 		PRIORITY         = priority;
@@ -56,6 +58,12 @@ public class GeneralCategoryRegex implements OORegex {
 	public boolean nullable() { return false; }
 	
 	/**
+	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 */
+	@Override
+	public int charactersMatched() { return 1; }
+	
+	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
 	 */
 	@Override
@@ -64,6 +72,7 @@ public class GeneralCategoryRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
 	 */
+	@Nullable
 	@Override
 	public OORegex advanced(char character) {
 		
@@ -75,6 +84,7 @@ public class GeneralCategoryRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
+	@NotNull
 	@Override
 	public OORegex clone() { return new GeneralCategoryRegex(GENERAL_CATEGORY, PRIORITY); }
 	

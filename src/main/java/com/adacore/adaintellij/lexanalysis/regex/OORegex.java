@@ -1,5 +1,7 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
+import org.jetbrains.annotations.*;
+
 /**
  * Object-Based Regular Expression specifically designed
  * to be used by a Lexical Analyser.
@@ -24,6 +26,17 @@ public interface OORegex {
 	 * @return The "nullability" of this regex.
 	 */
 	boolean nullable();
+	
+	/**
+	 * Returns the number of characters matched by this regex.
+	 * This is useful to enforce constraints on the usage of certain
+	 * regexes, such as requiring that a NotRegex is constructed using
+	 * a single-character regex.
+	 *
+	 * @return The number of characters matched by this regex, or -1
+	 *         if this regex matches an indefinite number of characters.
+	 */
+	int charactersMatched();
 	
 	/**
 	 * The priority of this regex. This may be used to choose a regex
@@ -57,6 +70,7 @@ public interface OORegex {
 	 * @param character The character by which to advance this regex.
 	 * @return The advanced regex.
 	 */
+	@Nullable
 	OORegex advanced(char character);
 	
 	/**
@@ -64,6 +78,7 @@ public interface OORegex {
 	 *
 	 * @return The clone of this regex.
 	 */
+	@NotNull
 	OORegex clone();
 	
 }

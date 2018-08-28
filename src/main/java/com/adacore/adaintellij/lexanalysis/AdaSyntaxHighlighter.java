@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * TODO: Rethink attribute/color associations?!
  */
-public class AdaSyntaxHighlighter extends SyntaxHighlighterBase {
+public final class AdaSyntaxHighlighter extends SyntaxHighlighterBase {
 	
 	/**
 	 * Color attribute keys.

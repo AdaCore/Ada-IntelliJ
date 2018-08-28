@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Ada file type factory.
  */
-public class AdaFileTypeFactory extends FileTypeFactory {
+public final class AdaFileTypeFactory extends FileTypeFactory {
 	
 	/**
 	 * Registers the different Ada-specific file types.

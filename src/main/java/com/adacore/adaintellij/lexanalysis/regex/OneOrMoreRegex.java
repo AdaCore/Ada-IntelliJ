@@ -1,10 +1,12 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
+import org.jetbrains.annotations.*;
+
 /**
  * Regex matching one or more occurrences of a sequence
  * of characters matched by a subregex.
  */
-public class OneOrMoreRegex implements OORegex {
+public final class OneOrMoreRegex implements OORegex {
 	
 	/**
 	 * The subregex to be matched one or more times.
@@ -21,7 +23,7 @@ public class OneOrMoreRegex implements OORegex {
 	 *
 	 * @param regex The subregex for the one or more regex.
 	 */
-	public OneOrMoreRegex(OORegex regex) { this(regex, 0); }
+	public OneOrMoreRegex(@NotNull OORegex regex) { this(regex, 0); }
 	
 	/**
 	 * Constructs a new one or more regex given a subregex and
@@ -30,7 +32,7 @@ public class OneOrMoreRegex implements OORegex {
 	 * @param regex The subregex for the one or more regex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public OneOrMoreRegex(OORegex regex, int priority) {
+	public OneOrMoreRegex(@NotNull OORegex regex, int priority) {
 		REGEX    = regex;
 		PRIORITY = priority;
 	}
@@ -42,6 +44,12 @@ public class OneOrMoreRegex implements OORegex {
 	public boolean nullable() { return REGEX.nullable(); }
 	
 	/**
+	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 */
+	@Override
+	public int charactersMatched() { return -1; }
+	
+	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
 	 */
 	@Override
@@ -50,6 +58,7 @@ public class OneOrMoreRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
 	 */
+	@Nullable
 	@Override
 	public OORegex advanced(char character) {
 		
@@ -67,6 +76,7 @@ public class OneOrMoreRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
+	@NotNull
 	@Override
 	public OORegex clone() { return new OneOrMoreRegex(REGEX.clone(), PRIORITY); }
 	

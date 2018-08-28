@@ -1,10 +1,12 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
+import org.jetbrains.annotations.*;
+
 /**
  * Regex matching zero or one occurrences of a sequence
  * of characters matched by a subregex.
  */
-public class ZeroOrOneRegex implements OORegex {
+public final class ZeroOrOneRegex implements OORegex {
 	
 	/**
 	 * The subregex to be matched zero or one times.
@@ -21,7 +23,7 @@ public class ZeroOrOneRegex implements OORegex {
 	 *
 	 * @param regex The subregex for the zero or one regex.
 	 */
-	public ZeroOrOneRegex(OORegex regex) { this(regex, 0); }
+	public ZeroOrOneRegex(@NotNull OORegex regex) { this(regex, 0); }
 	
 	/**
 	 * Constructs a new zero or one regex given a subregex and
@@ -30,7 +32,7 @@ public class ZeroOrOneRegex implements OORegex {
 	 * @param regex The subregex for the zero or one regex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public ZeroOrOneRegex(OORegex regex, int priority) {
+	public ZeroOrOneRegex(@NotNull OORegex regex, int priority) {
 		REGEX    = regex;
 		PRIORITY = priority;
 	}
@@ -42,6 +44,12 @@ public class ZeroOrOneRegex implements OORegex {
 	public boolean nullable() { return true; }
 	
 	/**
+	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 */
+	@Override
+	public int charactersMatched() { return -1; }
+	
+	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
 	 */
 	@Override
@@ -50,12 +58,14 @@ public class ZeroOrOneRegex implements OORegex {
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
 	 */
+	@Nullable
 	@Override
 	public OORegex advanced(char character) { return REGEX.advanced(character); }
 	
 	/**
 	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
 	 */
+	@NotNull
 	@Override
 	public OORegex clone() { return new ZeroOrOneRegex(REGEX.clone(), PRIORITY); }
 	
