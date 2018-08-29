@@ -16,7 +16,7 @@ public final class AdaTokenTypes {
 	/**
 	 * Ada token representing a contiguous whitespace sequence.
 	 */
-	public static final IElementType WHITESPACES = TokenType.WHITE_SPACE;
+	public static final IElementType WHITESPACES          = TokenType.WHITE_SPACE;
 	
 	/**
 	 * Ada token representing a syntactically invalid character.
@@ -56,6 +56,28 @@ public final class AdaTokenTypes {
 	public static final IElementType LEFT_LABEL_BRACKET   = new AdaTokenType("LEFT_LABEL_BRACKET");   // <<
 	public static final IElementType RIGHT_LABEL_BRACKET  = new AdaTokenType("RIGHT_LABEL_BRACKET");  // >>
 	public static final IElementType BOX_SIGN             = new AdaTokenType("BOX_SIGN");             // <>
+	
+	/**
+	 * Ada tokens representing identifiers and literals.
+	 */
+	public static final IElementType IDENTIFIER           = new AdaTokenType("IDENTIFIER");           // ident3
+	public static final IElementType DECIMAL_LITERAL      = new AdaTokenType("DECIMAL_LITERAL");      // 3.14
+	public static final IElementType BASED_LITERAL        = new AdaTokenType("BASED_LITERAL");        // 16#F8#E1
+	public static final IElementType CHARACTER_LITERAL    = new AdaTokenType("CHARACTER_LITERAL");    // 'a'
+	public static final IElementType STRING_LITERAL       = new AdaTokenType("STRING_LITERAL");       // "hello :)"
+	
+	/**
+	 * Ada token representing a single comment.
+	 */
+	public static final IElementType COMMENT              = new AdaTokenType("COMMENT");              // -- Ada comment
+	
+	/**
+	 * Ada token representing a pragma directive.
+	 *
+	 * TODO: Figure out if this should even be a thing
+	 * @see AdaLexer#PRAGMA_REGEX for explanation
+	 */
+	public static final IElementType PRAGMA               = new AdaTokenType("PRAGMA");               // pragma Optimize(Off);
 	
 	/**
 	 * Ada tokens representing reserved keywords.
@@ -151,27 +173,5 @@ public final class AdaTokenTypes {
 	public static final IElementType WITH_KEYWORD         = new AdaTokenType("WITH_KEYWORD");         // with
 	
 	public static final IElementType XOR_KEYWORD          = new AdaTokenType("XOR_KEYWORD");          // xor
-	
-	/**
-	 * Ada tokens representing identifiers and literals.
-	 */
-	public static final IElementType IDENTIFIER           = new AdaTokenType("IDENTIFIER");           // ident3
-	public static final IElementType DECIMAL_LITERAL      = new AdaTokenType("DECIMAL_LITERAL");      // 3.14
-	public static final IElementType BASED_LITERAL        = new AdaTokenType("BASED_LITERAL");        // 16#F8#E1
-	public static final IElementType CHARACTER_LITERAL    = new AdaTokenType("CHARACTER_LITERAL");    // 'a'
-	public static final IElementType STRING_LITERAL       = new AdaTokenType("STRING_LITERAL");       // "hello :)"
-	
-	/**
-	 * Ada token representing a single comment.
-	 */
-	public static final IElementType COMMENT              = new AdaTokenType("COMMENT");              // -- Ada comment
-	
-	/**
-	 * Ada token representing a pragma directive.
-	 *
-	 * TODO: Figure out if this should even be a thing
-	 * @see AdaLexer#PRAGMA_REGEX for explanation
-	 */
-	public static final IElementType PRAGMA               = new AdaTokenType("PRAGMA");               // pragma Optimize(Off);
 	
 }
