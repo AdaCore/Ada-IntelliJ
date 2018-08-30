@@ -1,11 +1,20 @@
 <idea-plugin>
 	<id>com.adacore.Ada-IntelliJ</id>
 	<name>Ada support for IntelliJ IDEs</name>
-	<vendor email="soufi@adacore.com" url="https://www.adacore.com">YourCompany</vendor>
+	<vendor email="soufi@adacore.com" url="https://www.adacore.com">AdaCore</vendor>
 	
 	<description><![CDATA[
 		IntelliJ plugin adding Ada support with functionalities ranging from syntax highlighting to building.
 	]]></description>
+	
+	<change-notes><![CDATA[
+		<strong>0.1-dev</strong>
+			<ul>
+				<li>IDE recognizes Ada body (.adb) and spec (.ads) files</li>
+				<li>Basic syntax highlighting for body and spec files</li>
+			</ul>
+		<strong>0-dev</strong>
+	]]></change-notes>
 	
 	<!-- Allows compatibility with all IntelliJ IDEs -->
 	<!-- See https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
