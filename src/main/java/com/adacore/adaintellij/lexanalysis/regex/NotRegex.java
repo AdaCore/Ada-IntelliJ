@@ -84,11 +84,4 @@ public final class NotRegex implements OORegex {
 		
 	}
 	
-	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
-	 */
-	@NotNull
-	@Override
-	public OORegex clone() { return new NotRegex(REGEX.clone(), PRIORITY); }
-	
 }

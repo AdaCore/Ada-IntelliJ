@@ -212,13 +212,4 @@ public final class UnionRegex implements OORegex {
 		
 	}
 	
-	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
-	 */
-	@NotNull
-	@Override
-	public OORegex clone() {
-		return new UnionRegex(FIRST_REGEX.clone(), SECOND_REGEX.clone(), PRIORITY);
-	}
-	
 }

@@ -65,15 +65,8 @@ public final class ZeroOrMoreRegex implements OORegex {
 		OORegex advancedRegex = REGEX.advanced(character);
 		
 		return advancedRegex == null ? null :
-			new ConcatRegex(advancedRegex, clone(), PRIORITY);
+			new ConcatRegex(advancedRegex, this, PRIORITY);
 		
 	}
-	
-	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
-	 */
-	@NotNull
-	@Override
-	public OORegex clone() { return new ZeroOrMoreRegex(REGEX.clone(), PRIORITY); }
 	
 }
