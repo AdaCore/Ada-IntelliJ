@@ -10,8 +10,6 @@ import com.adacore.adaintellij.lexanalysis.regex.*;
 
 /**
  * Lexical Analyser for Ada 2012 (ISO/IEC 8652:2012(E)).
- *
- * TODO: Consider normalizing text?!
  */
 public final class AdaLexer extends LexerBase {
 	
@@ -216,11 +214,11 @@ public final class AdaLexer extends LexerBase {
 	/**
 	 * Regex defining an exponent (used to define numeric literals).
 	 *
-	 * exponent ::= E [+] numeral | E – numeral
+	 * exponent ::= e [+] numeral | e – numeral
 	 */
 	private static final OORegex EXPONENT_REGEX =
 		ConcatRegex.fromRegexes(
-			new UnitRegex("E"),
+			new UnitRegex("e"),
 			UnionRegex.fromRegexes(
 				new UnitRegex("-"),
 				new ZeroOrOneRegex(new UnitRegex("+"))
@@ -259,17 +257,11 @@ public final class AdaLexer extends LexerBase {
 	/**
 	 * Regex defining an extended digit (hexadecimal digit).
 	 *
-	 * extended_digit ::= digit | A | B | C | D | E | F | a | b | c | d | e | f
+	 * extended_digit ::= digit | a | b | c | d | e | f
 	 */
 	private static final OORegex EXTENDED_DIGIT_REGEX =
 		UnionRegex.fromRegexes(
 			DIGIT_REGEX,
-			new UnitRegex("A"),
-			new UnitRegex("B"),
-			new UnitRegex("C"),
-			new UnitRegex("D"),
-			new UnitRegex("E"),
-			new UnitRegex("F"),
 			new UnitRegex("a"),
 			new UnitRegex("b"),
 			new UnitRegex("c"),
@@ -670,7 +662,7 @@ public final class AdaLexer extends LexerBase {
 	*/
 	
 	/**
-	 * The text to be analysed.
+	 * The lowercase version of the text to be analysed.
 	 */
 	private CharSequence text;
 	
@@ -741,7 +733,8 @@ public final class AdaLexer extends LexerBase {
 		
 		// Initialize lexer fields
 		
-		text            = buffer;
+		text            = buffer.toString().toLowerCase(Locale.ROOT);
+		
 		lexingEndOffset = endOffset;
 		lexingOffset    = startOffset;
 		state           = initialState;
@@ -822,22 +815,20 @@ public final class AdaLexer extends LexerBase {
 		characterLoop: // label only used for reference in comments
 		while (tokenEnd == tokenStart) {
 			
+			final char CHARACTER = nextCharacter;
+			
 			// The set of regexes that advanced successfully in this
 			// iteration of characterLoop
 			Set<OORegex> advancedRegexes = new HashSet<>();
 			
-			Iterator<OORegex> regexIterator = regexes.iterator();
-			
 			// For each regex that successfully advanced by all
 			// characters so far...
 			
-			while (regexIterator.hasNext()) {
-			
-				OORegex regex = regexIterator.next();
+			regexes.forEach(regex -> {
 				
 				// Try to advance the regex
 				
-				OORegex advancedRegex = regex.advanced(nextCharacter);
+				OORegex advancedRegex = regex.advanced(CHARACTER);
 				
 				// If the regex advanced successfully, store it for the next
 				// iteration of characterLoop, and keep track of the root
@@ -852,7 +843,7 @@ public final class AdaLexer extends LexerBase {
 					
 				}
 				
-			}
+			});
 			
 			// Set the regex set to be the advanced regex set
 			
