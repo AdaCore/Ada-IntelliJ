@@ -1,0 +1,45 @@
+-- Token list for the "code-with-comments.adb" source file.
+-- Intended for testing token generation for Ada comments.
+
+WHITE_SPACE                     0   1
+
+AdaTokenType.COMMENT            1  38 -- Comment token for "-- This is an ..."
+
+WHITE_SPACE                    38  39
+
+AdaTokenType.COMMENT           39 107 -- Comment token for "-- Each of these..."
+
+WHITE_SPACE                   107 108
+
+AdaTokenType.FUNCTION_KEYWORD 108 116 -- function
+WHITE_SPACE                   116 117
+AdaTokenType.IDENTIFIER       117 121 --          test
+WHITE_SPACE                   121 122
+AdaTokenType.IS_KEYWORD       122 124 --               is
+
+WHITE_SPACE                   124 125
+
+AdaTokenType.BEGIN_KEYWORD    125 130 -- begin
+
+WHITE_SPACE                   130 132
+
+AdaTokenType.COMMENT          132 151 -- Comment token for "-------------------"
+
+WHITE_SPACE                   151 153
+
+AdaTokenType.COMMENT          153 172 -- Comment token for "-- Function body --"
+
+WHITE_SPACE                   172 174
+
+AdaTokenType.COMMENT          174 193 -- Comment token for "-------------------"
+
+WHITE_SPACE                   193 194
+
+AdaTokenType.END_KEYWORD      194 197 -- end
+WHITE_SPACE                   197 198
+AdaTokenType.IDENTIFIER       198 202 --     test
+AdaTokenType.SEMICOLON        202 203 --         ;
+
+WHITE_SPACE                   203 205
+
+AdaTokenType.COMMENT          205 264 -- Comment token for "-- This comment should..."

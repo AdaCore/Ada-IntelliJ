@@ -1,0 +1,42 @@
+-- Token list for the simple "hello-world.adb" Ada program
+-- and its mixed-case version "hello-world-mixed-case.adb".
+
+AdaTokenType.WITH_KEYWORD        0   4 -- with
+WHITE_SPACE                      4   5
+AdaTokenType.IDENTIFIER          5   8 --      Ada
+AdaTokenType.FULL_STOP           8   9 --         .
+AdaTokenType.IDENTIFIER          9  16 --          Text_IO
+AdaTokenType.SEMICOLON          16  17 --                 ;
+
+WHITE_SPACE                     17  19
+
+AdaTokenType.PROCEDURE_KEYWORD  19  28 -- procedure
+WHITE_SPACE                     28  29
+AdaTokenType.IDENTIFIER         29  39 --           HelloWorld
+WHITE_SPACE                     39  40
+AdaTokenType.IS_KEYWORD         40  42 --                      is
+
+WHITE_SPACE                     42  43
+
+AdaTokenType.BEGIN_KEYWORD      43  48 -- begin
+
+WHITE_SPACE                     48  50
+
+AdaTokenType.IDENTIFIER         50  53 -- Ada
+AdaTokenType.FULL_STOP          53  54 --    .
+AdaTokenType.IDENTIFIER         54  61 --     Text_IO
+AdaTokenType.FULL_STOP          61  62 --            .
+AdaTokenType.IDENTIFIER         62  70 --             Put_Line
+AdaTokenType.LEFT_PARENTHESIS   70  71 --                     (
+AdaTokenType.STRING_LITERAL     71  86 --                      "Hello, World!"
+AdaTokenType.RIGHT_PARENTHESIS  86  87 --                                     )
+AdaTokenType.SEMICOLON          87  88 --                                      ;
+
+WHITE_SPACE                     88  89
+
+AdaTokenType.END_KEYWORD        89  92 -- end
+WHITE_SPACE                     92  93
+AdaTokenType.IDENTIFIER         93 103 --    HelloWorld
+AdaTokenType.SEMICOLON         103 104 --              ;
+
+WHITE_SPACE                    104 105
