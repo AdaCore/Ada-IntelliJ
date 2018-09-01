@@ -4,81 +4,81 @@
 -- is to test the lexer's token generation for syntactically valid
 -- Ada literals.
 
-AdaTokenType.COMMENT            0  19 -- Comment token for "-- Numeric Literals"
+AdaTokenType.COMMENT             0  19 -- Comment token for "-- Numeric Literals"
 
-WHITE_SPACE                    19  20
+WHITE_SPACE                     19  20
 
 ----------------------
 -- Numeric Literals --
 ----------------------
 
-AdaTokenType.DECIMAL_LITERAL   20  23 -- 123
+AdaTokenType.DECIMAL_LITERAL    20  23 -- 123
 
-WHITE_SPACE                    23  24
+WHITE_SPACE                     23  24
 
-AdaTokenType.DECIMAL_LITERAL   24  31 -- 123_456
+AdaTokenType.DECIMAL_LITERAL    24  31 -- 123_456
 
-WHITE_SPACE                    31  32
+WHITE_SPACE                     31  32
 
-AdaTokenType.DECIMAL_LITERAL   32  40 -- 12_34_56
+AdaTokenType.DECIMAL_LITERAL    32  40 -- 12_34_56
 
-WHITE_SPACE                    40  41
+WHITE_SPACE                     40  41
 
-AdaTokenType.DECIMAL_LITERAL   41  48 -- 123.456
+AdaTokenType.DECIMAL_LITERAL    41  48 -- 123.456
 
-WHITE_SPACE                    48  49
+WHITE_SPACE                     48  49
 
-AdaTokenType.DECIMAL_LITERAL   49  60 -- 123_456.789
+AdaTokenType.DECIMAL_LITERAL    49  60 -- 123_456.789
 
-WHITE_SPACE                    60  61
+WHITE_SPACE                     60  61
 
-AdaTokenType.DECIMAL_LITERAL   61  72 -- 123.456_789
+AdaTokenType.DECIMAL_LITERAL    61  72 -- 123.456_789
 
-WHITE_SPACE                    72  73
+WHITE_SPACE                     72  73
 
-AdaTokenType.DECIMAL_LITERAL   73  85 -- 12_34.567_89
+AdaTokenType.DECIMAL_LITERAL    73  85 -- 12_34.567_89
 
-WHITE_SPACE                    85  86
+WHITE_SPACE                     85  86
 
-AdaTokenType.DECIMAL_LITERAL   86  92 -- 123E12
+AdaTokenType.DECIMAL_LITERAL    86  92 -- 123E12
 
-WHITE_SPACE                    92  93
+WHITE_SPACE                     92  93
 
-AdaTokenType.DECIMAL_LITERAL   93 101 -- 1.23e5_4
+AdaTokenType.DECIMAL_LITERAL    93 101 -- 1.23e5_4
 
-WHITE_SPACE                   101 102
+WHITE_SPACE                    101 102
 
-AdaTokenType.DECIMAL_LITERAL  102 109 -- 12_3E+5
+AdaTokenType.DECIMAL_LITERAL   102 109 -- 12_3E+5
 
-WHITE_SPACE                   109 110
+WHITE_SPACE                    109 110
 
-AdaTokenType.DECIMAL_LITERAL  110 118 -- 1.2_3e+5
+AdaTokenType.DECIMAL_LITERAL   110 118 -- 1.2_3e+5
 
-WHITE_SPACE                   118 119
+WHITE_SPACE                    118 119
 
-AdaTokenType.DECIMAL_LITERAL  119 127 -- 1_2.3E-5
+AdaTokenType.DECIMAL_LITERAL   119 127 -- 1_2.3E-5
 
-WHITE_SPACE                   127 128
+WHITE_SPACE                    127 128
 
-AdaTokenType.DECIMAL_LITERAL  128 136 -- 123.4e-5
+AdaTokenType.DECIMAL_LITERAL   128 136 -- 123.4e-5
 
-WHITE_SPACE                   136 137
+WHITE_SPACE                    136 137
 
-AdaTokenType.BASED_LITERAL    137 143 -- 1#123#
+AdaTokenType.BASED_LITERAL     137 143 -- 1#123#
 
-WHITE_SPACE                   143 144
+WHITE_SPACE                    143 144
 
-AdaTokenType.BASED_LITERAL    144 158 -- 1_6#123.3#e-12
+AdaTokenType.BASED_LITERAL     144 158 -- 1_6#123.3#e-12
 
-WHITE_SPACE                   158 159
+WHITE_SPACE                    158 159
 
-AdaTokenType.BASED_LITERAL    159 174 -- 32#12_3_Ab#E4_5
+AdaTokenType.BASED_LITERAL     159 174 -- 32#12_3_Ab#E4_5
 
-WHITE_SPACE                   174 176
+WHITE_SPACE                    174 176
 
-AdaTokenType.COMMENT          176 195 -- Comment token for "-- Textual Literals"
+AdaTokenType.COMMENT           176 195 -- Comment token for "-- Textual Literals"
 
-WHITE_SPACE                   195 196
+WHITE_SPACE                    195 196
 
 ----------------------
 -- Textual Literals --
