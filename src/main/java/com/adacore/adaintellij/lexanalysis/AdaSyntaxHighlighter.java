@@ -12,8 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Syntax highlighter for Ada 2012.
- *
- * TODO: Rethink attribute/color associations?!
  */
 public final class AdaSyntaxHighlighter extends SyntaxHighlighterBase {
 	
@@ -32,8 +30,6 @@ public final class AdaSyntaxHighlighter extends SyntaxHighlighterBase {
 		createTextAttributesKey("ADA_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
 	private static final TextAttributesKey COMMENT_COLOR =
 		createTextAttributesKey("ADA_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
-	private static final TextAttributesKey PRAGMA_COLOR =
-		createTextAttributesKey("ADA_PRAGMA", DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR); // TODO: Change color here?!
 	private static final TextAttributesKey BAD_CHARACTER_COLOR =
 		createTextAttributesKey("ADA_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
 	
@@ -46,7 +42,6 @@ public final class AdaSyntaxHighlighter extends SyntaxHighlighterBase {
 	private static final TextAttributesKey[] TEXTUAL_LITERAL_KEYS = new TextAttributesKey[]{ TEXTUAL_LITERAL_COLOR };
 	private static final TextAttributesKey[] KEYWORD_KEYS         = new TextAttributesKey[]{ KEYWORD_COLOR         };
 	private static final TextAttributesKey[] COMMENT_KEYS         = new TextAttributesKey[]{ COMMENT_COLOR         };
-	private static final TextAttributesKey[] PRAGMA_KEYS          = new TextAttributesKey[]{ PRAGMA_COLOR          };
 	private static final TextAttributesKey[] BAD_CHARACTER_KEYS   = new TextAttributesKey[]{ BAD_CHARACTER_COLOR   };
 	private static final TextAttributesKey[] EMPTY_KEYS           = new TextAttributesKey[0];
 	
@@ -215,9 +210,6 @@ public final class AdaSyntaxHighlighter extends SyntaxHighlighterBase {
 			tokenType == AdaTokenTypes.XOR_KEYWORD
 			
 		) { return KEYWORD_KEYS; }
-		
-		// Pragmas
-		else if (tokenType == AdaTokenTypes.PRAGMA) { return PRAGMA_KEYS; }
 		
 		// Invalid tokens
 		else if (tokenType == AdaTokenTypes.BAD_CHARACTER) { return BAD_CHARACTER_KEYS; }

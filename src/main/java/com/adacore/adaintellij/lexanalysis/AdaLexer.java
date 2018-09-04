@@ -20,18 +20,31 @@ public final class AdaLexer extends LexerBase {
 	// Whitespaces
 	
 	/**
+	 * Regexes matching different whitespace characters.
+	 */
+	private static final OORegex HORIZONTAL_TABULATION_REGEX = new UnitRegex("\t");
+	private static final OORegex LINE_FEED_REGEX             = new UnitRegex("\n");
+	private static final OORegex VERTICAL_TABULATION_REGEX   = new UnitRegex("\u000b");
+	private static final OORegex FORM_FEED_REGEX             = new UnitRegex("\f");
+	private static final OORegex CARRIAGE_RETURN_REGEX       = new UnitRegex("\r");
+	private static final OORegex SPACE_REGEX                 = new UnitRegex("\u0020");
+	private static final OORegex NEXT_LINE_REGEX             = new UnitRegex("\u0085");
+	private static final OORegex NO_BREAK_SPACE_REGEX        = new UnitRegex("\u00a0");
+	
+	/**
 	 * Regex defining a sequence of whitespaces in Ada.
-	 *
-	 * TODO: Figure out how exactly to define the whitespaces regex
-	 *       (the spec is not clear/explicit enough about whitespaces)
 	 */
 	private static final OORegex WHITESPACES_REGEX =
 		new OneOrMoreRegex(
 			UnionRegex.fromRegexes(
-				new UnitRegex("\n"),
-				new UnitRegex("\r"),
-				new UnitRegex("\t"),
-				new UnitRegex(" ")
+				HORIZONTAL_TABULATION_REGEX,
+				LINE_FEED_REGEX,
+				VERTICAL_TABULATION_REGEX,
+				FORM_FEED_REGEX,
+				CARRIAGE_RETURN_REGEX,
+				SPACE_REGEX,
+				NEXT_LINE_REGEX,
+				NO_BREAK_SPACE_REGEX
 			)
 		);
 	
@@ -100,12 +113,12 @@ public final class AdaLexer extends LexerBase {
 	 */
 	private static final OORegex FORMAT_EFFECTOR_REGEX =
 		UnionRegex.fromRegexes(
-			new UnitRegex("\u0009"),
-			new UnitRegex("\n"),
-			new UnitRegex("\u000b"),
-			new UnitRegex("\u000c"),
-			new UnitRegex("\r"),
-			new UnitRegex("\u0085"),
+			HORIZONTAL_TABULATION_REGEX,
+			LINE_FEED_REGEX,
+			VERTICAL_TABULATION_REGEX,
+			FORM_FEED_REGEX,
+			CARRIAGE_RETURN_REGEX,
+			NEXT_LINE_REGEX,
 			SEPARATOR_LINE_REGEX,
 			SEPARATOR_PARAGRAPH_REGEX
 		);
@@ -367,9 +380,14 @@ public final class AdaLexer extends LexerBase {
 	 */
 	private static final OORegex NON_END_OF_LINE_CHARACTER_REGEX =
 		new NotRegex(
-			new UnionRegex(
-				new UnitRegex("\r"),
-				new UnitRegex("\n")
+			UnionRegex.fromRegexes(
+				LINE_FEED_REGEX,
+				VERTICAL_TABULATION_REGEX,
+				FORM_FEED_REGEX,
+				CARRIAGE_RETURN_REGEX,
+				NEXT_LINE_REGEX,
+				SEPARATOR_LINE_REGEX,
+				SEPARATOR_PARAGRAPH_REGEX
 			)
 		);
 	
@@ -383,23 +401,6 @@ public final class AdaLexer extends LexerBase {
 			new UnitRegex("--"),
 			new ZeroOrMoreRegex(NON_END_OF_LINE_CHARACTER_REGEX)
 		);
-	
-	// Pragmas
-	
-	/**
-	 * Regex defining an Ada pragma.
-	 *
-	 * TODO: Figure out whether or not a pragma as a whole should be
-	 *       analysed at Lexer level.
-	 *       Note: The pragma keyword is already analysed by the lexer at which
-	 *       point it returns a token corresponding to the keyword. The question
-	 *       here is whether the lexer needs to return a single token for the
-	 *       pragma directive as a whole, as may be implied by the inclusion of
-	 *       the pragma directive syntax in the "Lexical Elements" chapter of
-	 *       the Ada spec (section 2.8), or whether handling pragma directives
-	 *       should be left to the parser, which seems more logical to me.
-	 */
-	private static final OORegex PRAGMA_REGEX = null;
 	
 	// Keywords
 	

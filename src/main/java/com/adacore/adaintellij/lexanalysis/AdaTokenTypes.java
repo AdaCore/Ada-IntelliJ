@@ -72,14 +72,6 @@ public final class AdaTokenTypes {
 	public static final IElementType COMMENT              = new AdaTokenType("COMMENT");              // -- Ada comment
 	
 	/**
-	 * Ada token representing a pragma directive.
-	 *
-	 * TODO: Figure out if this should even be a thing
-	 * @see AdaLexer#PRAGMA_REGEX for explanation
-	 */
-	public static final IElementType PRAGMA               = new AdaTokenType("PRAGMA");               // pragma Optimize(Off);
-	
-	/**
 	 * Ada tokens representing reserved keywords.
 	 */
 	public static final IElementType ABORT_KEYWORD        = new AdaTokenType("ABORT_KEYWORD");        // abort
