@@ -67,17 +67,10 @@ public final class OneOrMoreRegex implements OORegex {
 		return advancedRegex == null ? null :
 			new ConcatRegex(
 				advancedRegex,
-				new ZeroOrMoreRegex(REGEX.clone(), PRIORITY),
+				new ZeroOrMoreRegex(REGEX, PRIORITY),
 				PRIORITY
 			);
 		
 	}
-	
-	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
-	 */
-	@NotNull
-	@Override
-	public OORegex clone() { return new OneOrMoreRegex(REGEX.clone(), PRIORITY); }
 	
 }

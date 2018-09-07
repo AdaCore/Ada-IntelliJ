@@ -85,13 +85,4 @@ public final class IntersectionRegex implements OORegex {
 		
 	}
 	
-	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
-	 */
-	@NotNull
-	@Override
-	public OORegex clone() {
-		return new IntersectionRegex(FIRST_REGEX.clone(), SECOND_REGEX.clone(), PRIORITY);
-	}
-	
 }

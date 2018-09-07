@@ -10,8 +10,6 @@ import com.adacore.adaintellij.lexanalysis.regex.*;
 
 /**
  * Lexical Analyser for Ada 2012 (ISO/IEC 8652:2012(E)).
- *
- * TODO: Consider normalizing text?!
  */
 public final class AdaLexer extends LexerBase {
 	
@@ -22,18 +20,31 @@ public final class AdaLexer extends LexerBase {
 	// Whitespaces
 	
 	/**
+	 * Regexes matching different whitespace characters.
+	 */
+	private static final OORegex HORIZONTAL_TABULATION_REGEX = new UnitRegex("\t");
+	private static final OORegex LINE_FEED_REGEX             = new UnitRegex("\n");
+	private static final OORegex VERTICAL_TABULATION_REGEX   = new UnitRegex("\u000b");
+	private static final OORegex FORM_FEED_REGEX             = new UnitRegex("\f");
+	private static final OORegex CARRIAGE_RETURN_REGEX       = new UnitRegex("\r");
+	private static final OORegex SPACE_REGEX                 = new UnitRegex("\u0020");
+	private static final OORegex NEXT_LINE_REGEX             = new UnitRegex("\u0085");
+	private static final OORegex NO_BREAK_SPACE_REGEX        = new UnitRegex("\u00a0");
+	
+	/**
 	 * Regex defining a sequence of whitespaces in Ada.
-	 *
-	 * TODO: Figure out how exactly to define the whitespaces regex
-	 *       (the spec is not clear/explicit enough about whitespaces)
 	 */
 	private static final OORegex WHITESPACES_REGEX =
 		new OneOrMoreRegex(
 			UnionRegex.fromRegexes(
-				new UnitRegex("\n"),
-				new UnitRegex("\r"),
-				new UnitRegex("\t"),
-				new UnitRegex(" ")
+				HORIZONTAL_TABULATION_REGEX,
+				LINE_FEED_REGEX,
+				VERTICAL_TABULATION_REGEX,
+				FORM_FEED_REGEX,
+				CARRIAGE_RETURN_REGEX,
+				SPACE_REGEX,
+				NEXT_LINE_REGEX,
+				NO_BREAK_SPACE_REGEX
 			)
 		);
 	
@@ -102,12 +113,12 @@ public final class AdaLexer extends LexerBase {
 	 */
 	private static final OORegex FORMAT_EFFECTOR_REGEX =
 		UnionRegex.fromRegexes(
-			new UnitRegex("\u0009"),
-			new UnitRegex("\n"),
-			new UnitRegex("\u000b"),
-			new UnitRegex("\u000c"),
-			new UnitRegex("\r"),
-			new UnitRegex("\u0085"),
+			HORIZONTAL_TABULATION_REGEX,
+			LINE_FEED_REGEX,
+			VERTICAL_TABULATION_REGEX,
+			FORM_FEED_REGEX,
+			CARRIAGE_RETURN_REGEX,
+			NEXT_LINE_REGEX,
 			SEPARATOR_LINE_REGEX,
 			SEPARATOR_PARAGRAPH_REGEX
 		);
@@ -216,11 +227,11 @@ public final class AdaLexer extends LexerBase {
 	/**
 	 * Regex defining an exponent (used to define numeric literals).
 	 *
-	 * exponent ::= E [+] numeral | E – numeral
+	 * exponent ::= e [+] numeral | e – numeral
 	 */
 	private static final OORegex EXPONENT_REGEX =
 		ConcatRegex.fromRegexes(
-			new UnitRegex("E"),
+			new UnitRegex("e"),
 			UnionRegex.fromRegexes(
 				new UnitRegex("-"),
 				new ZeroOrOneRegex(new UnitRegex("+"))
@@ -259,17 +270,11 @@ public final class AdaLexer extends LexerBase {
 	/**
 	 * Regex defining an extended digit (hexadecimal digit).
 	 *
-	 * extended_digit ::= digit | A | B | C | D | E | F | a | b | c | d | e | f
+	 * extended_digit ::= digit | a | b | c | d | e | f
 	 */
 	private static final OORegex EXTENDED_DIGIT_REGEX =
 		UnionRegex.fromRegexes(
 			DIGIT_REGEX,
-			new UnitRegex("A"),
-			new UnitRegex("B"),
-			new UnitRegex("C"),
-			new UnitRegex("D"),
-			new UnitRegex("E"),
-			new UnitRegex("F"),
 			new UnitRegex("a"),
 			new UnitRegex("b"),
 			new UnitRegex("c"),
@@ -375,9 +380,14 @@ public final class AdaLexer extends LexerBase {
 	 */
 	private static final OORegex NON_END_OF_LINE_CHARACTER_REGEX =
 		new NotRegex(
-			new UnionRegex(
-				new UnitRegex("\r"),
-				new UnitRegex("\n")
+			UnionRegex.fromRegexes(
+				LINE_FEED_REGEX,
+				VERTICAL_TABULATION_REGEX,
+				FORM_FEED_REGEX,
+				CARRIAGE_RETURN_REGEX,
+				NEXT_LINE_REGEX,
+				SEPARATOR_LINE_REGEX,
+				SEPARATOR_PARAGRAPH_REGEX
 			)
 		);
 	
@@ -391,23 +401,6 @@ public final class AdaLexer extends LexerBase {
 			new UnitRegex("--"),
 			new ZeroOrMoreRegex(NON_END_OF_LINE_CHARACTER_REGEX)
 		);
-	
-	// Pragmas
-	
-	/**
-	 * Regex defining an Ada pragma.
-	 *
-	 * TODO: Figure out whether or not a pragma as a whole should be
-	 *       analysed at Lexer level.
-	 *       Note: The pragma keyword is already analysed by the lexer at which
-	 *       point it returns a token corresponding to the keyword. The question
-	 *       here is whether the lexer needs to return a single token for the
-	 *       pragma directive as a whole, as may be implied by the inclusion of
-	 *       the pragma directive syntax in the "Lexical Elements" chapter of
-	 *       the Ada spec (section 2.8), or whether handling pragma directives
-	 *       should be left to the parser, which seems more logical to me.
-	 */
-	private static final OORegex PRAGMA_REGEX = null;
 	
 	// Keywords
 	
@@ -670,7 +663,7 @@ public final class AdaLexer extends LexerBase {
 	*/
 	
 	/**
-	 * The text to be analysed.
+	 * The lowercase version of the text to be analysed.
 	 */
 	private CharSequence text;
 	
@@ -741,7 +734,8 @@ public final class AdaLexer extends LexerBase {
 		
 		// Initialize lexer fields
 		
-		text            = buffer;
+		text            = buffer.toString().toLowerCase(Locale.ROOT);
+		
 		lexingEndOffset = endOffset;
 		lexingOffset    = startOffset;
 		state           = initialState;
@@ -822,22 +816,20 @@ public final class AdaLexer extends LexerBase {
 		characterLoop: // label only used for reference in comments
 		while (tokenEnd == tokenStart) {
 			
+			final char CHARACTER = nextCharacter;
+			
 			// The set of regexes that advanced successfully in this
 			// iteration of characterLoop
 			Set<OORegex> advancedRegexes = new HashSet<>();
 			
-			Iterator<OORegex> regexIterator = regexes.iterator();
-			
 			// For each regex that successfully advanced by all
 			// characters so far...
 			
-			while (regexIterator.hasNext()) {
-			
-				OORegex regex = regexIterator.next();
+			regexes.forEach(regex -> {
 				
 				// Try to advance the regex
 				
-				OORegex advancedRegex = regex.advanced(nextCharacter);
+				OORegex advancedRegex = regex.advanced(CHARACTER);
 				
 				// If the regex advanced successfully, store it for the next
 				// iteration of characterLoop, and keep track of the root
@@ -852,7 +844,7 @@ public final class AdaLexer extends LexerBase {
 					
 				}
 				
-			}
+			});
 			
 			// Set the regex set to be the advanced regex set
 			

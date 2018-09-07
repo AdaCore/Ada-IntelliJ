@@ -19,12 +19,6 @@ public final class GeneralCategoryRegex implements OORegex {
 	public final Pattern PATTERN;
 	
 	/**
-	 * The pattern string used to compile the Java pattern.
-	 * Stored for cloning purposes.
-	 */
-	public final String GENERAL_CATEGORY;
-	
-	/**
 	 * The priority of this regex.
 	 */
 	public final int PRIORITY;
@@ -47,7 +41,6 @@ public final class GeneralCategoryRegex implements OORegex {
 	 */
 	public GeneralCategoryRegex(@NotNull String generalCategory, int priority) {
 		PATTERN          = Pattern.compile(String.format("\\p{%s}", generalCategory));
-		GENERAL_CATEGORY = generalCategory;
 		PRIORITY         = priority;
 	}
 	
@@ -80,12 +73,5 @@ public final class GeneralCategoryRegex implements OORegex {
 			new UnitRegex("") : null;
 		
 	}
-	
-	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
-	 */
-	@NotNull
-	@Override
-	public OORegex clone() { return new GeneralCategoryRegex(GENERAL_CATEGORY, PRIORITY); }
 	
 }

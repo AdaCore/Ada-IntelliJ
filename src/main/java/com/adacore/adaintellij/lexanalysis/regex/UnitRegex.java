@@ -66,11 +66,4 @@ public final class UnitRegex implements OORegex {
 			null : new UnitRegex(SEQUENCE.substring(1), PRIORITY);
 	}
 	
-	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
-	 */
-	@NotNull
-	@Override
-	public OORegex clone() { return new UnitRegex(SEQUENCE, PRIORITY); }
-	
 }

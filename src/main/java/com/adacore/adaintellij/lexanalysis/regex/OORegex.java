@@ -11,9 +11,6 @@ import org.jetbrains.annotations.*;
  * along the way.
  * Any implementing class must be immutable by design. This
  * allows regexes to be reused when defining complex regexes.
- *
- * TODO: Consider reducing cloning in clone implementations of
- *       implementing classes without breaking immutability
  */
 public interface OORegex {
 	
@@ -72,13 +69,5 @@ public interface OORegex {
 	 */
 	@Nullable
 	OORegex advanced(char character);
-	
-	/**
-	 * Returns a clone of this regex.
-	 *
-	 * @return The clone of this regex.
-	 */
-	@NotNull
-	OORegex clone();
 	
 }

@@ -62,11 +62,4 @@ public final class ZeroOrOneRegex implements OORegex {
 	@Override
 	public OORegex advanced(char character) { return REGEX.advanced(character); }
 	
-	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
-	 */
-	@NotNull
-	@Override
-	public OORegex clone() { return new ZeroOrOneRegex(REGEX.clone(), PRIORITY); }
-	
 }

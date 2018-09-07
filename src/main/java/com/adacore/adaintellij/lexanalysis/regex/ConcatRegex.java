@@ -158,12 +158,12 @@ public final class ConcatRegex implements OORegex {
 			
 			} else if (secondRegexAdvanced == null) {
 			
-				return new ConcatRegex(firstRegexAdvanced, SECOND_REGEX.clone(), PRIORITY);
+				return new ConcatRegex(firstRegexAdvanced, SECOND_REGEX, PRIORITY);
 			
 			} else {
 			
 				return new UnionRegex(
-					new ConcatRegex(firstRegexAdvanced, SECOND_REGEX.clone(), PRIORITY),
+					new ConcatRegex(firstRegexAdvanced, SECOND_REGEX, PRIORITY),
 					secondRegexAdvanced,
 					PRIORITY
 				);
@@ -178,20 +178,11 @@ public final class ConcatRegex implements OORegex {
 				
 			} else {
 				
-				return new ConcatRegex(firstRegexAdvanced, SECOND_REGEX.clone(), PRIORITY);
+				return new ConcatRegex(firstRegexAdvanced, SECOND_REGEX, PRIORITY);
 				
 			}
 		}
 		
-	}
-	
-	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#clone()
-	 */
-	@NotNull
-	@Override
-	public OORegex clone() {
-		return new ConcatRegex(FIRST_REGEX.clone(), SECOND_REGEX.clone(), PRIORITY);
 	}
 	
 }

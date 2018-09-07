@@ -1,0 +1,133 @@
+-- Token list for the "code-with-bad-syntax.adb" source file.
+-- Note that for the sake of conciseness, the source code is
+-- intentionally not a compilable Ada program, as its only purpose
+-- is to test the lexer's token generation for syntactically invalid
+-- sequences of characters.
+
+AdaTokenType.COMMENT           0  19 -- Comment token for "-- Numeric Literals"
+
+WHITE_SPACE                   19  20
+
+----------------------
+-- Numeric Literals --
+----------------------
+
+BAD_CHARACTER                 20  24 -- 123_
+BAD_CHARACTER                 24  25 --     _
+AdaTokenType.DECIMAL_LITERAL  25  28 --      456
+
+WHITE_SPACE                   28  29
+
+BAD_CHARACTER                 29  38 -- 12345678_
+
+WHITE_SPACE                   38  39
+
+BAD_CHARACTER                 39  43 -- 123.
+
+WHITE_SPACE                   43  44
+
+AdaTokenType.DECIMAL_LITERAL  44  51 -- 123.456
+AdaTokenType.FULL_STOP        51  52 --        .
+AdaTokenType.DECIMAL_LITERAL  52  55 --         789
+
+WHITE_SPACE                   55  56
+
+BAD_CHARACTER                 56  59 -- 1E+
+
+WHITE_SPACE                   59  60
+
+AdaTokenType.DECIMAL_LITERAL  60  67 -- 1234e56
+AdaTokenType.FULL_STOP        67  68 --        .
+AdaTokenType.DECIMAL_LITERAL  68  69 --         7
+
+WHITE_SPACE                   69  70
+
+BAD_CHARACTER                 70  73 -- 16#
+
+WHITE_SPACE                   73  74
+
+BAD_CHARACTER                 74  79 -- 12#14
+
+WHITE_SPACE                   79  80
+
+BAD_CHARACTER                 80  85 -- 10#5.
+
+WHITE_SPACE                   85  86
+
+BAD_CHARACTER                 86  91 -- 8#2.3
+
+WHITE_SPACE                   91  92
+
+BAD_CHARACTER                 92  94 -- 6#
+BAD_CHARACTER                 94  95 --   #
+
+WHITE_SPACE                   95  96
+
+BAD_CHARACTER                 96 103 -- 4#123.1
+AdaTokenType.FULL_STOP       103 104 --        .
+BAD_CHARACTER                104 106 --         2#
+
+WHITE_SPACE                  106 107
+
+BAD_CHARACTER                107 113 -- 2#101.
+BAD_CHARACTER                113 114 --       #
+
+WHITE_SPACE                  114 115
+
+BAD_CHARACTER                115 121 -- 16#123
+AdaTokenType.IDENTIFIER      121 122 --       G
+BAD_CHARACTER                122 123 --        #
+AdaTokenType.DECIMAL_LITERAL 123 124 --         2
+
+WHITE_SPACE                  124 126
+
+AdaTokenType.COMMENT         126 145 -- Comment token for "-- Textual Literals"
+
+WHITE_SPACE                  145 146
+
+----------------------
+-- Textual Literals --
+----------------------
+
+AdaTokenType.APOSTROPHE      146 147 -- '
+
+WHITE_SPACE                  147 148
+
+BAD_CHARACTER                148 150 -- ''
+
+WHITE_SPACE                  150 151
+
+AdaTokenType.APOSTROPHE      151 152 -- '
+WHITE_SPACE                  152 153
+AdaTokenType.APOSTROPHE      153 154 --  	'
+
+WHITE_SPACE                  154 155
+
+BAD_CHARACTER                155 157 -- 'a
+AdaTokenType.IDENTIFIER      157 158 --   b
+AdaTokenType.APOSTROPHE      158 159 --    '
+
+WHITE_SPACE                  159 160
+
+BAD_CHARACTER                160 161 -- "
+
+WHITE_SPACE                  161 162
+
+BAD_CHARACTER                162 165 -- """
+
+WHITE_SPACE                  165 167
+
+AdaTokenType.COMMENT         167 193 -- Comment token for "-- Characters not part..."
+
+WHITE_SPACE                  193 194
+
+-----------------------------
+-- Non-Alphabet Characters --
+-----------------------------
+
+AdaTokenType.IDENTIFIER      194 202 -- Put_Line
+BAD_CHARACTER                202 203 --         [
+AdaTokenType.STRING_LITERAL  203 209 --          "oops"
+BAD_CHARACTER                209 210 --                ]
+
+WHITE_SPACE                  210 211
