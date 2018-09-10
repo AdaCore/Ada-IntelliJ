@@ -58,7 +58,7 @@ public final class GprFileManager implements ProjectComponent {
 	@Override
 	public void projectOpened() {
 		
-		locateGprFiles(() -> System.out.println("Done"));
+		locateGprFiles(() -> {});
 		
 	}
 	

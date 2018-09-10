@@ -1,5 +1,7 @@
 package com.adacore.adaintellij.build;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.*;
@@ -195,12 +197,19 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 			
 			while (matcher.find()) {
 				
-				MatchResult matchResult = matcher.toMatchResult();
+				MatchResult      matchResult       = matcher.toMatchResult();
+				String           match             = matchResult.group();
+				Iterator<String> matchPartIterator = Arrays.asList(match.split(":")).iterator();
 				
-				String[] matchParts = matchResult.group().split(":");
-				String   filename   = matchParts[0];
+				StringBuilder    filenameBuilder   = new StringBuilder(matchPartIterator.next());
 				
-				String   filePath   = "";
+				if (match.charAt(1) == ':') {
+					filenameBuilder.append(':');
+					filenameBuilder.append(matchPartIterator.next());
+				}
+				
+				String filename = filenameBuilder.toString();
+				String filePath = "";
 				
 				/**
 				 * TEMPORARY HACK:
@@ -285,8 +294,9 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 				
 				if (virtualFile == null) { continue; }
 				
-				int lineNumber   = Integer.parseInt(matchParts[1]) - 1;
-				int columnNumber = Integer.parseInt(matchParts[2]) - 1;
+				int lineNumber   = Integer.parseInt(matchPartIterator.next()) - 1;
+				int columnNumber = matchPartIterator.hasNext() ?
+					Integer.parseInt(matchPartIterator.next()) - 1 : 0;
 				
 				// TODO: Find a way to return results for all matches in a line, see:
 				//       https://upsource.jetbrains.com/idea-ce/file/idea-ce-d00d8b4ae3ed33097972b8a4286b336bf4ffcfab/platform/lang-api/src/com/intellij/execution/filters/Filter.java
