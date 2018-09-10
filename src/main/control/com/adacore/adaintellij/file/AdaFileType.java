@@ -6,8 +6,6 @@ import com.adacore.adaintellij.AdaLanguage;
 
 /**
  * Any file type specific to the Ada language.
- *
- * TODO: Add subclass for the GPR file type
  */
 public abstract class AdaFileType extends LanguageFileType {
 	
