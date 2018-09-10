@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.adacore'
-version '0.1-dev'
+version '0.2-dev'
 
 sourceCompatibility = 1.8
 
@@ -19,6 +19,11 @@ dependencies {
 
 intellij {
 	version '2018.2.1'
+}
+
+sourceSets {
+	main.java.srcDirs = [ 'src/main/control' , 'src/main/ui' ]
+	test.java.srcDirs = [ 'src/test/control' , 'src/test/ui' ]
 }
 
 test {

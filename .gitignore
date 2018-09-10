@@ -1,9 +1,9 @@
 # IDE-specific config files
-.idea
+/.idea
 
 # Gradle Wrapper downloaded files
-.gradle
+/.gradle
 
 # Build files & generated binaries
-build
-out
+/build
+/out

@@ -2,8 +2,9 @@ package com.adacore.adaintellij.file;
 
 import javax.swing.*;
 
-import com.intellij.openapi.util.IconLoader;
 import org.jetbrains.annotations.*;
+
+import com.adacore.adaintellij.Icons;
 
 /**
  * Internal representation of the Ada body file type.
@@ -14,11 +15,6 @@ public final class AdaBodyFileType extends AdaFileType {
 	 * Unique instance representing the Ada body file type.
 	 */
 	public static final AdaFileType INSTANCE = new AdaBodyFileType();
-	
-	/**
-	 * Graphical icon corresponding to the Ada body file type.
-	 */
-	public static final Icon ICON = IconLoader.getIcon("/icons/test-icon.png");
 	
 	/**
 	 * Constructs a new instance of the Ada body file type.
@@ -53,6 +49,6 @@ public final class AdaBodyFileType extends AdaFileType {
 	 */
 	@Nullable
 	@Override
-	public Icon getIcon() { return ICON; }
+	public Icon getIcon() { return Icons.ADA_BODY_SOURCE_FILE; }
 
 }

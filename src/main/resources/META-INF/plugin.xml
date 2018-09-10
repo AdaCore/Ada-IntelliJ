@@ -8,11 +8,18 @@
 	]]></description>
 	
 	<change-notes><![CDATA[
+		<strong>0.2-dev</strong>
+		<ul>
+			<li>IDE recognizes GPR (.gpr) files (no syntax highlighting)</li>
+			<li>Basic gprbuild support, build configurations with limited customization</li>
+			<li>Hacky gprbuild output hyperlinks to source code (requires gps_cli to be on PATH)</li>
+			<li>Basic GPR file management</li>
+		</ul>
 		<strong>0.1-dev</strong>
-			<ul>
-				<li>IDE recognizes Ada body (.adb) and spec (.ads) files</li>
-				<li>Basic syntax highlighting for body and spec files</li>
-			</ul>
+		<ul>
+			<li>IDE recognizes Ada body (.adb) and spec (.ads) files</li>
+			<li>Basic syntax highlighting for body and spec files</li>
+		</ul>
 		<strong>0-dev</strong>
 	]]></change-notes>
 	
@@ -20,11 +27,27 @@
 	<!-- See https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
 	<depends>com.intellij.modules.lang</depends>
 	
+	<application-components>
+		<!-- gprbuild manager component -->
+		<component>
+			<implementation-class>com.adacore.adaintellij.build.GPRbuildManager</implementation-class>
+		</component>
+	</application-components>
+	
+	<project-components>
+		<!-- GPR file manager component -->
+		<component>
+			<implementation-class>com.adacore.adaintellij.project.GprFileManager</implementation-class>
+		</component>
+	</project-components>
+	
 	<extensions defaultExtensionNs="com.intellij">
 		<!-- Ada file type factory -->
 		<fileTypeFactory implementation="com.adacore.adaintellij.file.AdaFileTypeFactory"/>
 		<!-- Ada syntax highligher factory -->
 		<lang.syntaxHighlighterFactory language="AdaLanguage" implementationClass="com.adacore.adaintellij.lexanalysis.AdaSyntaxHighlighterFactory"/>
+		<!-- GPR build run configuration type -->
+		<configurationType implementation="com.adacore.adaintellij.build.GprBuildRunConfigurationType"/>
 	</extensions>
 	
 	<actions>
