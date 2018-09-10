@@ -1,4 +1,4 @@
-package com.adacore.adaintellij.icons;
+package com.adacore.adaintellij;
 
 import javax.swing.*;
 

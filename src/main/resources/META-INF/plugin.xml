@@ -30,7 +30,7 @@
 	<application-components>
 		<!-- gprbuild manager component -->
 		<component>
-			<implementation-class>com.adacore.adaintellij.build.GprbuildManager</implementation-class>
+			<implementation-class>com.adacore.adaintellij.build.GPRbuildManager</implementation-class>
 		</component>
 	</application-components>
 	

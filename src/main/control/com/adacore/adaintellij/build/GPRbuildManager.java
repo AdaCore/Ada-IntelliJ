@@ -10,9 +10,9 @@ import org.jetbrains.annotations.Nullable;
 import com.adacore.adaintellij.notifications.AdaIJNotification;
 
 /**
- * Application component handling gprbuild-related tasks.
+ * Application component handling GPRBuild-related tasks.
  */
-public final class GprbuildManager implements ApplicationComponent {
+public final class GPRbuildManager implements ApplicationComponent {
 	
 	/**
 	 * The extension-less name of the gprbuild executable.
@@ -28,7 +28,7 @@ public final class GprbuildManager implements ApplicationComponent {
 	 * @see com.intellij.openapi.components.NamedComponent#getComponentName()
 	 */
 	@Override
-	public String getComponentName() { return "com.adacore.adaintellij.build.GprbuildManager"; }
+	public String getComponentName() { return "com.adacore.adaintellij.build.GPRbuildManager"; }
 	
 	/**
 	 * @see com.intellij.openapi.components.BaseComponent#initComponent()

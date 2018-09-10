@@ -19,15 +19,9 @@ import org.jetbrains.annotations.*;
 import com.adacore.adaintellij.project.GprFileManager;
 
 /**
- * Run configuration for running gprbuild.
+ * Run configuration for running GPRBuild.
  */
-public final class GprBuildRunConfiguration extends RunConfigurationBase {
-	
-	private static final String GPRBUILD_NOT_SPECIFIED_MESSAGE =
-		"No gprbuild path specified. Go to `Run | Edit Configurations...` to set the gprbuild path.";
-	
-	private static final String GPR_FILE_NOT_FOUND_MESSAGE =
-		"No `.gpr` file found in project. Add a `.gpr` file to the project's base directory.";
+public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 	
 	/**
 	 * The project in which this configuration will be run.
@@ -47,14 +41,14 @@ public final class GprBuildRunConfiguration extends RunConfigurationBase {
 	private String customGprFilePath = "";
 	
 	/**
-	 * Constructs a new GprBuildRunConfiguration given a project, a factory
+	 * Constructs a new GPRBuildRunConfiguration given a project, a factory
 	 * and a name.
 	 *
 	 * @param project The project in which this configuration will be run.
 	 * @param factory The factory that generated this configuration.
 	 * @param name The name of this configuration.
 	 */
-	GprBuildRunConfiguration(Project project, GprBuildConfigurationFactory factory, String name) {
+	GPRBuildRunConfiguration(Project project, GPRBuildConfigurationFactory factory, String name) {
 		super(project, factory, name);
 		this.project = project;
 	}
@@ -65,7 +59,7 @@ public final class GprBuildRunConfiguration extends RunConfigurationBase {
 	@NotNull
 	@Override
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-		return new GprBuildSettingsEditor();
+		return new GPRBuildSettingsEditor();
 	}
 	
 	/**
@@ -99,7 +93,7 @@ public final class GprBuildRunConfiguration extends RunConfigurationBase {
 				ConsoleView    consoleView    =
 					TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
 				
-				consoleView.addMessageFilter(new GprbuildOutputFilter());
+				consoleView.addMessageFilter(new GPRBuildOutputFilter());
 				consoleView.attachToProcess(processHandler);
 				
 				return new DefaultExecutionResult(consoleView, processHandler);
@@ -110,15 +104,19 @@ public final class GprBuildRunConfiguration extends RunConfigurationBase {
 			@Override
 			protected ProcessHandler startProcess() throws ExecutionException {
 				
-				String gprbuildPath = GprbuildManager.getGprbuildPath();
+				String gprbuildPath = GPRbuildManager.getGprbuildPath();
 				String gprFilePath  = getEffectiveGprFilePath();
 				
 				if (gprbuildPath == null) {
-					throw new ExecutionException(GPRBUILD_NOT_SPECIFIED_MESSAGE);
-				}
-				
-				if (gprFilePath == null) {
-					throw new ExecutionException(GPR_FILE_NOT_FOUND_MESSAGE);
+					throw new ExecutionException(
+						"No gprbuild path specified. Go to `Run | Edit" +
+							" Configurations...` to set the gprbuild path."
+					);
+				} else if (gprFilePath == null) {
+					throw new ExecutionException(
+						"No `.gpr` file found in project. Add a" +
+							"`.gpr` file to the project's base directory."
+					);
 				}
 				
 				GeneralCommandLine commandLine =
@@ -176,16 +174,13 @@ public final class GprBuildRunConfiguration extends RunConfigurationBase {
 	 * hyperlinks to certain parts of the output, such as a link to line 23
 	 * column 7 of file main.adb for the string "main.adb:23:7".
 	 */
-	private final class GprbuildOutputFilter implements Filter {
+	private final class GPRBuildOutputFilter implements Filter {
 		
 		/**
-		 * Pattern matching strings strings of the format:
-		 *
-		 *       file_name:line_number:column_number
-		 *
-		 * TODO: Restrict regex
+		 * Pattern matching source file locations.
 		 */
-		private final Pattern PATTERN = Pattern.compile("[\\w_\\-.]+:[0-9]+:[0-9]+");
+		private final Pattern PATTERN = Pattern.compile("^([^:]:?[^:]*):(\\d+):((\\d+):)? " +
+				"(((medium )?warning|medium:)?(info|Note|check)?(\\(style|low:|low warning:)?.*)");
 		
 		/**
 		 * @see com.intellij.execution.filters.Filter#applyFilter(String, int)

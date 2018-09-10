@@ -13,6 +13,7 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.*;
 
+import com.adacore.adaintellij.dialogs.ListChooserDialog;
 import com.adacore.adaintellij.file.GprFileType;
 import com.adacore.adaintellij.notifications.AdaIJNotification;
 

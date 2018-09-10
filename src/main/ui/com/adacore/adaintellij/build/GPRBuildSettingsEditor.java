@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * TODO: Move gprbuild path setting to a global plugin settings page.
  */
-public final class GprBuildSettingsEditor extends SettingsEditor<GprBuildRunConfiguration> {
+public final class GPRBuildSettingsEditor extends SettingsEditor<GPRBuildRunConfiguration> {
 	
 	/**
 	 * UI components.
@@ -25,9 +25,9 @@ public final class GprBuildSettingsEditor extends SettingsEditor<GprBuildRunConf
 	private TextFieldWithBrowseButton customGprFilePathField;
 	
 	/**
-	 * Constructs a new GprBuildSettingsEditor.
+	 * Constructs a new GPRBuildSettingsEditor.
 	 */
-	GprBuildSettingsEditor() {
+	GPRBuildSettingsEditor() {
 		gprbuildPathField      = new TextFieldWithBrowseButton();
 		customGprFilePathField = new TextFieldWithBrowseButton();
 	}
@@ -39,8 +39,8 @@ public final class GprBuildSettingsEditor extends SettingsEditor<GprBuildRunConf
 	 *                                 reset this editor.
 	 */
 	@Override
-	protected void resetEditorFrom(@NotNull GprBuildRunConfiguration gprBuildRunConfiguration) {
-		gprbuildPathField.setText(GprbuildManager.getGprbuildPath());
+	protected void resetEditorFrom(@NotNull GPRBuildRunConfiguration gprBuildRunConfiguration) {
+		gprbuildPathField.setText(GPRbuildManager.getGprbuildPath());
 		customGprFilePathField.setText(gprBuildRunConfiguration.getCustomGprFilePath());
 	}
 	
@@ -51,8 +51,8 @@ public final class GprBuildSettingsEditor extends SettingsEditor<GprBuildRunConf
 	 *                                 apply the data in this editor.
 	 */
 	@Override
-	protected void applyEditorTo(@NotNull GprBuildRunConfiguration gprBuildRunConfiguration) {
-		GprbuildManager.setGprBuildPath(gprbuildPathField.getText());
+	protected void applyEditorTo(@NotNull GPRBuildRunConfiguration gprBuildRunConfiguration) {
+		GPRbuildManager.setGprBuildPath(gprbuildPathField.getText());
 		gprBuildRunConfiguration.setCustomGprFilePath(customGprFilePathField.getText());
 	}
 	

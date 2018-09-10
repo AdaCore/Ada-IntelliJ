@@ -4,7 +4,7 @@ import javax.swing.*;
 
 import org.jetbrains.annotations.*;
 
-import com.adacore.adaintellij.icons.Icons;
+import com.adacore.adaintellij.Icons;
 
 /**
  * Internal representation of the GNAT project file/GPR file type.

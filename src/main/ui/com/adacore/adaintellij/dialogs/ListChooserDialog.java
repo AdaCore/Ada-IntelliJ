@@ -1,4 +1,4 @@
-package com.adacore.adaintellij.project;
+package com.adacore.adaintellij.dialogs;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

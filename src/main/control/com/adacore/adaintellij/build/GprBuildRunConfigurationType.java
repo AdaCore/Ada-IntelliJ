@@ -5,10 +5,10 @@ import javax.swing.*;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 
-import com.adacore.adaintellij.icons.Icons;
+import com.adacore.adaintellij.Icons;
 
 /**
- * Run configuration type for gprbuild run configurations.
+ * Run configuration type for GPRBuild run configurations.
  */
 public final class GprBuildRunConfigurationType implements ConfigurationType {
 	
@@ -16,13 +16,13 @@ public final class GprBuildRunConfigurationType implements ConfigurationType {
 	 * @see com.intellij.execution.configurations.ConfigurationType#getDisplayName()
 	 */
 	@Override
-	public String getDisplayName() { return "GPR Build"; }
+	public String getDisplayName() { return "GPRBuild"; }
 	
 	/**
 	 * @see com.intellij.execution.configurations.ConfigurationType#getConfigurationTypeDescription()
 	 */
 	@Override
-	public String getConfigurationTypeDescription() { return "GPR Build Run Configuration Type"; }
+	public String getConfigurationTypeDescription() { return "GPRBuild Run Configuration Type"; }
 	
 	/**
 	 * @see com.intellij.execution.configurations.ConfigurationType#getIcon()
@@ -41,7 +41,7 @@ public final class GprBuildRunConfigurationType implements ConfigurationType {
 	 */
 	@Override
 	public ConfigurationFactory[] getConfigurationFactories() {
-		return new ConfigurationFactory[] { new GprBuildConfigurationFactory(this) };
+		return new ConfigurationFactory[] { new GPRBuildConfigurationFactory(this) };
 	}
 	
 }
