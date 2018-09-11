@@ -21,7 +21,7 @@ import org.jetbrains.annotations.*;
 import com.adacore.adaintellij.project.GprFileManager;
 
 /**
- * Run configuration for running GPRBuild.
+ * Run configuration for running GPRbuild.
  */
 public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 	

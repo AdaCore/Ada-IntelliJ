@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import com.adacore.adaintellij.notifications.AdaIJNotification;
 
 /**
- * Application component handling GPRBuild-related tasks.
+ * Application component handling GPRbuild-related tasks.
  */
 public final class GPRbuildManager implements ApplicationComponent {
 	

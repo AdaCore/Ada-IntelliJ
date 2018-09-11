@@ -5,7 +5,7 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Factory for GPRBuild configurations.
+ * Factory for GPRbuild configurations.
  */
 public final class GPRBuildConfigurationFactory extends ConfigurationFactory {
 	
@@ -21,7 +21,7 @@ public final class GPRBuildConfigurationFactory extends ConfigurationFactory {
 	 */
 	@Override
 	public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
-		return new GPRBuildRunConfiguration(project, this, "GPRBuild");
+		return new GPRBuildRunConfiguration(project, this, "GPRbuild");
 	}
 	
 	/**
@@ -29,7 +29,7 @@ public final class GPRBuildConfigurationFactory extends ConfigurationFactory {
 	 */
 	@Override
 	public String getName() {
-		return "GPRBuild Configuration Factory";
+		return "GPRbuild Configuration Factory";
 	}
 	
 }
