@@ -13,9 +13,9 @@ public final class Icons {
 	/**
 	 * Icons for Ada file types.
 	 */
-	public static final Icon ADA_BODY_SOURCE_FILE       = IconLoader.getIcon("/icons/test-icon.png");
-	public static final Icon ADA_SPEC_SOURCE_FILE       = IconLoader.getIcon("/icons/test-icon.png");
-	public static final Icon ADA_GPR_SOURCE_FILE        = IconLoader.getIcon("/icons/test-icon.png");
+	public static final Icon ADA_BODY_SOURCE_FILE       = IconLoader.getIcon("/icons/adb-icon.png");
+	public static final Icon ADA_SPEC_SOURCE_FILE       = IconLoader.getIcon("/icons/ads-icon.png");
+	public static final Icon ADA_GPR_SOURCE_FILE        = IconLoader.getIcon("/icons/gpr-icon.png");
 	
 	/**
 	 * Icons for run configuration types.
