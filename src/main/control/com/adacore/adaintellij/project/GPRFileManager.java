@@ -14,13 +14,13 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.*;
 
 import com.adacore.adaintellij.dialogs.ListChooserDialog;
-import com.adacore.adaintellij.file.GprFileType;
+import com.adacore.adaintellij.file.GPRFileType;
 import com.adacore.adaintellij.notifications.AdaIJNotification;
 
 /**
  * Project component handling everything related to GPR files.
  */
-public final class GprFileManager implements ProjectComponent {
+public final class GPRFileManager implements ProjectComponent {
 	
 	/**
 	 * The project to which this component belongs.
@@ -39,18 +39,18 @@ public final class GprFileManager implements ProjectComponent {
 	private int defaultGprFilePathIndex = -1;
 	
 	/**
-	 * Constructs a new GPR file manager given a project.
+	 * Constructs a new GPRFileManager given a project.
 	 *
 	 * @param project The project to attach to the constructed manager.
 	 */
-	public GprFileManager(Project project) { this.project = project; }
+	public GPRFileManager(Project project) { this.project = project; }
 	
 	/**
 	 * @see com.intellij.openapi.components.NamedComponent#getComponentName()
 	 */
 	@Override
 	@NotNull
-	public String getComponentName() { return "com.adacore.adaintellij.project.GprFileManager"; }
+	public String getComponentName() { return "com.adacore.adaintellij.project.GPRFileManager"; }
 	
 	/**
 	 * @see com.intellij.openapi.components.ProjectComponent#projectOpened()
@@ -95,7 +95,7 @@ public final class GprFileManager implements ProjectComponent {
 	 */
 	private void locateGprFiles(@Nullable Runnable doneRunnable) {
 		
-		String gprFileExtension = GprFileType.INSTANCE.getDefaultExtension();
+		String gprFileExtension = GPRFileType.INSTANCE.getDefaultExtension();
 		
 		gprFilePaths = new ArrayList<>();
 		

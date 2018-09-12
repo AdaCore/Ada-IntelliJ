@@ -13,6 +13,16 @@ import com.adacore.adaintellij.Icons;
 public final class GPRbuildRunConfigurationType implements ConfigurationType {
 	
 	/**
+	 * Unique instance representing the GPRbuild run configuration type.
+	 */
+	public static final GPRbuildRunConfigurationType INSTANCE = new GPRbuildRunConfigurationType();
+	
+	/**
+	 * Constructs a new instance of the GPRbuild run configuration type.
+	 */
+	private GPRbuildRunConfigurationType() {}
+	
+	/**
 	 * @see com.intellij.execution.configurations.ConfigurationType#getDisplayName()
 	 */
 	@Override

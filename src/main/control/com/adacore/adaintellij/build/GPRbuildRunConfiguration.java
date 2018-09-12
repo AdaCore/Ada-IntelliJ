@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.*;
 
-import com.adacore.adaintellij.Utils;
-import com.adacore.adaintellij.notifications.AdaIJNotification;
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.filters.*;
@@ -22,7 +20,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
 import org.jetbrains.annotations.*;
 
-import com.adacore.adaintellij.project.GprFileManager;
+import com.adacore.adaintellij.notifications.AdaIJNotification;
+import com.adacore.adaintellij.project.GPRFileManager;
+import com.adacore.adaintellij.Utils;
 
 /**
  * Run configuration for running GPRbuild.
@@ -168,7 +168,7 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 	@Nullable
 	private String getEffectiveGprFilePath() {
 		
-		GprFileManager gprFileManager = project.getComponent(GprFileManager.class);
+		GPRFileManager gprFileManager = project.getComponent(GPRFileManager.class);
 		
 		return "".equals(customGprFilePath) ?
 			gprFileManager.defaultGprFilePath() : customGprFilePath;
@@ -231,7 +231,7 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 						"Add gps_cli to PATH for output file location hyperlinks",
 						"File location hyperlinks from gprbuild output is an in-dev" +
 							" feature and currently requires gps_cli to be on the PATH.",
-						NotificationType.WARNING
+						NotificationType.INFORMATION
 					));
 					
 					return null;
