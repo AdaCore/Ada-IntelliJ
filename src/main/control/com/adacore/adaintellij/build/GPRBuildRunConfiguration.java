@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.*;
 
+import com.adacore.adaintellij.Utils;
+import com.adacore.adaintellij.notifications.AdaIJNotification;
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.filters.*;
@@ -13,6 +15,8 @@ import com.intellij.execution.process.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
@@ -219,6 +223,20 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 				 */
 				/////////////////////////////////////////////////////////////////////////
 				//                                                                     //
+				
+				if (!Utils.isOnSystemPath(GpsCli.COMMAND, false)) {
+					
+					// Notify the user that gps_cli needs to be on the path
+					Notifications.Bus.notify(new AdaIJNotification(
+						"Add gps_cli to PATH for output file location hyperlinks",
+						"File location hyperlinks from gprbuild output is an in-dev" +
+							" feature and currently requires gps_cli to be on the PATH.",
+						NotificationType.WARNING
+					));
+					
+					return null;
+					
+				}
 				
 				List<String> sources;
 				

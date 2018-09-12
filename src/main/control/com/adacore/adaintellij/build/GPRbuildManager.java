@@ -1,5 +1,6 @@
 package com.adacore.adaintellij.build;
 
+import com.adacore.adaintellij.Utils;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.ApplicationComponent;
@@ -36,54 +37,28 @@ public final class GPRbuildManager implements ApplicationComponent {
 	@Override
 	public void initComponent() {
 		
-		char   fileSeparator = System.getProperty("file.separator").charAt(0);
-		String pathSeparator = System.getProperty("path.separator");
+		String path = Utils.getPathFromSystemPath(GPRBUILD_NAME, false);
 		
-		String[] paths = System.getenv("PATH").split(pathSeparator);
-		
-		for (String path : paths) {
+		if (path == null) {
 			
-			VirtualFile directory = LocalFileSystem.getInstance().findFileByPath(path);
+			// Notify the user that no compiler was found on the path
+			Notifications.Bus.notify(new AdaIJNotification(
+				"No Compiler Found on the PATH",
+				"Please set the gprbuild path in `Run | Edit Configurations`.",
+				NotificationType.WARNING
+			));
 			
-			// Shouldn't happen in a PATH variable but just to be safe
-			if (directory == null || !directory.isDirectory()) { continue; }
-			
-			for (VirtualFile file : directory.getChildren()) {
-				
-				if (file.isDirectory()) { continue; }
-				
-				if (GPRBUILD_NAME.equals(file.getNameWithoutExtension())) {
-					
-					// Set the gprbuild path
-					
-					StringBuilder newGprbuildPath = new StringBuilder(path);
-					
-					if (path.charAt(path.length() - 1) != fileSeparator) {
-						newGprbuildPath.append(fileSeparator);
-					}
-					
-					gprbuildPath = newGprbuildPath.append(file.getName()).toString();
-					
-					// Notify the user that a compiler was found on the path
-					Notifications.Bus.notify(new AdaIJNotification(
-						"Compiler Found on the PATH",
-						"Using the following gprbuild for compilation:\n" + gprbuildPath,
-						NotificationType.INFORMATION
-					));
-					
-					return;
-					
-				}
-				
-			}
+			return;
 			
 		}
 		
-		// Notify the user that no compiler was found on the path
+		gprbuildPath = path;
+		
+		// Notify the user that a compiler was found on the path
 		Notifications.Bus.notify(new AdaIJNotification(
-			"No Compiler Found on the PATH",
-			"Please set the gprbuild path in `Run | Edit Configurations`.",
-			NotificationType.WARNING
+			"Compiler Found on the PATH",
+			"Using the following gprbuild for compilation:\n" + gprbuildPath,
+			NotificationType.INFORMATION
 		));
 		
 	}
