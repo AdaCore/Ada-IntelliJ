@@ -27,7 +27,7 @@ import com.adacore.adaintellij.project.GprFileManager;
 /**
  * Run configuration for running GPRbuild.
  */
-public final class GPRBuildRunConfiguration extends RunConfigurationBase {
+public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 	
 	/**
 	 * The project in which this configuration will be run.
@@ -47,14 +47,14 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 	private String customGprFilePath = "";
 	
 	/**
-	 * Constructs a new GPRBuildRunConfiguration given a project, a factory
+	 * Constructs a new GPRbuildRunConfiguration given a project, a factory
 	 * and a name.
 	 *
 	 * @param project The project in which this configuration will be run.
 	 * @param factory The factory that generated this configuration.
 	 * @param name The name of this configuration.
 	 */
-	GPRBuildRunConfiguration(Project project, GPRBuildConfigurationFactory factory, String name) {
+	GPRbuildRunConfiguration(Project project, GPRbuildConfigurationFactory factory, String name) {
 		super(project, factory, name);
 		this.project = project;
 	}
@@ -65,7 +65,7 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 	@NotNull
 	@Override
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-		return new GPRBuildSettingsEditor();
+		return new GPRbuildSettingsEditor();
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 				ConsoleView    consoleView    =
 					TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
 				
-				consoleView.addMessageFilter(new GPRBuildOutputFilter());
+				consoleView.addMessageFilter(new GPRbuildOutputFilter());
 				consoleView.attachToProcess(processHandler);
 				
 				return new DefaultExecutionResult(consoleView, processHandler);
@@ -180,7 +180,7 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 	 * hyperlinks to certain parts of the output, such as a link to line 23
 	 * column 7 of file main.adb for the string "main.adb:23:7".
 	 */
-	private final class GPRBuildOutputFilter implements Filter {
+	private final class GPRbuildOutputFilter implements Filter {
 		
 		/**
 		 * Pattern matching source file locations.

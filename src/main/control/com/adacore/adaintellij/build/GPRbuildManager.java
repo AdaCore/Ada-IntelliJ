@@ -4,8 +4,6 @@ import com.adacore.adaintellij.Utils;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.Nullable;
 
 import com.adacore.adaintellij.notifications.AdaIJNotification;

@@ -47,7 +47,7 @@
 		<!-- Ada syntax highligher factory -->
 		<lang.syntaxHighlighterFactory language="AdaLanguage" implementationClass="com.adacore.adaintellij.lexanalysis.AdaSyntaxHighlighterFactory"/>
 		<!-- GPR build run configuration type -->
-		<configurationType implementation="com.adacore.adaintellij.build.GprBuildRunConfigurationType"/>
+		<configurationType implementation="com.adacore.adaintellij.build.GPRbuildRunConfigurationType"/>
 	</extensions>
 	
 	<actions>

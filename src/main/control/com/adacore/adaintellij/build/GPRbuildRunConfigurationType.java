@@ -10,7 +10,7 @@ import com.adacore.adaintellij.Icons;
 /**
  * Run configuration type for GPRbuild run configurations.
  */
-public final class GprBuildRunConfigurationType implements ConfigurationType {
+public final class GPRbuildRunConfigurationType implements ConfigurationType {
 	
 	/**
 	 * @see com.intellij.execution.configurations.ConfigurationType#getDisplayName()
@@ -41,7 +41,7 @@ public final class GprBuildRunConfigurationType implements ConfigurationType {
 	 */
 	@Override
 	public ConfigurationFactory[] getConfigurationFactories() {
-		return new ConfigurationFactory[] { new GPRBuildConfigurationFactory(this) };
+		return new ConfigurationFactory[] { new GPRbuildConfigurationFactory(this) };
 	}
 	
 }
