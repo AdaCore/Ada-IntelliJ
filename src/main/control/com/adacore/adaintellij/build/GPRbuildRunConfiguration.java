@@ -176,6 +176,20 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 	}
 	
 	/**
+	 * TEMPORARY!
+	 *
+	 * Whether or not the user has already been notified about
+	 * gps_cli not being on the PATH.
+	 *
+	 * TODO: Remove this with gps_cli hack
+	 */
+	/////////////////////////////////////////////////////////////////////////
+	//                                                                     //
+	private static boolean notifiedAboutGpsCli = false;
+	//                                                                     //
+	/////////////////////////////////////////////////////////////////////////
+	
+	/**
 	 * Output filter, to be used with the output of gprbuild, for attaching
 	 * hyperlinks to certain parts of the output, such as a link to line 23
 	 * column 7 of file main.adb for the string "main.adb:23:7".
@@ -194,6 +208,35 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 		@Nullable
 		@Override
 		public Filter.Result applyFilter(String line, int entireLength) {
+			
+			/**
+			 * TEMPORARY!
+			 *
+			 * TODO: Remove this with gps_cli hack
+			 */
+			/////////////////////////////////////////////////////////////////////////
+			//                                                                     //
+			if (!Utils.isOnSystemPath(GpsCli.COMMAND, false)) {
+				
+				if (!notifiedAboutGpsCli) {
+					
+					// Notify the user that gps_cli needs to be on the path
+					Notifications.Bus.notify(new AdaIJNotification(
+						"Add gps_cli to PATH for output file location hyperlinks",
+						"File location hyperlinks from gprbuild output is an in-dev" +
+							" feature and currently requires gps_cli to be on the PATH.",
+						NotificationType.INFORMATION
+					));
+					
+					notifiedAboutGpsCli = true;
+					
+				}
+				
+				return null;
+				
+			}
+			//                                                                     //
+			/////////////////////////////////////////////////////////////////////////
 			
 			Matcher matcher = PATTERN.matcher(line);
 			
@@ -223,20 +266,6 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 				 */
 				/////////////////////////////////////////////////////////////////////////
 				//                                                                     //
-				
-				if (!Utils.isOnSystemPath(GpsCli.COMMAND, false)) {
-					
-					// Notify the user that gps_cli needs to be on the path
-					Notifications.Bus.notify(new AdaIJNotification(
-						"Add gps_cli to PATH for output file location hyperlinks",
-						"File location hyperlinks from gprbuild output is an in-dev" +
-							" feature and currently requires gps_cli to be on the PATH.",
-						NotificationType.INFORMATION
-					));
-					
-					return null;
-					
-				}
 				
 				List<String> sources;
 				
