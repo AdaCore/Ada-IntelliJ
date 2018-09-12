@@ -28,7 +28,7 @@
 	<depends>com.intellij.modules.lang</depends>
 	
 	<application-components>
-		<!-- gprbuild manager component -->
+		<!-- GPRbuild manager component -->
 		<component>
 			<implementation-class>com.adacore.adaintellij.build.GPRbuildManager</implementation-class>
 		</component>
@@ -37,7 +37,11 @@
 	<project-components>
 		<!-- GPR file manager component -->
 		<component>
-			<implementation-class>com.adacore.adaintellij.project.GprFileManager</implementation-class>
+			<implementation-class>com.adacore.adaintellij.project.GPRFileManager</implementation-class>
+		</component>
+		<!-- GPRbuild configuration manager component -->
+		<component>
+			<implementation-class>com.adacore.adaintellij.build.GPRbuildConfigurationManager</implementation-class>
 		</component>
 	</project-components>
 	
@@ -46,8 +50,8 @@
 		<fileTypeFactory implementation="com.adacore.adaintellij.file.AdaFileTypeFactory"/>
 		<!-- Ada syntax highligher factory -->
 		<lang.syntaxHighlighterFactory language="AdaLanguage" implementationClass="com.adacore.adaintellij.lexanalysis.AdaSyntaxHighlighterFactory"/>
-		<!-- GPR build run configuration type -->
-		<configurationType implementation="com.adacore.adaintellij.build.GprBuildRunConfigurationType"/>
+		<!-- GPRbuild run configuration type -->
+		<configurationType implementation="com.adacore.adaintellij.build.GPRbuildRunConfigurationType"/>
 	</extensions>
 	
 	<actions>

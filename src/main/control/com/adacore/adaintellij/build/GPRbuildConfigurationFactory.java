@@ -5,23 +5,23 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Factory for GPRBuild configurations.
+ * Factory for GPRbuild configurations.
  */
-public final class GPRBuildConfigurationFactory extends ConfigurationFactory {
+public final class GPRbuildConfigurationFactory extends ConfigurationFactory {
 	
 	/**
-	 * Constructs a new GPRBuildConfigurationFactory.
+	 * Constructs a new GPRbuildConfigurationFactory.
 	 *
 	 * @param type The configuration type for this factory.
 	 */
-	GPRBuildConfigurationFactory(ConfigurationType type) { super(type); }
+	GPRbuildConfigurationFactory(ConfigurationType type) { super(type); }
 	
 	/**
 	 * @see com.intellij.execution.configurations.ConfigurationFactory#createTemplateConfiguration(Project)
 	 */
 	@Override
 	public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
-		return new GPRBuildRunConfiguration(project, this, "GPRBuild");
+		return new GPRbuildRunConfiguration(project, this, "GPRbuild");
 	}
 	
 	/**
@@ -29,7 +29,7 @@ public final class GPRBuildConfigurationFactory extends ConfigurationFactory {
 	 */
 	@Override
 	public String getName() {
-		return "GPRBuild Configuration Factory";
+		return "GPRbuild Configuration Factory";
 	}
 	
 }

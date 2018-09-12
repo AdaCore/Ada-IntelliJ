@@ -1,5 +1,6 @@
 # IDE-specific config files
 /.idea
+/Ada-IntelliJ.iml
 
 # Gradle Wrapper downloaded files
 /.gradle

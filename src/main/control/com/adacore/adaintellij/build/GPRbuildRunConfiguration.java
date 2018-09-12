@@ -13,17 +13,21 @@ import com.intellij.execution.process.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
 import org.jetbrains.annotations.*;
 
-import com.adacore.adaintellij.project.GprFileManager;
+import com.adacore.adaintellij.notifications.AdaIJNotification;
+import com.adacore.adaintellij.project.GPRFileManager;
+import com.adacore.adaintellij.Utils;
 
 /**
- * Run configuration for running GPRBuild.
+ * Run configuration for running GPRbuild.
  */
-public final class GPRBuildRunConfiguration extends RunConfigurationBase {
+public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 	
 	/**
 	 * The project in which this configuration will be run.
@@ -43,14 +47,14 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 	private String customGprFilePath = "";
 	
 	/**
-	 * Constructs a new GPRBuildRunConfiguration given a project, a factory
+	 * Constructs a new GPRbuildRunConfiguration given a project, a factory
 	 * and a name.
 	 *
 	 * @param project The project in which this configuration will be run.
 	 * @param factory The factory that generated this configuration.
 	 * @param name The name of this configuration.
 	 */
-	GPRBuildRunConfiguration(Project project, GPRBuildConfigurationFactory factory, String name) {
+	GPRbuildRunConfiguration(Project project, GPRbuildConfigurationFactory factory, String name) {
 		super(project, factory, name);
 		this.project = project;
 	}
@@ -61,7 +65,7 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 	@NotNull
 	@Override
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-		return new GPRBuildSettingsEditor();
+		return new GPRbuildSettingsEditor();
 	}
 	
 	/**
@@ -95,7 +99,7 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 				ConsoleView    consoleView    =
 					TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
 				
-				consoleView.addMessageFilter(new GPRBuildOutputFilter());
+				consoleView.addMessageFilter(new GPRbuildOutputFilter());
 				consoleView.attachToProcess(processHandler);
 				
 				return new DefaultExecutionResult(consoleView, processHandler);
@@ -164,7 +168,7 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 	@Nullable
 	private String getEffectiveGprFilePath() {
 		
-		GprFileManager gprFileManager = project.getComponent(GprFileManager.class);
+		GPRFileManager gprFileManager = project.getComponent(GPRFileManager.class);
 		
 		return "".equals(customGprFilePath) ?
 			gprFileManager.defaultGprFilePath() : customGprFilePath;
@@ -176,7 +180,7 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 	 * hyperlinks to certain parts of the output, such as a link to line 23
 	 * column 7 of file main.adb for the string "main.adb:23:7".
 	 */
-	private final class GPRBuildOutputFilter implements Filter {
+	private final class GPRbuildOutputFilter implements Filter {
 		
 		/**
 		 * Pattern matching source file locations.
@@ -219,6 +223,20 @@ public final class GPRBuildRunConfiguration extends RunConfigurationBase {
 				 */
 				/////////////////////////////////////////////////////////////////////////
 				//                                                                     //
+				
+				if (!Utils.isOnSystemPath(GpsCli.COMMAND, false)) {
+					
+					// Notify the user that gps_cli needs to be on the path
+					Notifications.Bus.notify(new AdaIJNotification(
+						"Add gps_cli to PATH for output file location hyperlinks",
+						"File location hyperlinks from gprbuild output is an in-dev" +
+							" feature and currently requires gps_cli to be on the PATH.",
+						NotificationType.INFORMATION
+					));
+					
+					return null;
+					
+				}
 				
 				List<String> sources;
 				

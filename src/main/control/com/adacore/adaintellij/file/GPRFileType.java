@@ -9,17 +9,17 @@ import com.adacore.adaintellij.Icons;
 /**
  * Internal representation of the GNAT project file/GPR file type.
  */
-public final class GprFileType extends AdaFileType {
+public final class GPRFileType extends AdaFileType {
 	
 	/**
 	 * Unique instance representing the GPR file type.
 	 */
-	public static final AdaFileType INSTANCE = new GprFileType();
+	public static final AdaFileType INSTANCE = new GPRFileType();
 	
 	/**
 	 * Constructs a new instance of the GPR file type.
 	 */
-	private GprFileType() { super(); }
+	private GPRFileType() { super(); }
 	
 	/**
 	 * @see com.intellij.openapi.fileTypes.FileType#getName()

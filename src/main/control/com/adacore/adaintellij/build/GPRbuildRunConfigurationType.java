@@ -8,21 +8,31 @@ import com.intellij.execution.configurations.ConfigurationType;
 import com.adacore.adaintellij.Icons;
 
 /**
- * Run configuration type for GPRBuild run configurations.
+ * Run configuration type for GPRbuild run configurations.
  */
-public final class GprBuildRunConfigurationType implements ConfigurationType {
+public final class GPRbuildRunConfigurationType implements ConfigurationType {
+	
+	/**
+	 * Unique instance representing the GPRbuild run configuration type.
+	 */
+	public static final GPRbuildRunConfigurationType INSTANCE = new GPRbuildRunConfigurationType();
+	
+	/**
+	 * Constructs a new instance of the GPRbuild run configuration type.
+	 */
+	private GPRbuildRunConfigurationType() {}
 	
 	/**
 	 * @see com.intellij.execution.configurations.ConfigurationType#getDisplayName()
 	 */
 	@Override
-	public String getDisplayName() { return "GPRBuild"; }
+	public String getDisplayName() { return "GPRbuild"; }
 	
 	/**
 	 * @see com.intellij.execution.configurations.ConfigurationType#getConfigurationTypeDescription()
 	 */
 	@Override
-	public String getConfigurationTypeDescription() { return "GPRBuild Run Configuration Type"; }
+	public String getConfigurationTypeDescription() { return "GPRbuild Run Configuration Type"; }
 	
 	/**
 	 * @see com.intellij.execution.configurations.ConfigurationType#getIcon()
@@ -41,7 +51,7 @@ public final class GprBuildRunConfigurationType implements ConfigurationType {
 	 */
 	@Override
 	public ConfigurationFactory[] getConfigurationFactories() {
-		return new ConfigurationFactory[] { new GPRBuildConfigurationFactory(this) };
+		return new ConfigurationFactory[] { new GPRbuildConfigurationFactory(this) };
 	}
 	
 }

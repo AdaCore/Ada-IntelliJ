@@ -21,7 +21,7 @@ public final class GpsCli {
 	/**
 	 * The name of the main command.
 	 */
-	private static final String COMMAND = "gps_cli";
+	public static final String COMMAND = "gps_cli";
 	
 	/**
 	 * Returns a list of paths to the source files in the given project.

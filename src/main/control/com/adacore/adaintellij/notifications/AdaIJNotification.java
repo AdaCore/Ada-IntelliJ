@@ -1,7 +1,6 @@
 package com.adacore.adaintellij.notifications;
 
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
+import com.intellij.notification.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,6 +25,6 @@ public final class AdaIJNotification extends Notification {
 		@NotNull String title,
 		@NotNull String content,
 		@NotNull NotificationType type)
-	{ super(GROUP_DISPLAY_ID, title, content, type); }
+	{ super(GROUP_DISPLAY_ID, GROUP_DISPLAY_ID + " - " + title, content, type); }
 
 }

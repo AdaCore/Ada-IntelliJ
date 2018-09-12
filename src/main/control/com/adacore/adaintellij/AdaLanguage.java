@@ -5,7 +5,7 @@ import com.intellij.lang.Language;
 /**
  * Internal representation of the Ada language.
  */
-public class AdaLanguage extends Language {
+public final class AdaLanguage extends Language {
 	
 	/**
 	 * Unique instance representing the Ada language.
