@@ -33,7 +33,7 @@ public final class GpsCli {
 	 */
 	static List<String> projectSources(Project project, String gprFilePath) throws Exception {
 		
-		File script = generateScript(project.getBasePath() + "/source-query.py",
+		File script = generateScript(project.getBasePath(),
 			"def execute():\n" +
 			"\tfor file in GPS.Project.root().sources(True):\n" +
 			"\t\tprint file.name()\n");
@@ -65,8 +65,8 @@ public final class GpsCli {
 	 * @throws Exception If something goes wrong.
 	 */
 	static List<String> projectObjectDirectories(Project project, String gprFilePath) throws Exception {
-		
-		File script = generateScript(project.getBasePath() + "/object-dir-query.py",
+
+		File script = generateScript(project.getBasePath(),
 			"def execute():\n" +
 				"\tfor directory_name in GPS.Project.root().object_dirs(False):\n" +
 				"\t\tprint directory_name\n");
@@ -93,18 +93,19 @@ public final class GpsCli {
 	 * Generates and returns a script file at the given path with the given
 	 * source code.
 	 *
-	 * @param scriptPath The path to the script to be created.
+	 * @param scriptParentPath The path to the directory in which to create
+	 *                         the script.
 	 * @param text The source code to write in the script.
 	 * @return The script file.
 	 * @throws Exception If something goes wrong.
 	 */
-	private static File generateScript(String scriptPath, String text) throws Exception {
-		
+	private static File generateScript(String scriptParentPath, String text) throws Exception {
+
+		String scriptPath = scriptParentPath + "/ada-intellij-gps-cli-script.py";
+
 		File script = new File(scriptPath);
 		
-		if (script.exists()) {
-			throw new Exception(scriptPath + " already exists.");
-		}
+		if (script.exists()) { script.delete(); }
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(script));
 		writer.write(text);
