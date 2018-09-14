@@ -12,7 +12,7 @@
 		<ul>
 			<li>IDE recognizes GPR (.gpr) files (no syntax highlighting)</li>
 			<li>Basic gprbuild support, build configurations with limited customization</li>
-			<li>Hacky gprbuild output hyperlinks to source code (requires gps_cli to be on PATH)</li>
+			<li>gprbuild output hyperlinks to source code (requires gps_cli to be on PATH)</li>
 			<li>Basic GPR file management</li>
 		</ul>
 		<strong>0.1-dev</strong>
