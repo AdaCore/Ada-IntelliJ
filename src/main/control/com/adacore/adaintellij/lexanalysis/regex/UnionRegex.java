@@ -138,12 +138,10 @@ public final class UnionRegex implements OORegex {
 		
 		if (fromChar > toChar) {
 			throw new IllegalArgumentException("Invalid bounds: fromChar must be smaller or equal to toChar");
-		} else if (fromChar == toChar) {
-			return new UnitRegex(Character.toString(fromChar), priority);
 		}
 		
 		char character = toChar;
-		OORegex regex  = new UnitRegex(Character.toString(toChar), priority);
+		OORegex regex  = new UnitRegex(Character.toString(character), priority);
 		
 		while (character != fromChar) {
 			regex = new UnionRegex(

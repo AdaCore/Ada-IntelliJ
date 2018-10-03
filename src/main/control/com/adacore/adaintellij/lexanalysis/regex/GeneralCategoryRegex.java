@@ -40,8 +40,8 @@ public final class GeneralCategoryRegex implements OORegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public GeneralCategoryRegex(@NotNull String generalCategory, int priority) {
-		PATTERN          = Pattern.compile(String.format("\\p{%s}", generalCategory));
-		PRIORITY         = priority;
+		PATTERN  = Pattern.compile(String.format("\\p{%s}", generalCategory));
+		PRIORITY = priority;
 	}
 	
 	/**

@@ -142,7 +142,7 @@ public final class ConcatRegex implements OORegex {
 	@Override
 	public OORegex advanced(char character) {
 		
-		OORegex firstRegexAdvanced  = FIRST_REGEX.advanced(character);
+		OORegex firstRegexAdvanced = FIRST_REGEX.advanced(character);
 		
 		if (FIRST_REGEX.nullable()) {
 			
@@ -172,15 +172,9 @@ public final class ConcatRegex implements OORegex {
 			
 		} else {
 			
-			if (firstRegexAdvanced == null) {
-				
-				return null;
-				
-			} else {
-				
-				return new ConcatRegex(firstRegexAdvanced, SECOND_REGEX, PRIORITY);
-				
-			}
+			return firstRegexAdvanced == null ? null :
+				new ConcatRegex(firstRegexAdvanced, SECOND_REGEX, PRIORITY);
+			
 		}
 		
 	}
