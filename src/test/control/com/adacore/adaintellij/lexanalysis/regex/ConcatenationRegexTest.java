@@ -1,42 +1,42 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import static com.adacore.adaintellij.lexanalysis.regex.OORegexTestUtils.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import static com.adacore.adaintellij.lexanalysis.regex.LexerRegexTestUtils.*;
+
 /**
- * JUnit test class for the ConcatRegex class.
+ * JUnit test class for the ConcatenationRegex class.
  */
-final class ConcatRegexTest {
+final class ConcatenationRegexTest {
 	
 	// Constants
 	
-	private static final OORegex LOWER_CASE_A_UNIT_REGEX = new UnitRegex("a");
-	private static final OORegex LOWER_CASE_B_UNIT_REGEX = new UnitRegex("b");
-	private static final OORegex LOWER_CASE_C_UNIT_REGEX = new UnitRegex("c");
-	private static final OORegex LOWER_CASE_D_UNIT_REGEX = new UnitRegex("d");
-	private static final OORegex LOWER_CASE_E_UNIT_REGEX = new UnitRegex("e");
+	private static final LexerRegex LOWER_CASE_A_UNIT_REGEX = new UnitRegex("a");
+	private static final LexerRegex LOWER_CASE_B_UNIT_REGEX = new UnitRegex("b");
+	private static final LexerRegex LOWER_CASE_C_UNIT_REGEX = new UnitRegex("c");
+	private static final LexerRegex LOWER_CASE_D_UNIT_REGEX = new UnitRegex("d");
+	private static final LexerRegex LOWER_CASE_E_UNIT_REGEX = new UnitRegex("e");
 	
-	private static final OORegex CONCAT_REGEX_1 =
-		ConcatRegex.fromRegexes(
+	private static final LexerRegex CONCAT_REGEX_1 =
+		ConcatenationRegex.fromRegexes(
 			LOWER_CASE_A_UNIT_REGEX,
 			LOWER_CASE_B_UNIT_REGEX,
 			LOWER_CASE_C_UNIT_REGEX
 		);
 	
-	private static final OORegex CONCAT_REGEX_2 =
-		ConcatRegex.fromRegexes(
+	private static final LexerRegex CONCAT_REGEX_2 =
+		ConcatenationRegex.fromRegexes(
 			new UnitRegex("ab"),
 			new UnitRegex("cd")
 		);
 	
-	private static final OORegex CONCAT_REGEX_3 =
-		ConcatRegex.fromRegexes(
+	private static final LexerRegex CONCAT_REGEX_3 =
+		ConcatenationRegex.fromRegexes(
 			new UnitRegex("hello"),
 			new UnitRegex("world")
 		);
@@ -48,7 +48,7 @@ final class ConcatRegexTest {
 		
 		// Initialization
 		
-		List<OORegex> regexes = new ArrayList<>();
+		List<LexerRegex> regexes = new ArrayList<>();
 		
 		regexes.add(LOWER_CASE_A_UNIT_REGEX);
 		regexes.add(LOWER_CASE_B_UNIT_REGEX);
@@ -58,15 +58,15 @@ final class ConcatRegexTest {
 		
 		// Testing
 		
-		assertTrue(ConcatRegex.fromList(regexes) instanceof ConcatRegex);
+		assertTrue(ConcatenationRegex.fromList(regexes) instanceof ConcatenationRegex);
 		
-		assertTrue(ConcatRegex.fromRegexes(
+		assertTrue(ConcatenationRegex.fromRegexes(
 			LOWER_CASE_A_UNIT_REGEX,
 			LOWER_CASE_B_UNIT_REGEX,
 			LOWER_CASE_C_UNIT_REGEX,
 			LOWER_CASE_D_UNIT_REGEX,
 			LOWER_CASE_E_UNIT_REGEX
-		) instanceof ConcatRegex);
+		) instanceof ConcatenationRegex);
 		
 	}
 	
@@ -77,19 +77,19 @@ final class ConcatRegexTest {
 		
 		int regexCount = 5;
 		
-		List<OORegex> regexes = new ArrayList<>();
+		List<LexerRegex> regexes = new ArrayList<>();
 		
 		for (int i = 0 ; i < regexCount ; i++) {
 			regexes.add(new UnitRegex(""));
 		}
 		
-		OORegex regex = ConcatRegex.fromList(regexes);
+		LexerRegex regex = ConcatenationRegex.fromList(regexes);
 		
 		// Testing
 		
 		for (int i = 0 ; i < regexCount - 1 ; i++) {
 			
-			ConcatRegex concatRegex = (ConcatRegex)regex;
+			ConcatenationRegex concatRegex = (ConcatenationRegex)regex;
 			
 			assertNotNull(concatRegex);
 			assertEquals(regexes.get(i), concatRegex.FIRST_REGEX);
@@ -107,8 +107,8 @@ final class ConcatRegexTest {
 		
 		// Initialization
 		
-		ConcatRegex regex =
-			(ConcatRegex)ConcatRegex.fromRegexes(
+		ConcatenationRegex regex =
+			(ConcatenationRegex) ConcatenationRegex.fromRegexes(
 				LOWER_CASE_A_UNIT_REGEX,
 				LOWER_CASE_B_UNIT_REGEX,
 				LOWER_CASE_C_UNIT_REGEX,
@@ -119,36 +119,36 @@ final class ConcatRegexTest {
 		// Testing
 		
 		assertEquals(LOWER_CASE_A_UNIT_REGEX, regex.FIRST_REGEX);
-		regex = (ConcatRegex)regex.SECOND_REGEX;
+		regex = (ConcatenationRegex)regex.SECOND_REGEX;
 		assertEquals(LOWER_CASE_B_UNIT_REGEX, regex.FIRST_REGEX);
-		regex = (ConcatRegex)regex.SECOND_REGEX;
+		regex = (ConcatenationRegex)regex.SECOND_REGEX;
 		assertEquals(LOWER_CASE_C_UNIT_REGEX, regex.FIRST_REGEX);
-		regex = (ConcatRegex)regex.SECOND_REGEX;
+		regex = (ConcatenationRegex)regex.SECOND_REGEX;
 		assertEquals(LOWER_CASE_D_UNIT_REGEX, regex.FIRST_REGEX);
 		assertEquals(LOWER_CASE_E_UNIT_REGEX, regex.SECOND_REGEX);
 		
 	}
 	
-	// Testing ConcatRegex#nullable() method
+	// Testing ConcatenationRegex#nullable() method
 	
 	@Test
 	void concat_regex_is_nullable_iff_both_subregexes_are_nullable() {
 		
 		// Initialization
 		
-		OORegex nullableRegex    = new UnitRegex("");
-		OORegex nonNullableRegex = new UnitRegex("abc");
+		LexerRegex nullableRegex    = new UnitRegex("");
+		LexerRegex nonNullableRegex = new UnitRegex("abc");
 		
 		// Testing
 		
-		assertFalse(new ConcatRegex(nonNullableRegex, nonNullableRegex).nullable());
-		assertFalse(new ConcatRegex(nonNullableRegex, nullableRegex).nullable());
-		assertFalse(new ConcatRegex(nullableRegex, nonNullableRegex).nullable());
-		assertTrue(new ConcatRegex(nullableRegex, nullableRegex).nullable());
+		assertFalse(new ConcatenationRegex(nonNullableRegex, nonNullableRegex).nullable());
+		assertFalse(new ConcatenationRegex(nonNullableRegex, nullableRegex).nullable());
+		assertFalse(new ConcatenationRegex(nullableRegex, nonNullableRegex).nullable());
+		assertTrue(new ConcatenationRegex(nullableRegex, nullableRegex).nullable());
 		
 	}
 	
-	// Testing ConcatRegex#advanced(char) method
+	// Testing ConcatenationRegex#advanced(char) method
 	
 	@Test
 	void concat_regex_does_not_advance_when_it_should_not() {

@@ -1,17 +1,13 @@
 package com.adacore.adaintellij.lexanalysis;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.net.URI;
 import java.util.*;
 
-import com.intellij.lexer.Lexer;
-import com.intellij.psi.tree.IElementType;
+import org.junit.jupiter.api.Test;
 
 import com.adacore.adaintellij.AdaTestUtils;
-import com.adacore.adaintellij.lexanalysis.AdaTokenListParser.TokenData;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * JUnit test class for the AdaLexer class.
@@ -39,30 +35,21 @@ final class AdaLexerTest {
 		
 		String sourceText = AdaTestUtils.getFileText(sourceFileURI);
 		
-		Iterator<TokenData> expectedTokens = AdaTokenListParser.parseTokenListFile(tokenListFileURI);
-		
-		Lexer lexer = new AdaLexer();
+		Iterator<AdaLexer.Token> expectedTokens = AdaTokenListParser.parseTokenListFile(tokenListFileURI);
+		Iterator<AdaLexer.Token> textTokens     = AdaLexer.textTokens(sourceText);
 		
 		// Testing
 		
-		lexer.start(sourceText, 0, sourceText.length(), 0);
-		
-		IElementType tokenType = lexer.getTokenType();
-		
-		while (tokenType != null) {
+		while (textTokens.hasNext()) {
 			
-			TokenData lexerTokenData =
-				new TokenData(tokenType.toString(), lexer.getTokenStart(), lexer.getTokenEnd());
+			AdaLexer.Token lexerToken =
+				textTokens.next();
 			
 			if (!expectedTokens.hasNext()) {
-				fail("Reached end of token list but lexer generated another token:\n\t" + lexerTokenData);
+				fail("Reached end of token list but lexer generated another token:\n\t" + lexerToken);
 			}
 			
-			assertEquals(expectedTokens.next(), lexerTokenData);
-			
-			lexer.advance();
-			
-			tokenType = lexer.getTokenType();
+			assertEquals(expectedTokens.next(), lexerToken);
 			
 		}
 		
@@ -80,6 +67,46 @@ final class AdaLexerTest {
 		assertSourceFileLexedCorrectly(
 			classObject.getResource("/ada-sources/empty.adb").toURI(),
 			classObject.getResource("/ada-sources/empty.adb.token-list").toURI()
+		);
+	}
+	
+	// Testing lexing delimiters
+	
+	@Test
+	void source_file_with_delimiters_lexed_correctly() throws Exception {
+		assertSourceFileLexedCorrectly(
+			classObject.getResource("/ada-sources/delimiters.adb").toURI(),
+			classObject.getResource("/ada-sources/delimiters.adb.token-list").toURI()
+		);
+	}
+	
+	// Testing lexing literals
+	
+	@Test
+	void source_file_with_literals_lexed_correctly() throws Exception {
+		assertSourceFileLexedCorrectly(
+			classObject.getResource("/ada-sources/literals.adb").toURI(),
+			classObject.getResource("/ada-sources/literals.adb.token-list").toURI()
+		);
+	}
+	
+	// Testing lexing keywords
+	
+	@Test
+	void source_file_with_keywords_lexed_correctly() throws Exception {
+		assertSourceFileLexedCorrectly(
+			classObject.getResource("/ada-sources/keywords.adb").toURI(),
+			classObject.getResource("/ada-sources/keywords.adb.token-list").toURI()
+		);
+	}
+	
+	// Testing lexing bad syntax
+	
+	@Test
+	void source_file_with_bad_syntax_lexed_correctly() throws Exception {
+		assertSourceFileLexedCorrectly(
+			classObject.getResource("/ada-sources/bad-syntax.adb").toURI(),
+			classObject.getResource("/ada-sources/bad-syntax.adb.token-list").toURI()
 		);
 	}
 	
@@ -108,26 +135,6 @@ final class AdaLexerTest {
 		assertSourceFileLexedCorrectly(
 			classObject.getResource("/ada-sources/code-with-comments.adb").toURI(),
 			classObject.getResource("/ada-sources/code-with-comments.adb.token-list").toURI()
-		);
-	}
-	
-	// Testing lexing literals
-	
-	@Test
-	void source_file_with_literals_lexed_correctly() throws Exception {
-		assertSourceFileLexedCorrectly(
-			classObject.getResource("/ada-sources/literals.adb").toURI(),
-			classObject.getResource("/ada-sources/literals.adb.token-list").toURI()
-		);
-	}
-	
-	// Testing lexing bad syntax
-	
-	@Test
-	void source_file_with_bad_syntax_lexed_correctly() throws Exception {
-		assertSourceFileLexedCorrectly(
-			classObject.getResource("/ada-sources/bad-syntax.adb").toURI(),
-			classObject.getResource("/ada-sources/bad-syntax.adb.token-list").toURI()
 		);
 	}
 	

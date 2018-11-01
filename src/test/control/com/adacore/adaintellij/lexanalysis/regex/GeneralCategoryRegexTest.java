@@ -1,10 +1,10 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import static com.adacore.adaintellij.lexanalysis.regex.OORegexTestUtils.*;
-
-import org.junit.jupiter.api.Test;
+import static com.adacore.adaintellij.lexanalysis.regex.LexerRegexTestUtils.*;
 
 /**
  * JUnit test class for the GeneralCategoryRegex class.
@@ -13,36 +13,36 @@ final class GeneralCategoryRegexTest {
 	
 	// Constants
 	
-	private static final OORegex MARK_SPACING_COMBINING_REGEX    = new GeneralCategoryRegex("Mc");
-	private static final OORegex PUNCTUATION_CONNECTOR_REGEX     = new GeneralCategoryRegex("Pc");
-	private static final OORegex OTHER_CONTROL_REGEX             = new GeneralCategoryRegex("Cc");
-	private static final OORegex SYMBOL_CURRENCY_REGEX           = new GeneralCategoryRegex("Sc");
-	private static final OORegex PUNCTUATION_DASH_REGEX          = new GeneralCategoryRegex("Pd");
-	private static final OORegex NUMBER_DECIMAL_REGEX            = new GeneralCategoryRegex("Nd");
-	private static final OORegex MARK_ENCLOSING_REGEX            = new GeneralCategoryRegex("Me");
-	private static final OORegex PUNCTUATION_END_REGEX           = new GeneralCategoryRegex("Pe");
-	private static final OORegex PUNCTUATION_FINAL_QUOTE_REGEX   = new GeneralCategoryRegex("Pf");
-	private static final OORegex OTHER_FORMAT_REGEX              = new GeneralCategoryRegex("Cf");
-	private static final OORegex PUNCTUATION_INITIAL_QUOTE_REGEX = new GeneralCategoryRegex("Pi");
-	private static final OORegex NUMBER_LETTER_REGEX             = new GeneralCategoryRegex("Nl");
-	private static final OORegex SEPARATOR_LINE_REGEX            = new GeneralCategoryRegex("Zl");
-	private static final OORegex LETTER_LOWERCASE_REGEX          = new GeneralCategoryRegex("Ll");
-	private static final OORegex SYMBOL_MATH_REGEX               = new GeneralCategoryRegex("Sm");
-	private static final OORegex LETTER_MODIFIER_REGEX           = new GeneralCategoryRegex("Lm");
-	private static final OORegex SYMBOL_MODIFIER_REGEX           = new GeneralCategoryRegex("Sk");
-	private static final OORegex MARK_NON_SPACING_REGEX          = new GeneralCategoryRegex("Mn");
-	private static final OORegex LETTER_OTHER_REGEX              = new GeneralCategoryRegex("Lo");
-	private static final OORegex NUMBER_OTHER_REGEX              = new GeneralCategoryRegex("No");
-	private static final OORegex PUNCTUATION_OTHER_REGEX         = new GeneralCategoryRegex("Po");
-	private static final OORegex SYMBOL_OTHER_REGEX              = new GeneralCategoryRegex("So");
-	private static final OORegex SEPARATOR_PARAGRAPH_REGEX       = new GeneralCategoryRegex("Zp");
-	private static final OORegex OTHER_PRIVATE_USE_REGEX         = new GeneralCategoryRegex("Co");
-	private static final OORegex SEPARATOR_SPACE_REGEX           = new GeneralCategoryRegex("Zs");
-	private static final OORegex PUNCTUATION_START_REGEX         = new GeneralCategoryRegex("Ps");
-	private static final OORegex OTHER_SURROGATE_REGEX           = new GeneralCategoryRegex("Cs");
-	private static final OORegex LETTER_TITLECASE_REGEX          = new GeneralCategoryRegex("Lt");
-	private static final OORegex OTHER_UNASSIGNED_REGEX          = new GeneralCategoryRegex("Cn");
-	private static final OORegex LETTER_UPPERCASE_REGEX          = new GeneralCategoryRegex("Lu");
+	private static final LexerRegex MARK_SPACING_COMBINING_REGEX    = new GeneralCategoryRegex("Mc");
+	private static final LexerRegex PUNCTUATION_CONNECTOR_REGEX     = new GeneralCategoryRegex("Pc");
+	private static final LexerRegex OTHER_CONTROL_REGEX             = new GeneralCategoryRegex("Cc");
+	private static final LexerRegex SYMBOL_CURRENCY_REGEX           = new GeneralCategoryRegex("Sc");
+	private static final LexerRegex PUNCTUATION_DASH_REGEX          = new GeneralCategoryRegex("Pd");
+	private static final LexerRegex NUMBER_DECIMAL_REGEX            = new GeneralCategoryRegex("Nd");
+	private static final LexerRegex MARK_ENCLOSING_REGEX            = new GeneralCategoryRegex("Me");
+	private static final LexerRegex PUNCTUATION_END_REGEX           = new GeneralCategoryRegex("Pe");
+	private static final LexerRegex PUNCTUATION_FINAL_QUOTE_REGEX   = new GeneralCategoryRegex("Pf");
+	private static final LexerRegex OTHER_FORMAT_REGEX              = new GeneralCategoryRegex("Cf");
+	private static final LexerRegex PUNCTUATION_INITIAL_QUOTE_REGEX = new GeneralCategoryRegex("Pi");
+	private static final LexerRegex NUMBER_LETTER_REGEX             = new GeneralCategoryRegex("Nl");
+	private static final LexerRegex SEPARATOR_LINE_REGEX            = new GeneralCategoryRegex("Zl");
+	private static final LexerRegex LETTER_LOWERCASE_REGEX          = new GeneralCategoryRegex("Ll");
+	private static final LexerRegex SYMBOL_MATH_REGEX               = new GeneralCategoryRegex("Sm");
+	private static final LexerRegex LETTER_MODIFIER_REGEX           = new GeneralCategoryRegex("Lm");
+	private static final LexerRegex SYMBOL_MODIFIER_REGEX           = new GeneralCategoryRegex("Sk");
+	private static final LexerRegex MARK_NON_SPACING_REGEX          = new GeneralCategoryRegex("Mn");
+	private static final LexerRegex LETTER_OTHER_REGEX              = new GeneralCategoryRegex("Lo");
+	private static final LexerRegex NUMBER_OTHER_REGEX              = new GeneralCategoryRegex("No");
+	private static final LexerRegex PUNCTUATION_OTHER_REGEX         = new GeneralCategoryRegex("Po");
+	private static final LexerRegex SYMBOL_OTHER_REGEX              = new GeneralCategoryRegex("So");
+	private static final LexerRegex SEPARATOR_PARAGRAPH_REGEX       = new GeneralCategoryRegex("Zp");
+	private static final LexerRegex OTHER_PRIVATE_USE_REGEX         = new GeneralCategoryRegex("Co");
+	private static final LexerRegex SEPARATOR_SPACE_REGEX           = new GeneralCategoryRegex("Zs");
+	private static final LexerRegex PUNCTUATION_START_REGEX         = new GeneralCategoryRegex("Ps");
+	private static final LexerRegex OTHER_SURROGATE_REGEX           = new GeneralCategoryRegex("Cs");
+	private static final LexerRegex LETTER_TITLECASE_REGEX          = new GeneralCategoryRegex("Lt");
+	private static final LexerRegex OTHER_UNASSIGNED_REGEX          = new GeneralCategoryRegex("Cn");
+	private static final LexerRegex LETTER_UPPERCASE_REGEX          = new GeneralCategoryRegex("Lu");
 	
 	// Testing GeneralCategoryRegex#nullable() method
 	

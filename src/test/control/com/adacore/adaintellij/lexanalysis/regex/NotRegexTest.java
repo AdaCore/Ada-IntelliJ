@@ -1,10 +1,10 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import static com.adacore.adaintellij.lexanalysis.regex.OORegexTestUtils.*;
-
-import org.junit.jupiter.api.Test;
+import static com.adacore.adaintellij.lexanalysis.regex.LexerRegexTestUtils.*;
 
 /**
  * JUnit test class for the NotRegex class.
@@ -13,8 +13,8 @@ final class NotRegexTest {
 	
 	// Constants
 	
-	private static final OORegex NOT_LOWERCASE_A_REGEX      = new NotRegex(new UnitRegex("a"));
-	private static final OORegex NOT_LOWERCASE_LETTER_REGEX = new NotRegex(UnionRegex.fromRange('a', 'z'));
+	private static final LexerRegex NOT_LOWERCASE_A_REGEX      = new NotRegex(new UnitRegex("a"));
+	private static final LexerRegex NOT_LOWERCASE_LETTER_REGEX = new NotRegex(UnionRegex.fromRange('a', 'z'));
 	
 	// Testing NotRegex#nullable() method
 	

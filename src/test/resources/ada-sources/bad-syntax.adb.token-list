@@ -4,130 +4,154 @@
 -- is to test the lexer's token generation for syntactically invalid
 -- sequences of characters.
 
-AdaTokenType.COMMENT           0  19 -- Comment token for "-- Numeric Literals"
+COMMENT           0  19 -- Comment token for "-- Numeric Literals"
 
-WHITE_SPACE                   19  20
+WHITE_SPACE      19  20
 
 ----------------------
 -- Numeric Literals --
 ----------------------
 
-BAD_CHARACTER                 20  24 -- 123_
-BAD_CHARACTER                 24  25 --     _
-AdaTokenType.DECIMAL_LITERAL  25  28 --      456
+DECIMAL_LITERAL  20  23 -- 123
+BAD_CHARACTER    23  24 --    _
+BAD_CHARACTER    24  25 --     _
+DECIMAL_LITERAL  25  28 --      456
 
-WHITE_SPACE                   28  29
+WHITE_SPACE      28  29
 
-BAD_CHARACTER                 29  38 -- 12345678_
+DECIMAL_LITERAL  29  37 -- 12345678
+BAD_CHARACTER    37  38 --         _
 
-WHITE_SPACE                   38  39
+WHITE_SPACE      38  39
 
-BAD_CHARACTER                 39  43 -- 123.
+DECIMAL_LITERAL  39  42 -- 123
+FULL_STOP        42  43 --    .
 
-WHITE_SPACE                   43  44
+WHITE_SPACE      43  44
 
-AdaTokenType.DECIMAL_LITERAL  44  51 -- 123.456
-AdaTokenType.FULL_STOP        51  52 --        .
-AdaTokenType.DECIMAL_LITERAL  52  55 --         789
+DECIMAL_LITERAL  44  51 -- 123.456
+FULL_STOP        51  52 --        .
+DECIMAL_LITERAL  52  55 --         789
 
-WHITE_SPACE                   55  56
+WHITE_SPACE      55  56
 
-BAD_CHARACTER                 56  59 -- 1E+
+DECIMAL_LITERAL  56  57 -- 1
+IDENTIFIER       57  58 --  E
+PLUS_SIGN        58  59 --   +
 
-WHITE_SPACE                   59  60
+WHITE_SPACE      59  60
 
-AdaTokenType.DECIMAL_LITERAL  60  67 -- 1234e56
-AdaTokenType.FULL_STOP        67  68 --        .
-AdaTokenType.DECIMAL_LITERAL  68  69 --         7
+DECIMAL_LITERAL  60  67 -- 1234e56
+FULL_STOP        67  68 --        .
+DECIMAL_LITERAL  68  69 --         7
 
-WHITE_SPACE                   69  70
+WHITE_SPACE      69  70
 
-BAD_CHARACTER                 70  73 -- 16#
+DECIMAL_LITERAL  70  72 -- 16
+BAD_CHARACTER    72  73 --   #
 
-WHITE_SPACE                   73  74
+WHITE_SPACE      73  74
 
-BAD_CHARACTER                 74  79 -- 12#14
+DECIMAL_LITERAL  74  76 -- 12
+BAD_CHARACTER    76  77 --   #
+DECIMAL_LITERAL  77  79 --    14
 
-WHITE_SPACE                   79  80
+WHITE_SPACE      79  80
 
-BAD_CHARACTER                 80  85 -- 10#5.
+DECIMAL_LITERAL  80  82 -- 10
+BAD_CHARACTER    82  83 --   #
+DECIMAL_LITERAL  83  84 --    5
+FULL_STOP        84  85 --     .
 
-WHITE_SPACE                   85  86
+WHITE_SPACE      85  86
 
-BAD_CHARACTER                 86  91 -- 8#2.3
+DECIMAL_LITERAL  86  87 -- 8
+BAD_CHARACTER    87  88 --  #
+DECIMAL_LITERAL  88  91 --   2.3
 
-WHITE_SPACE                   91  92
+WHITE_SPACE      91  92
 
-BAD_CHARACTER                 92  94 -- 6#
-BAD_CHARACTER                 94  95 --   #
+DECIMAL_LITERAL  92  93 -- 6
+BAD_CHARACTER    93  94 --  #
+BAD_CHARACTER    94  95 --   #
 
-WHITE_SPACE                   95  96
+WHITE_SPACE      95  96
 
-BAD_CHARACTER                 96 103 -- 4#123.1
-AdaTokenType.FULL_STOP       103 104 --        .
-BAD_CHARACTER                104 106 --         2#
+DECIMAL_LITERAL  96  97 -- 4
+BAD_CHARACTER    97  98 --  #
+DECIMAL_LITERAL  98 103 --   123.1
+FULL_STOP       103 104 --        .
+DECIMAL_LITERAL 104 105 --         2
+BAD_CHARACTER   105 106 --          #
 
-WHITE_SPACE                  106 107
+WHITE_SPACE     106 107
 
-BAD_CHARACTER                107 113 -- 2#101.
-BAD_CHARACTER                113 114 --       #
+DECIMAL_LITERAL 107 108 -- 2
+BAD_CHARACTER   108 109 --  #
+DECIMAL_LITERAL 109 112 --   101
+FULL_STOP       112 113 --      .
+BAD_CHARACTER   113 114 --       #
 
-WHITE_SPACE                  114 115
+WHITE_SPACE     114 115
 
-BAD_CHARACTER                115 121 -- 16#123
-AdaTokenType.IDENTIFIER      121 122 --       G
-BAD_CHARACTER                122 123 --        #
-AdaTokenType.DECIMAL_LITERAL 123 124 --         2
+DECIMAL_LITERAL 115 117 -- 16
+BAD_CHARACTER   117 118 --   #
+DECIMAL_LITERAL 118 121 --    123
+IDENTIFIER      121 122 --       G
+BAD_CHARACTER   122 123 --        #
+DECIMAL_LITERAL 123 124 --         2
 
-WHITE_SPACE                  124 126
+WHITE_SPACE     124 126
 
-AdaTokenType.COMMENT         126 145 -- Comment token for "-- Textual Literals"
+COMMENT         126 145 -- Comment token for "-- Textual Literals"
 
-WHITE_SPACE                  145 146
+WHITE_SPACE     145 146
 
 ----------------------
 -- Textual Literals --
 ----------------------
 
-AdaTokenType.APOSTROPHE      146 147 -- '
+APOSTROPHE      146 147 -- '
 
-WHITE_SPACE                  147 148
+WHITE_SPACE     147 148
 
-BAD_CHARACTER                148 150 -- ''
+APOSTROPHE      148 149 -- '
+APOSTROPHE      149 150 --  '
 
-WHITE_SPACE                  150 151
+WHITE_SPACE     150 151
 
-AdaTokenType.APOSTROPHE      151 152 -- '
-WHITE_SPACE                  152 153
-AdaTokenType.APOSTROPHE      153 154 --  	'
+APOSTROPHE      151 152 -- '
+WHITE_SPACE     152 153
+APOSTROPHE      153 154 --  	'
 
-WHITE_SPACE                  154 155
+WHITE_SPACE     154 155
 
-BAD_CHARACTER                155 157 -- 'a
-AdaTokenType.IDENTIFIER      157 158 --   b
-AdaTokenType.APOSTROPHE      158 159 --    '
+APOSTROPHE      155 156 -- '
+IDENTIFIER      156 158 --  ab
+APOSTROPHE      158 159 --    '
 
-WHITE_SPACE                  159 160
+WHITE_SPACE     159 160
 
-BAD_CHARACTER                160 161 -- "
+BAD_CHARACTER   160 161 -- "
 
-WHITE_SPACE                  161 162
+WHITE_SPACE     161 162
 
-BAD_CHARACTER                162 165 -- """
+STRING_LITERAL  162 164 -- ""
+BAD_CHARACTER   164 165 --   "
 
-WHITE_SPACE                  165 167
+WHITE_SPACE     165 167
 
-AdaTokenType.COMMENT         167 193 -- Comment token for "-- Characters not part..."
+COMMENT         167 193 -- Comment token for "-- Characters not part..."
 
-WHITE_SPACE                  193 194
+WHITE_SPACE     193 194
 
 -----------------------------
 -- Non-Alphabet Characters --
 -----------------------------
 
-AdaTokenType.IDENTIFIER      194 202 -- Put_Line
-BAD_CHARACTER                202 203 --         [
-AdaTokenType.STRING_LITERAL  203 209 --          "oops"
-BAD_CHARACTER                209 210 --                ]
+IDENTIFIER      194 202 -- Put_Line
+BAD_CHARACTER   202 203 --         [
+STRING_LITERAL  203 209 --          "oops"
+BAD_CHARACTER   209 210 --                ]
 
-WHITE_SPACE                  210 211
+WHITE_SPACE     210 211

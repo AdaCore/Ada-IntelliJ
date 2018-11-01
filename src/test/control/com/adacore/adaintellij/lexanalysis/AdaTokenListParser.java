@@ -1,11 +1,12 @@
 package com.adacore.adaintellij.lexanalysis;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.net.URI;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.intellij.psi.TokenType;
+import com.intellij.psi.tree.IElementType;
 
 import com.adacore.adaintellij.AdaTestUtils;
 
@@ -48,67 +49,6 @@ import com.adacore.adaintellij.AdaTestUtils;
 final class AdaTokenListParser {
 	
 	/**
-	 * A single token data object, storing a token's debug name,
-	 * start and end offsets in a specific Ada source file.
-	 */
-	static class TokenData {
-		
-		/**
-		 * The debug name, start and end offsets of the token.
-		 */
-		final String TOKEN_TYPE_DEBUG_NAME;
-		final int    TOKEN_START;
-		final int    TOKEN_END;
-		
-		/**
-		 * Constructs a new token data object given a set of data.
-		 *
-		 * @param tokenTypeDebugName The debug name of the token.
-		 * @param tokenStart The start offset of the token.
-		 * @param tokenEnd The end offset of the token.
-		 */
-		TokenData(@NotNull String tokenTypeDebugName, int tokenStart, int tokenEnd) {
-			TOKEN_TYPE_DEBUG_NAME = tokenTypeDebugName;
-			TOKEN_START           = tokenStart;
-			TOKEN_END             = tokenEnd;
-		}
-		
-		/**
-		 * Returns whether or not this token data object is equal
-		 * to the given object.
-		 *
-		 * @param object The object to compare to this object.
-		 * @return The result of the comparison.
-		 */
-		@Override
-		public boolean equals(Object object) {
-			
-			if (!(object instanceof TokenData)) { return false; }
-			else {
-				
-				TokenData tokenData = (TokenData)object;
-				
-				return tokenData.TOKEN_TYPE_DEBUG_NAME.equals(TOKEN_TYPE_DEBUG_NAME) &&
-					tokenData.TOKEN_START == TOKEN_START && tokenData.TOKEN_END == TOKEN_END;
-				
-			}
-			
-		}
-		
-		/**
-		 * Returns a string representation of this token data
-		 * object.
-		 *
-		 * @return A string representation of this object.
-		 */
-		@Override
-		public String toString() {
-			return "TokenData(" + TOKEN_TYPE_DEBUG_NAME + ", " + TOKEN_START + ", " + TOKEN_END + ")";
-		}
-		
-	}
-	
-	/**
 	 * Parses the token list file at the given URI and returns
 	 * the list of tokens described by the list file as an iterator
 	 * over token data objects.
@@ -118,13 +58,13 @@ final class AdaTokenListParser {
 	 * @throws Exception If a problem occurs while reading the file
 	 *                   or if its syntax is invalid.
 	 */
-	static Iterator<TokenData> parseTokenListFile(URI fileURI) throws Exception {
+	static Iterator<AdaLexer.Token> parseTokenListFile(URI fileURI) throws Exception {
 		
 		String tokenListText = AdaTestUtils.getFileText(fileURI);
 		
 		String[] lines = tokenListText.split("\n");
 		
-		List<TokenData> expectedTokens = new LinkedList<>();
+		List<AdaLexer.Token> expectedTokens = new LinkedList<>();
 		
 		for (int i = 0 ; i < lines.length ; i++) {
 			
@@ -155,11 +95,16 @@ final class AdaTokenListParser {
 			} catch (NumberFormatException exception) {
 				
 				throw new Exception("Invalid token list file: line " + (i + 1) +
-					" contains a number that is not parsable as an integer.");
+					" contains a component that is not parsable as an integer.");
 				
 			}
 			
-			expectedTokens.add(new TokenData(tokenName, tokenStart, tokenEnd));
+			IElementType tokenType =
+				"WHITE_SPACE".equals(tokenName)   ? TokenType.WHITE_SPACE   :
+				"BAD_CHARACTER".equals(tokenName) ? TokenType.BAD_CHARACTER :
+				new AdaTokenType(tokenName);
+			
+			expectedTokens.add(new AdaLexer.Token(tokenType, tokenStart, tokenEnd));
 			
 		}
 		

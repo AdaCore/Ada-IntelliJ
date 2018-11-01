@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Helper testing methods for regex classes.
  */
-final class OORegexTestUtils {
+final class LexerRegexTestUtils {
 	
 	/**
 	 * Represents the result of applying a regex to a sequence of characters.
@@ -34,9 +34,9 @@ final class OORegexTestUtils {
 	 * @param sequence The sequence of characters.
 	 * @return The advance state.
 	 */
-	private static AdvanceState regexAdvanceStateOnSequence(OORegex regex, String sequence) {
+	private static AdvanceState regexAdvanceStateOnSequence(LexerRegex regex, String sequence) {
 		
-		OORegex advancedRegex = regex;
+		LexerRegex advancedRegex = regex;
 		
 		for (char character : sequence.toCharArray()) {
 			advancedRegex = advancedRegex.advanced(character);
@@ -55,7 +55,7 @@ final class OORegexTestUtils {
 	 * @param regex The regex to advance.
 	 * @param sequence The sequence of characters.
 	 */
-	static void assertRegexAdvances(OORegex regex, String sequence) {
+	static void assertRegexAdvances(LexerRegex regex, String sequence) {
 		assertNotEquals(
 			AdvanceState.DOES_NOT_ADVANCE_ON_SEQUENCE,
 			regexAdvanceStateOnSequence(regex, sequence)
@@ -69,7 +69,7 @@ final class OORegexTestUtils {
 	 * @param regex The regex to advance.
 	 * @param sequence The sequence of characters.
 	 */
-	static void assertRegexDoesNotAdvance(OORegex regex, String sequence) {
+	static void assertRegexDoesNotAdvance(LexerRegex regex, String sequence) {
 		assertEquals(
 			AdvanceState.DOES_NOT_ADVANCE_ON_SEQUENCE,
 			regexAdvanceStateOnSequence(regex, sequence)
@@ -83,7 +83,7 @@ final class OORegexTestUtils {
 	 * @param regex The regex to advance.
 	 * @param sequence The sequence of characters.
 	 */
-	static void assertRegexMatches(OORegex regex, String sequence) {
+	static void assertRegexMatches(LexerRegex regex, String sequence) {
 		assertEquals(
 			AdvanceState.MATCHES_SEQUENCE,
 			regexAdvanceStateOnSequence(regex, sequence)
@@ -97,7 +97,7 @@ final class OORegexTestUtils {
 	 * @param regex The regex to advance.
 	 * @param sequence The sequence of characters.
 	 */
-	static void assertRegexDoesNotMatch(OORegex regex, String sequence) {
+	static void assertRegexDoesNotMatch(LexerRegex regex, String sequence) {
 		assertNotEquals(
 			AdvanceState.MATCHES_SEQUENCE,
 			regexAdvanceStateOnSequence(regex, sequence)

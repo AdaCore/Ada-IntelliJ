@@ -1,10 +1,10 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import static com.adacore.adaintellij.lexanalysis.regex.OORegexTestUtils.*;
-
-import org.junit.jupiter.api.Test;
+import static com.adacore.adaintellij.lexanalysis.regex.LexerRegexTestUtils.*;
 
 /**
  * JUnit test class for the IntersectionRegex class.
@@ -14,7 +14,7 @@ final class IntersectionRegexTest {
 	// Constants
 	
 	// All lowercase letters except the letters "h", "e", "l" and "o"
-	private static final OORegex INTERSECTION_REGEX_1 =
+	private static final LexerRegex INTERSECTION_REGEX_1 =
 		new IntersectionRegex(
 			UnionRegex.fromRange('a', 'z'),
 			new NotRegex(
@@ -29,14 +29,14 @@ final class IntersectionRegexTest {
 	
 	// Equivalent to "h" but written as an intersection of
 	// "hello" and "h"
-	private static final OORegex INTERSECTION_REGEX_2 =
+	private static final LexerRegex INTERSECTION_REGEX_2 =
 		new IntersectionRegex(
 			new UnitRegex("hello"),
 			new UnitRegex("helicopter")
 		);
 	
 	// Parentheses only"
-	private static final OORegex INTERSECTION_REGEX_3 =
+	private static final LexerRegex INTERSECTION_REGEX_3 =
 		new IntersectionRegex(
 			UnionRegex.fromRegexes(
 				new UnitRegex("*"),
@@ -61,8 +61,8 @@ final class IntersectionRegexTest {
 		
 		// Initialization
 		
-		OORegex nullableRegex    = new UnitRegex("");
-		OORegex nonNullableRegex = new UnitRegex("abc");
+		LexerRegex nullableRegex    = new UnitRegex("");
+		LexerRegex nonNullableRegex = new UnitRegex("abc");
 		
 		// Testing
 		

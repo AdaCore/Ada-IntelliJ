@@ -1,10 +1,10 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import static com.adacore.adaintellij.lexanalysis.regex.OORegexTestUtils.*;
-
-import org.junit.jupiter.api.Test;
+import static com.adacore.adaintellij.lexanalysis.regex.LexerRegexTestUtils.*;
 
 /**
  * JUnit test class for the ZeroOrOneRegex class.
@@ -13,17 +13,17 @@ final class ZeroOrOneRegexTest {
 	
 	// Constants
 	
-	private static final OORegex ZERO_OR_ONE_LOWERCASE_A_REGEX = new ZeroOrOneRegex(new UnitRegex("a"));
+	private static final LexerRegex ZERO_OR_ONE_LOWERCASE_A_REGEX = new ZeroOrOneRegex(new UnitRegex("a"));
 	
-	private static final OORegex ZERO_OR_ONE_BRACKETS_REGEX =
+	private static final LexerRegex ZERO_OR_ONE_BRACKETS_REGEX =
 		new ZeroOrOneRegex(
-			new ConcatRegex(
+			new ConcatenationRegex(
 				new UnionRegex(new UnitRegex("["), new UnitRegex("{")),
 				new UnionRegex(new UnitRegex("]"), new UnitRegex("}"))
 			)
 		);
 	
-	private static final OORegex ZERO_OR_ONE_NULLABLE_REGEX =
+	private static final LexerRegex ZERO_OR_ONE_NULLABLE_REGEX =
 		new ZeroOrOneRegex(
 			new UnionRegex(
 				new UnitRegex("abc"),
