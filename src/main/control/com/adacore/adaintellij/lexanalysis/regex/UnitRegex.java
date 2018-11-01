@@ -7,17 +7,17 @@ import org.jetbrains.annotations.*;
  * unlike other types of regexes that are defined recursively
  * using other regexes.
  */
-public final class UnitRegex implements OORegex {
+public final class UnitRegex implements LexerRegex {
 	
 	/**
 	 * The sequence of characters matched by this regex.
 	 */
-	public final String SEQUENCE;
+	final String SEQUENCE;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	public final int PRIORITY;
+	private final int PRIORITY;
 	
 	/**
 	 * Constructs a new unit regex given a sequence of characters.
@@ -39,29 +39,29 @@ public final class UnitRegex implements OORegex {
 	}
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#nullable()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#nullable()
 	 */
 	@Override
 	public boolean nullable() { return SEQUENCE.length() == 0; }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#charactersMatched()
 	 */
 	@Override
 	public int charactersMatched() { return SEQUENCE.length(); }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#getPriority()
 	 */
 	@Override
 	public int getPriority() { return PRIORITY; }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#advanced(char)
 	 */
 	@Nullable
 	@Override
-	public OORegex advanced(char character) {
+	public LexerRegex advanced(char character) {
 		return SEQUENCE.length() == 0 || SEQUENCE.charAt(0) != character ?
 			null : new UnitRegex(SEQUENCE.substring(1), PRIORITY);
 	}

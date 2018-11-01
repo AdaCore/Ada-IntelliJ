@@ -7,18 +7,18 @@ import org.jetbrains.annotations.*;
 /**
  * Regex matching the union of two subregexes.
  */
-public final class UnionRegex implements OORegex {
+public final class UnionRegex implements LexerRegex {
 	
 	/**
 	 * The union subregexes.
 	 */
-	public final OORegex FIRST_REGEX;
-	public final OORegex SECOND_REGEX;
+	final LexerRegex FIRST_REGEX;
+	final LexerRegex SECOND_REGEX;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	public final int PRIORITY;
+	private final int PRIORITY;
 	
 	/**
 	 * Constructs a new union regex given two subregexes.
@@ -26,7 +26,7 @@ public final class UnionRegex implements OORegex {
 	 * @param firstRegex The first subregex.
 	 * @param secondRegex The second subregex.
 	 */
-	public UnionRegex(@NotNull OORegex firstRegex, @NotNull OORegex secondRegex) {
+	public UnionRegex(@NotNull LexerRegex firstRegex, @NotNull LexerRegex secondRegex) {
 		this(firstRegex, secondRegex, 0);
 	}
 	
@@ -38,7 +38,7 @@ public final class UnionRegex implements OORegex {
 	 * @param secondRegex The second subregex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public UnionRegex(@NotNull OORegex firstRegex, @NotNull OORegex secondRegex, int priority) {
+	public UnionRegex(@NotNull LexerRegex firstRegex, @NotNull LexerRegex secondRegex, int priority) {
 		FIRST_REGEX  = firstRegex;
 		SECOND_REGEX = secondRegex;
 		PRIORITY     = priority;
@@ -67,21 +67,21 @@ public final class UnionRegex implements OORegex {
 	 * @param regexes The list of regexes to unite.
 	 * @return A hierarchy of union regexes.
 	 */
-	public static OORegex fromList(@NotNull final List<OORegex> regexes) {
+	public static LexerRegex fromList(@NotNull final List<LexerRegex> regexes) {
 		
 		int regexesSize = regexes.size();
 		
 		if (regexesSize == 0) { return null; }
 		
-		ListIterator<OORegex> regexIterator = regexes.listIterator(regexesSize);
+		ListIterator<LexerRegex> regexIterator = regexes.listIterator(regexesSize);
 		
-		OORegex regex = regexIterator.previous();
+		LexerRegex regex = regexIterator.previous();
 		
 		int maxPriority = regex.getPriority();
 		
 		while (regexIterator.hasPrevious()) {
 			
-			OORegex nextRegex = regexIterator.previous();
+			LexerRegex nextRegex = regexIterator.previous();
 			
 			int nextRegexPriority = nextRegex.getPriority();
 			
@@ -99,12 +99,12 @@ public final class UnionRegex implements OORegex {
 	
 	/**
 	 * Returns a new hierarchy of union regexes from an arbitrary
-	 * number of regexes (Java varargs) using fromList(List<OORegex>).
+	 * number of regexes (Java varargs) using fromList(List<LexerRegex>).
 	 *
 	 * @param regexes The regexes to unite.
 	 * @return A hierarchy of union regexes.
 	 */
-	public static OORegex fromRegexes(@NotNull OORegex... regexes) {
+	public static LexerRegex fromRegexes(@NotNull LexerRegex... regexes) {
 		return fromList(Arrays.asList(regexes));
 	}
 	
@@ -117,7 +117,7 @@ public final class UnionRegex implements OORegex {
 	 * @param toChar The upper bound character of the range.
 	 * @return A hierarchy of union regexes matching a range of characters.
 	 */
-	public static OORegex fromRange(char fromChar, char toChar) {
+	public static LexerRegex fromRange(char fromChar, char toChar) {
 		return fromRange(fromChar, toChar, 0);
 	}
 	
@@ -134,14 +134,15 @@ public final class UnionRegex implements OORegex {
 	 * @return A hierarchy of union regexes matching a range of characters.
 	 * @throws IllegalArgumentException If fromChar is greater than toChar.
 	 */
-	public static OORegex fromRange(char fromChar, char toChar, int priority) {
+	public static LexerRegex fromRange(char fromChar, char toChar, int priority) {
 		
 		if (fromChar > toChar) {
 			throw new IllegalArgumentException("Invalid bounds: fromChar must be smaller or equal to toChar");
 		}
 		
 		char character = toChar;
-		OORegex regex  = new UnitRegex(Character.toString(character), priority);
+		
+		LexerRegex regex = new UnitRegex(Character.toString(character), priority);
 		
 		while (character != fromChar) {
 			regex = new UnionRegex(
@@ -156,13 +157,13 @@ public final class UnionRegex implements OORegex {
 	}
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#nullable()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#nullable()
 	 */
 	@Override
 	public boolean nullable() { return FIRST_REGEX.nullable() || SECOND_REGEX.nullable(); }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#charactersMatched()
 	 */
 	@Override
 	public int charactersMatched() {
@@ -175,20 +176,20 @@ public final class UnionRegex implements OORegex {
 	}
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#getPriority()
 	 */
 	@Override
 	public int getPriority() { return PRIORITY; }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#advanced(char)
 	 */
 	@Nullable
 	@Override
-	public OORegex advanced(char character) {
+	public LexerRegex advanced(char character) {
 		
-		OORegex firstRegexAdvanced  = FIRST_REGEX.advanced(character);
-		OORegex secondRegexAdvanced = SECOND_REGEX.advanced(character);
+		LexerRegex firstRegexAdvanced  = FIRST_REGEX.advanced(character);
+		LexerRegex secondRegexAdvanced = SECOND_REGEX.advanced(character);
 		
 		if (firstRegexAdvanced == null && secondRegexAdvanced == null) {
 			

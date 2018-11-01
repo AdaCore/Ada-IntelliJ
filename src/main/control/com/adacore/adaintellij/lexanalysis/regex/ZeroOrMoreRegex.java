@@ -6,24 +6,24 @@ import org.jetbrains.annotations.*;
  * Regex matching zero or more occurrences of a sequence
  * of characters matched by a subregex.
  */
-public final class ZeroOrMoreRegex implements OORegex {
+public final class ZeroOrMoreRegex implements LexerRegex {
 	
 	/**
 	 * The subregex to be matched zero or more times.
 	 */
-	public final OORegex REGEX;
+	final LexerRegex REGEX;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	public final int PRIORITY;
+	private final int PRIORITY;
 	
 	/**
 	 * Constructs a new zero or more regex given a subregex.
 	 *
 	 * @param regex The subregex for the zero or more regex.
 	 */
-	public ZeroOrMoreRegex(@NotNull OORegex regex) { this(regex, 0); }
+	public ZeroOrMoreRegex(@NotNull LexerRegex regex) { this(regex, 0); }
 	
 	/**
 	 * Constructs a new zero or more regex given a subregex and
@@ -32,40 +32,40 @@ public final class ZeroOrMoreRegex implements OORegex {
 	 * @param regex The subregex for the zero or more regex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public ZeroOrMoreRegex(@NotNull OORegex regex, int priority) {
+	public ZeroOrMoreRegex(@NotNull LexerRegex regex, int priority) {
 		REGEX    = regex;
 		PRIORITY = priority;
 	}
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#nullable()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#nullable()
 	 */
 	@Override
 	public boolean nullable() { return true; }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#charactersMatched()
 	 */
 	@Override
 	public int charactersMatched() { return -1; }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#getPriority()
 	 */
 	@Override
 	public int getPriority() { return PRIORITY; }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#advanced(char)
 	 */
 	@Nullable
 	@Override
-	public OORegex advanced(char character) {
+	public LexerRegex advanced(char character) {
 		
-		OORegex advancedRegex = REGEX.advanced(character);
+		LexerRegex advancedRegex = REGEX.advanced(character);
 		
 		return advancedRegex == null ? null :
-			new ConcatRegex(advancedRegex, this, PRIORITY);
+			new ConcatenationRegex(advancedRegex, this, PRIORITY);
 		
 	}
 	

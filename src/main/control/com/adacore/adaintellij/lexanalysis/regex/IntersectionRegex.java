@@ -8,18 +8,18 @@ import org.jetbrains.annotations.*;
  * only if the two intersection subregexes can both advance by that
  * character.
  */
-public final class IntersectionRegex implements OORegex {
+public final class IntersectionRegex implements LexerRegex {
 	
 	/**
 	 * The intersection subregexes.
 	 */
-	public final OORegex FIRST_REGEX;
-	public final OORegex SECOND_REGEX;
+	final LexerRegex FIRST_REGEX;
+	final LexerRegex SECOND_REGEX;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	public final int PRIORITY;
+	private final int PRIORITY;
 	
 	/**
 	 * Constructs a new intersection regex given two subregexes.
@@ -27,7 +27,7 @@ public final class IntersectionRegex implements OORegex {
 	 * @param firstRegex The first subregex.
 	 * @param secondRegex The second subregex.
 	 */
-	public IntersectionRegex(@NotNull OORegex firstRegex, @NotNull OORegex secondRegex) {
+	public IntersectionRegex(@NotNull LexerRegex firstRegex, @NotNull LexerRegex secondRegex) {
 		this(firstRegex, secondRegex, 0);
 	}
 	
@@ -39,20 +39,20 @@ public final class IntersectionRegex implements OORegex {
 	 * @param secondRegex The second subregex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public IntersectionRegex(@NotNull OORegex firstRegex, @NotNull OORegex secondRegex, int priority) {
+	public IntersectionRegex(@NotNull LexerRegex firstRegex, @NotNull LexerRegex secondRegex, int priority) {
 		FIRST_REGEX  = firstRegex;
 		SECOND_REGEX = secondRegex;
 		PRIORITY     = priority;
 	}
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#nullable()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#nullable()
 	 */
 	@Override
 	public boolean nullable() { return FIRST_REGEX.nullable() && SECOND_REGEX.nullable(); }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#charactersMatched()
 	 */
 	@Override
 	public int charactersMatched() {
@@ -65,20 +65,20 @@ public final class IntersectionRegex implements OORegex {
 	}
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#getPriority()
 	 */
 	@Override
 	public int getPriority() { return PRIORITY; }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#advanced(char)
 	 */
 	@Nullable
 	@Override
-	public OORegex advanced(char character) {
+	public LexerRegex advanced(char character) {
 		
-		OORegex firstRegexAdvanced  = FIRST_REGEX.advanced(character);
-		OORegex secondRegexAdvanced = SECOND_REGEX.advanced(character);
+		LexerRegex firstRegexAdvanced  = FIRST_REGEX.advanced(character);
+		LexerRegex secondRegexAdvanced = SECOND_REGEX.advanced(character);
 		
 		return firstRegexAdvanced != null && secondRegexAdvanced != null ?
 			new IntersectionRegex(firstRegexAdvanced, secondRegexAdvanced, PRIORITY) : null;

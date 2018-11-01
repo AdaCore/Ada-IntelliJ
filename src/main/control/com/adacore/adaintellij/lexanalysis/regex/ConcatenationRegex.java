@@ -7,18 +7,18 @@ import org.jetbrains.annotations.*;
 /**
  * Regex matching the concatenation of two subregexes.
  */
-public final class ConcatRegex implements OORegex {
+public final class ConcatenationRegex implements LexerRegex {
 	
 	/**
 	 * The concatenation subregexes.
 	 */
-	public final OORegex FIRST_REGEX;
-	public final OORegex SECOND_REGEX;
+	final LexerRegex FIRST_REGEX;
+	final LexerRegex SECOND_REGEX;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	public final int PRIORITY;
+	private final int PRIORITY;
 	
 	/**
 	 * Constructs a new concatenation regex given two subregexes.
@@ -26,7 +26,7 @@ public final class ConcatRegex implements OORegex {
 	 * @param firstRegex The first subregex.
 	 * @param secondRegex The second subregex.
 	 */
-	public ConcatRegex(@NotNull OORegex firstRegex, @NotNull OORegex secondRegex) {
+	public ConcatenationRegex(@NotNull LexerRegex firstRegex, @NotNull LexerRegex secondRegex) {
 		this(firstRegex, secondRegex, 0);
 	}
 	
@@ -38,7 +38,7 @@ public final class ConcatRegex implements OORegex {
 	 * @param secondRegex The second subregex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public ConcatRegex(@NotNull OORegex firstRegex, @NotNull OORegex secondRegex, int priority) {
+	public ConcatenationRegex(@NotNull LexerRegex firstRegex, @NotNull LexerRegex secondRegex, int priority) {
 		FIRST_REGEX  = firstRegex;
 		SECOND_REGEX = secondRegex;
 		PRIORITY     = priority;
@@ -68,21 +68,21 @@ public final class ConcatRegex implements OORegex {
 	 * @param regexes The list of regexes to concatenate.
 	 * @return A hierarchy of concatenation regexes.
 	 */
-	public static OORegex fromList(@NotNull List<OORegex> regexes) {
+	public static LexerRegex fromList(@NotNull List<LexerRegex> regexes) {
 		
 		int regexesSize = regexes.size();
 		
 		if (regexesSize == 0) { return null; }
 		
-		ListIterator<OORegex> regexIterator = regexes.listIterator(regexesSize);
+		ListIterator<LexerRegex> regexIterator = regexes.listIterator(regexesSize);
 		
-		OORegex regex = regexIterator.previous();
+		LexerRegex regex = regexIterator.previous();
 		
 		int maxPriority = regex.getPriority();
 		
 		while (regexIterator.hasPrevious()) {
 			
-			OORegex nextRegex = regexIterator.previous();
+			LexerRegex nextRegex = regexIterator.previous();
 			
 			int nextRegexPriority = nextRegex.getPriority();
 			
@@ -90,7 +90,7 @@ public final class ConcatRegex implements OORegex {
 				maxPriority = nextRegexPriority;
 			}
 			
-			regex = new ConcatRegex(nextRegex, regex, maxPriority);
+			regex = new ConcatenationRegex(nextRegex, regex, maxPriority);
 			
 		}
 		
@@ -100,23 +100,23 @@ public final class ConcatRegex implements OORegex {
 	
 	/**
 	 * Returns a new hierarchy of concatenation regexes from an arbitrary
-	 * number of regexes (Java varargs) using fromList(List<OORegex>).
+	 * number of regexes (Java varargs) using fromList(List<LexerRegex>).
 	 *
 	 * @param regexes The regexes to concatenate.
 	 * @return A hierarchy of concatenation regexes.
 	 */
-	public static OORegex fromRegexes(@NotNull OORegex... regexes) {
+	public static LexerRegex fromRegexes(@NotNull LexerRegex... regexes) {
 		return fromList(Arrays.asList(regexes));
 	}
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#nullable()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#nullable()
 	 */
 	@Override
 	public boolean nullable() { return FIRST_REGEX.nullable() && SECOND_REGEX.nullable(); }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#charactersMatched()
 	 */
 	@Override
 	public int charactersMatched() {
@@ -130,23 +130,23 @@ public final class ConcatRegex implements OORegex {
 	}
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#getPriority()
 	 */
 	@Override
 	public int getPriority() { return PRIORITY; }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#advanced(char)
 	 */
 	@Nullable
 	@Override
-	public OORegex advanced(char character) {
+	public LexerRegex advanced(char character) {
 		
-		OORegex firstRegexAdvanced = FIRST_REGEX.advanced(character);
+		LexerRegex firstRegexAdvanced = FIRST_REGEX.advanced(character);
 		
 		if (FIRST_REGEX.nullable()) {
 			
-			OORegex secondRegexAdvanced = SECOND_REGEX.advanced(character);
+			LexerRegex secondRegexAdvanced = SECOND_REGEX.advanced(character);
 			
 			if (firstRegexAdvanced == null && secondRegexAdvanced == null) {
 				
@@ -158,12 +158,12 @@ public final class ConcatRegex implements OORegex {
 			
 			} else if (secondRegexAdvanced == null) {
 			
-				return new ConcatRegex(firstRegexAdvanced, SECOND_REGEX, PRIORITY);
+				return new ConcatenationRegex(firstRegexAdvanced, SECOND_REGEX, PRIORITY);
 			
 			} else {
 			
 				return new UnionRegex(
-					new ConcatRegex(firstRegexAdvanced, SECOND_REGEX, PRIORITY),
+					new ConcatenationRegex(firstRegexAdvanced, SECOND_REGEX, PRIORITY),
 					secondRegexAdvanced,
 					PRIORITY
 				);
@@ -173,7 +173,7 @@ public final class ConcatRegex implements OORegex {
 		} else {
 			
 			return firstRegexAdvanced == null ? null :
-				new ConcatRegex(firstRegexAdvanced, SECOND_REGEX, PRIORITY);
+				new ConcatenationRegex(firstRegexAdvanced, SECOND_REGEX, PRIORITY);
 			
 		}
 		

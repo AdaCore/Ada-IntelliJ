@@ -22,19 +22,19 @@ public final class AdaLexer extends LexerBase {
 	/**
 	 * Regexes matching different whitespace characters.
 	 */
-	private static final OORegex HORIZONTAL_TABULATION_REGEX = new UnitRegex("\t");
-	private static final OORegex LINE_FEED_REGEX             = new UnitRegex("\n");
-	private static final OORegex VERTICAL_TABULATION_REGEX   = new UnitRegex("\u000b");
-	private static final OORegex FORM_FEED_REGEX             = new UnitRegex("\f");
-	private static final OORegex CARRIAGE_RETURN_REGEX       = new UnitRegex("\r");
-	private static final OORegex SPACE_REGEX                 = new UnitRegex("\u0020");
-	private static final OORegex NEXT_LINE_REGEX             = new UnitRegex("\u0085");
-	private static final OORegex NO_BREAK_SPACE_REGEX        = new UnitRegex("\u00a0");
+	private static final LexerRegex HORIZONTAL_TABULATION_REGEX = new UnitRegex("\t");
+	private static final LexerRegex LINE_FEED_REGEX             = new UnitRegex("\n");
+	private static final LexerRegex VERTICAL_TABULATION_REGEX   = new UnitRegex("\u000b");
+	private static final LexerRegex FORM_FEED_REGEX             = new UnitRegex("\f");
+	private static final LexerRegex CARRIAGE_RETURN_REGEX       = new UnitRegex("\r");
+	private static final LexerRegex SPACE_REGEX                 = new UnitRegex("\u0020");
+	private static final LexerRegex NEXT_LINE_REGEX             = new UnitRegex("\u0085");
+	private static final LexerRegex NO_BREAK_SPACE_REGEX        = new UnitRegex("\u00a0");
 	
 	/**
 	 * Regex defining a sequence of whitespaces in Ada.
 	 */
-	private static final OORegex WHITESPACES_REGEX =
+	private static final LexerRegex WHITESPACES_REGEX =
 		new OneOrMoreRegex(
 			UnionRegex.fromRegexes(
 				HORIZONTAL_TABULATION_REGEX,
@@ -53,36 +53,36 @@ public final class AdaLexer extends LexerBase {
 	/**
 	 * Unit regexes for matching Ada single delimiters.
 	 */
-	private static final OORegex AMPERSAND_REGEX         = new UnitRegex("&");
-	private static final OORegex APOSTROPHE_REGEX        = new UnitRegex("'");
-	private static final OORegex LEFT_PARENTHESIS_REGEX  = new UnitRegex("(");
-	private static final OORegex RIGHT_PARENTHESIS_REGEX = new UnitRegex(")");
-	private static final OORegex ASTERISK_REGEX          = new UnitRegex("*");
-	private static final OORegex PLUS_SIGN_REGEX         = new UnitRegex("+");
-	private static final OORegex COMMA_REGEX             = new UnitRegex(",");
-	private static final OORegex HYPHEN_MINUS_REGEX      = new UnitRegex("-");
-	private static final OORegex FULL_STOP_REGEX         = new UnitRegex(".");
-	private static final OORegex SOLIDUS_REGEX           = new UnitRegex("/");
-	private static final OORegex COLON_REGEX             = new UnitRegex(":");
-	private static final OORegex SEMICOLON_REGEX         = new UnitRegex(";");
-	private static final OORegex LESS_THAN_SIGN_REGEX    = new UnitRegex("<");
-	private static final OORegex EQUALS_SIGN_REGEX       = new UnitRegex("=");
-	private static final OORegex GREATER_THAN_SIGN_REGEX = new UnitRegex(">");
-	private static final OORegex VERTICAL_LINE_REGEX     = new UnitRegex("|");
+	private static final LexerRegex AMPERSAND_REGEX         = new UnitRegex("&");
+	private static final LexerRegex APOSTROPHE_REGEX        = new UnitRegex("'");
+	private static final LexerRegex LEFT_PARENTHESIS_REGEX  = new UnitRegex("(");
+	private static final LexerRegex RIGHT_PARENTHESIS_REGEX = new UnitRegex(")");
+	private static final LexerRegex ASTERISK_REGEX          = new UnitRegex("*");
+	private static final LexerRegex PLUS_SIGN_REGEX         = new UnitRegex("+");
+	private static final LexerRegex COMMA_REGEX             = new UnitRegex(",");
+	private static final LexerRegex HYPHEN_MINUS_REGEX      = new UnitRegex("-");
+	private static final LexerRegex FULL_STOP_REGEX         = new UnitRegex(".");
+	private static final LexerRegex SOLIDUS_REGEX           = new UnitRegex("/");
+	private static final LexerRegex COLON_REGEX             = new UnitRegex(":");
+	private static final LexerRegex SEMICOLON_REGEX         = new UnitRegex(";");
+	private static final LexerRegex LESS_THAN_SIGN_REGEX    = new UnitRegex("<");
+	private static final LexerRegex EQUALS_SIGN_REGEX       = new UnitRegex("=");
+	private static final LexerRegex GREATER_THAN_SIGN_REGEX = new UnitRegex(">");
+	private static final LexerRegex VERTICAL_LINE_REGEX     = new UnitRegex("|");
 	
 	/**
 	 * Unit regexes for matching Ada compound delimiters.
 	 */
-	private static final OORegex ARROW_REGEX               = new UnitRegex("=>");
-	private static final OORegex DOUBLE_DOT_REGEX          = new UnitRegex("..");
-	private static final OORegex DOUBLE_ASTERISK_REGEX     = new UnitRegex("**");
-	private static final OORegex ASSIGNMENT_REGEX          = new UnitRegex(":=");
-	private static final OORegex NOT_EQUAL_SIGN_REGEX      = new UnitRegex("/=");
-	private static final OORegex GREATER_EQUAL_SIGN_REGEX  = new UnitRegex(">=");
-	private static final OORegex LESS_EQUAL_SIGN_REGEX     = new UnitRegex("<=");
-	private static final OORegex LEFT_LABEL_BRACKET_REGEX  = new UnitRegex("<<");
-	private static final OORegex RIGHT_LABEL_BRACKET_REGEX = new UnitRegex(">>");
-	private static final OORegex BOX_SIGN_REGEX            = new UnitRegex("<>");
+	private static final LexerRegex ARROW_REGEX               = new UnitRegex("=>");
+	private static final LexerRegex DOUBLE_DOT_REGEX          = new UnitRegex("..");
+	private static final LexerRegex DOUBLE_ASTERISK_REGEX     = new UnitRegex("**");
+	private static final LexerRegex ASSIGNMENT_REGEX          = new UnitRegex(":=");
+	private static final LexerRegex NOT_EQUAL_SIGN_REGEX      = new UnitRegex("/=");
+	private static final LexerRegex GREATER_EQUAL_SIGN_REGEX  = new UnitRegex(">=");
+	private static final LexerRegex LESS_EQUAL_SIGN_REGEX     = new UnitRegex("<=");
+	private static final LexerRegex LEFT_LABEL_BRACKET_REGEX  = new UnitRegex("<<");
+	private static final LexerRegex RIGHT_LABEL_BRACKET_REGEX = new UnitRegex(">>");
+	private static final LexerRegex BOX_SIGN_REGEX            = new UnitRegex("<>");
 	
 	// Character Categories
 	
@@ -90,28 +90,28 @@ public final class AdaLexer extends LexerBase {
 	 * Regexes matching characters based on their "General Category"
 	 * as defined by the Unicode standard.
 	 */
-	private static final OORegex LETTER_UPPERCASE_REGEX       = new GeneralCategoryRegex("Lu");
-	private static final OORegex LETTER_LOWERCASE_REGEX       = new GeneralCategoryRegex("Ll");
-	private static final OORegex LETTER_TITLECASE_REGEX       = new GeneralCategoryRegex("Lt");
-	private static final OORegex LETTER_MODIFIER_REGEX        = new GeneralCategoryRegex("Lm");
-	private static final OORegex LETTER_OTHER_REGEX           = new GeneralCategoryRegex("Lo");
-	private static final OORegex MARK_NON_SPACING_REGEX       = new GeneralCategoryRegex("Mn");
-	private static final OORegex MARK_SPACING_COMBINING_REGEX = new GeneralCategoryRegex("Mc");
-	private static final OORegex NUMBER_DECIMAL_REGEX         = new GeneralCategoryRegex("Nd");
-	private static final OORegex NUMBER_LETTER_REGEX          = new GeneralCategoryRegex("Nl");
-	private static final OORegex PUNCTUATION_CONNECTOR_REGEX  = new GeneralCategoryRegex("Pc");
-	private static final OORegex OTHER_FORMAT_REGEX           = new GeneralCategoryRegex("Cf"); // Currently not used
-	private static final OORegex SEPARATOR_SPACE_REGEX        = new GeneralCategoryRegex("Zs"); // Currently not used
-	private static final OORegex SEPARATOR_LINE_REGEX         = new GeneralCategoryRegex("Zl");
-	private static final OORegex SEPARATOR_PARAGRAPH_REGEX    = new GeneralCategoryRegex("Zp");
-	private static final OORegex OTHER_PRIVATE_USE_REGEX      = new GeneralCategoryRegex("Co");
-	private static final OORegex OTHER_SURROGATE_REGEX        = new GeneralCategoryRegex("Cs");
+	private static final LexerRegex LETTER_UPPERCASE_REGEX       = new GeneralCategoryRegex("Lu");
+	private static final LexerRegex LETTER_LOWERCASE_REGEX       = new GeneralCategoryRegex("Ll");
+	private static final LexerRegex LETTER_TITLECASE_REGEX       = new GeneralCategoryRegex("Lt");
+	private static final LexerRegex LETTER_MODIFIER_REGEX        = new GeneralCategoryRegex("Lm");
+	private static final LexerRegex LETTER_OTHER_REGEX           = new GeneralCategoryRegex("Lo");
+	private static final LexerRegex MARK_NON_SPACING_REGEX       = new GeneralCategoryRegex("Mn");
+	private static final LexerRegex MARK_SPACING_COMBINING_REGEX = new GeneralCategoryRegex("Mc");
+	private static final LexerRegex NUMBER_DECIMAL_REGEX         = new GeneralCategoryRegex("Nd");
+	private static final LexerRegex NUMBER_LETTER_REGEX          = new GeneralCategoryRegex("Nl");
+	private static final LexerRegex PUNCTUATION_CONNECTOR_REGEX  = new GeneralCategoryRegex("Pc");
+	private static final LexerRegex OTHER_FORMAT_REGEX           = new GeneralCategoryRegex("Cf"); // Currently not used
+	private static final LexerRegex SEPARATOR_SPACE_REGEX        = new GeneralCategoryRegex("Zs"); // Currently not used
+	private static final LexerRegex SEPARATOR_LINE_REGEX         = new GeneralCategoryRegex("Zl");
+	private static final LexerRegex SEPARATOR_PARAGRAPH_REGEX    = new GeneralCategoryRegex("Zp");
+	private static final LexerRegex OTHER_PRIVATE_USE_REGEX      = new GeneralCategoryRegex("Co");
+	private static final LexerRegex OTHER_SURROGATE_REGEX        = new GeneralCategoryRegex("Cs");
 	
 	/**
 	 * Regexes matching various character classes defined by
 	 * the Ada 2012 specification.
 	 */
-	private static final OORegex FORMAT_EFFECTOR_REGEX =
+	private static final LexerRegex FORMAT_EFFECTOR_REGEX =
 		UnionRegex.fromRegexes(
 			HORIZONTAL_TABULATION_REGEX,
 			LINE_FEED_REGEX,
@@ -123,13 +123,13 @@ public final class AdaLexer extends LexerBase {
 			SEPARATOR_PARAGRAPH_REGEX
 		);
 	
-	private static final OORegex OTHER_CONTROL_REGEX =
+	private static final LexerRegex OTHER_CONTROL_REGEX =
 		new IntersectionRegex(
 			new GeneralCategoryRegex("Cc"),
 			new NotRegex(FORMAT_EFFECTOR_REGEX)
 		);
 	
-	private static final OORegex GRAPHIC_CHARACTER_REGEX =
+	private static final LexerRegex GRAPHIC_CHARACTER_REGEX =
 		new NotRegex(
 			UnionRegex.fromRegexes(
 				OTHER_CONTROL_REGEX,
@@ -154,7 +154,7 @@ public final class AdaLexer extends LexerBase {
 	 *   | letter_other
 	 *   | number_letter
 	 */
-	private static final OORegex IDENTIFIER_START_REGEX =
+	private static final LexerRegex IDENTIFIER_START_REGEX =
 		UnionRegex.fromRegexes(
 			LETTER_UPPERCASE_REGEX,
 			LETTER_LOWERCASE_REGEX,
@@ -174,7 +174,7 @@ public final class AdaLexer extends LexerBase {
 	 *   | number_decimal
 	 *   | punctuation_connector
 	 */
-	private static final OORegex IDENTIFIER_EXTEND_REGEX =
+	private static final LexerRegex IDENTIFIER_EXTEND_REGEX =
 		UnionRegex.fromRegexes(
 			MARK_NON_SPACING_REGEX,
 			MARK_SPACING_COMBINING_REGEX,
@@ -188,8 +188,8 @@ public final class AdaLexer extends LexerBase {
 	 * identifier ::=
 	 *     identifier_start {identifier_start | identifier_extend}
 	 */
-	private static final OORegex IDENTIFIER_REGEX =
-		new ConcatRegex(
+	private static final LexerRegex IDENTIFIER_REGEX =
+		new ConcatenationRegex(
 			IDENTIFIER_START_REGEX,
 			new ZeroOrMoreRegex(
 				new UnionRegex(
@@ -206,18 +206,18 @@ public final class AdaLexer extends LexerBase {
 	 *
 	 * digit ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 	 */
-	private static final OORegex DIGIT_REGEX = UnionRegex.fromRange('0', '9');
+	private static final LexerRegex DIGIT_REGEX = UnionRegex.fromRange('0', '9');
 	
 	/**
 	 * Regex defining a numeral (used to define numeric literals).
 	 *
 	 * numeral ::= digit {[underline] digit}
 	 */
-	private static final OORegex NUMERAL_REGEX =
-		new ConcatRegex(
+	private static final LexerRegex NUMERAL_REGEX =
+		new ConcatenationRegex(
 			DIGIT_REGEX,
 			new ZeroOrMoreRegex(
-				new ConcatRegex(
+				new ConcatenationRegex(
 					new ZeroOrOneRegex(new UnitRegex("_")),
 					DIGIT_REGEX
 				)
@@ -229,8 +229,8 @@ public final class AdaLexer extends LexerBase {
 	 *
 	 * exponent ::= e [+] numeral | e – numeral
 	 */
-	private static final OORegex EXPONENT_REGEX =
-		ConcatRegex.fromRegexes(
+	private static final LexerRegex EXPONENT_REGEX =
+		ConcatenationRegex.fromRegexes(
 			new UnitRegex("e"),
 			UnionRegex.fromRegexes(
 				new UnitRegex("-"),
@@ -246,11 +246,11 @@ public final class AdaLexer extends LexerBase {
 	 *
 	 * decimal_literal ::= numeral [.numeral] [exponent]
 	 */
-	private static final OORegex DECIMAL_LITERAL_REGEX =
-		ConcatRegex.fromRegexes(
+	private static final LexerRegex DECIMAL_LITERAL_REGEX =
+		ConcatenationRegex.fromRegexes(
 			NUMERAL_REGEX,
 			new ZeroOrOneRegex(
-				new ConcatRegex(
+				new ConcatenationRegex(
 					new UnitRegex("."),
 					NUMERAL_REGEX
 				)
@@ -265,14 +265,14 @@ public final class AdaLexer extends LexerBase {
 	 *
 	 * base ::= numeral
 	 */
-	private static final OORegex BASE_REGEX = NUMERAL_REGEX;
+	private static final LexerRegex BASE_REGEX = NUMERAL_REGEX;
 	
 	/**
 	 * Regex defining an extended digit (hexadecimal digit).
 	 *
 	 * extended_digit ::= digit | a | b | c | d | e | f
 	 */
-	private static final OORegex EXTENDED_DIGIT_REGEX =
+	private static final LexerRegex EXTENDED_DIGIT_REGEX =
 		UnionRegex.fromRegexes(
 			DIGIT_REGEX,
 			new UnitRegex("a"),
@@ -289,11 +289,11 @@ public final class AdaLexer extends LexerBase {
 	 * based_numeral ::=
 	 *     extended_digit {[underline] extended_digit}
 	 */
-	private static final OORegex BASED_NUMERAL_REGEX =
-		new ConcatRegex(
+	private static final LexerRegex BASED_NUMERAL_REGEX =
+		new ConcatenationRegex(
 			EXTENDED_DIGIT_REGEX,
 			new ZeroOrMoreRegex(
-				new ConcatRegex(
+				new ConcatenationRegex(
 					new ZeroOrOneRegex(new UnitRegex("_")),
 					EXTENDED_DIGIT_REGEX
 				)
@@ -306,13 +306,13 @@ public final class AdaLexer extends LexerBase {
 	 * based_literal ::=
 	 *     base # based_numeral [.based_numeral] # [exponent]
 	 */
-	private static final OORegex BASED_LITERAL_REGEX =
-		ConcatRegex.fromRegexes(
+	private static final LexerRegex BASED_LITERAL_REGEX =
+		ConcatenationRegex.fromRegexes(
 			BASE_REGEX,
 			new UnitRegex("#"),
 			BASED_NUMERAL_REGEX,
 			new ZeroOrOneRegex(
-				new ConcatRegex(
+				new ConcatenationRegex(
 					new UnitRegex("."),
 					BASED_NUMERAL_REGEX
 				)
@@ -328,8 +328,8 @@ public final class AdaLexer extends LexerBase {
 	 *
 	 * character_literal ::= 'graphic_character'
 	 */
-	private static final OORegex CHARACTER_LITERAL_REGEX =
-		ConcatRegex.fromRegexes(
+	private static final LexerRegex CHARACTER_LITERAL_REGEX =
+		ConcatenationRegex.fromRegexes(
 			new UnitRegex("'"),
 			GRAPHIC_CHARACTER_REGEX,
 			new UnitRegex("'")
@@ -344,7 +344,7 @@ public final class AdaLexer extends LexerBase {
 	 * A non-quotation-mark graphic character is defined as any
 	 * graphic_character other than the quotation mark character '"'
 	 */
-	private static final OORegex NON_QUOTATION_MARK_GRAPHIC_CHARACTER_REGEX =
+	private static final LexerRegex NON_QUOTATION_MARK_GRAPHIC_CHARACTER_REGEX =
 		new IntersectionRegex(
 			GRAPHIC_CHARACTER_REGEX,
 			new NotRegex(new UnitRegex("\""))
@@ -355,7 +355,7 @@ public final class AdaLexer extends LexerBase {
 	 *
 	 * string_element ::= "" | non_quotation_mark_graphic_character
 	 */
-	private static final OORegex STRING_ELEMENT_REGEX =
+	private static final LexerRegex STRING_ELEMENT_REGEX =
 		new UnionRegex(
 			new UnitRegex("\"\""),
 			NON_QUOTATION_MARK_GRAPHIC_CHARACTER_REGEX
@@ -366,8 +366,8 @@ public final class AdaLexer extends LexerBase {
 	 *
 	 * string_literal ::= "{string_element}"
 	 */
-	private static final OORegex STRING_LITERAL_REGEX =
-		ConcatRegex.fromRegexes(
+	private static final LexerRegex STRING_LITERAL_REGEX =
+		ConcatenationRegex.fromRegexes(
 			new UnitRegex("\""),
 			new ZeroOrMoreRegex(STRING_ELEMENT_REGEX),
 			new UnitRegex("\"")
@@ -378,7 +378,7 @@ public final class AdaLexer extends LexerBase {
 	/**
 	 * Regex defining a non-end-of-line character (useed to define comments).
 	 */
-	private static final OORegex NON_END_OF_LINE_CHARACTER_REGEX =
+	private static final LexerRegex NON_END_OF_LINE_CHARACTER_REGEX =
 		new NotRegex(
 			UnionRegex.fromRegexes(
 				LINE_FEED_REGEX,
@@ -396,8 +396,8 @@ public final class AdaLexer extends LexerBase {
 	 *
 	 * comment ::= --{non_end_of_line_character}
 	 */
-	private static final OORegex COMMENT_REGEX =
-		ConcatRegex.fromRegexes(
+	private static final LexerRegex COMMENT_REGEX =
+		ConcatenationRegex.fromRegexes(
 			new UnitRegex("--"),
 			new ZeroOrMoreRegex(NON_END_OF_LINE_CHARACTER_REGEX)
 		);
@@ -407,97 +407,97 @@ public final class AdaLexer extends LexerBase {
 	/**
 	 * Unit regexes for matching Ada keywords.
 	 */
-	private static final OORegex ABORT_KEYWORD_REGEX        = new UnitRegex("abort"       , 1);
-	private static final OORegex ABS_KEYWORD_REGEX          = new UnitRegex("abs"         , 1);
-	private static final OORegex ABSTRACT_KEYWORD_REGEX     = new UnitRegex("abstract"    , 1);
-	private static final OORegex ACCEPT_KEYWORD_REGEX       = new UnitRegex("accept"      , 1);
-	private static final OORegex ACCESS_KEYWORD_REGEX       = new UnitRegex("access"      , 1);
-	private static final OORegex ALIASED_KEYWORD_REGEX      = new UnitRegex("aliased"     , 1);
-	private static final OORegex ALL_KEYWORD_REGEX          = new UnitRegex("all"         , 1);
-	private static final OORegex AND_KEYWORD_REGEX          = new UnitRegex("and"         , 1);
-	private static final OORegex ARRAY_KEYWORD_REGEX        = new UnitRegex("array"       , 1);
-	private static final OORegex AT_KEYWORD_REGEX           = new UnitRegex("at"          , 1);
+	private static final LexerRegex ABORT_KEYWORD_REGEX        = new UnitRegex("abort"       , 1);
+	private static final LexerRegex ABS_KEYWORD_REGEX          = new UnitRegex("abs"         , 1);
+	private static final LexerRegex ABSTRACT_KEYWORD_REGEX     = new UnitRegex("abstract"    , 1);
+	private static final LexerRegex ACCEPT_KEYWORD_REGEX       = new UnitRegex("accept"      , 1);
+	private static final LexerRegex ACCESS_KEYWORD_REGEX       = new UnitRegex("access"      , 1);
+	private static final LexerRegex ALIASED_KEYWORD_REGEX      = new UnitRegex("aliased"     , 1);
+	private static final LexerRegex ALL_KEYWORD_REGEX          = new UnitRegex("all"         , 1);
+	private static final LexerRegex AND_KEYWORD_REGEX          = new UnitRegex("and"         , 1);
+	private static final LexerRegex ARRAY_KEYWORD_REGEX        = new UnitRegex("array"       , 1);
+	private static final LexerRegex AT_KEYWORD_REGEX           = new UnitRegex("at"          , 1);
 	
-	private static final OORegex BEGIN_KEYWORD_REGEX        = new UnitRegex("begin"       , 1);
-	private static final OORegex BODY_KEYWORD_REGEX         = new UnitRegex("body"        , 1);
+	private static final LexerRegex BEGIN_KEYWORD_REGEX        = new UnitRegex("begin"       , 1);
+	private static final LexerRegex BODY_KEYWORD_REGEX         = new UnitRegex("body"        , 1);
 	
-	private static final OORegex CASE_KEYWORD_REGEX         = new UnitRegex("case"        , 1);
-	private static final OORegex CONSTANT_KEYWORD_REGEX     = new UnitRegex("constant"    , 1);
+	private static final LexerRegex CASE_KEYWORD_REGEX         = new UnitRegex("case"        , 1);
+	private static final LexerRegex CONSTANT_KEYWORD_REGEX     = new UnitRegex("constant"    , 1);
 	
-	private static final OORegex DECLARE_KEYWORD_REGEX      = new UnitRegex("declare"     , 1);
-	private static final OORegex DELAY_KEYWORD_REGEX        = new UnitRegex("delay"       , 1);
-	private static final OORegex DELTA_KEYWORD_REGEX        = new UnitRegex("delta"       , 1);
-	private static final OORegex DIGITS_KEYWORD_REGEX       = new UnitRegex("digits"      , 1);
-	private static final OORegex DO_KEYWORD_REGEX           = new UnitRegex("do"          , 1);
+	private static final LexerRegex DECLARE_KEYWORD_REGEX      = new UnitRegex("declare"     , 1);
+	private static final LexerRegex DELAY_KEYWORD_REGEX        = new UnitRegex("delay"       , 1);
+	private static final LexerRegex DELTA_KEYWORD_REGEX        = new UnitRegex("delta"       , 1);
+	private static final LexerRegex DIGITS_KEYWORD_REGEX       = new UnitRegex("digits"      , 1);
+	private static final LexerRegex DO_KEYWORD_REGEX           = new UnitRegex("do"          , 1);
 	
-	private static final OORegex ELSE_KEYWORD_REGEX         = new UnitRegex("else"        , 1);
-	private static final OORegex ELSIF_KEYWORD_REGEX        = new UnitRegex("elsif"       , 1);
-	private static final OORegex END_KEYWORD_REGEX          = new UnitRegex("end"         , 1);
-	private static final OORegex ENTRY_KEYWORD_REGEX        = new UnitRegex("entry"       , 1);
-	private static final OORegex EXCEPTION_KEYWORD_REGEX    = new UnitRegex("exception"   , 1);
-	private static final OORegex EXIT_KEYWORD_REGEX         = new UnitRegex("exit"        , 1);
+	private static final LexerRegex ELSE_KEYWORD_REGEX         = new UnitRegex("else"        , 1);
+	private static final LexerRegex ELSIF_KEYWORD_REGEX        = new UnitRegex("elsif"       , 1);
+	private static final LexerRegex END_KEYWORD_REGEX          = new UnitRegex("end"         , 1);
+	private static final LexerRegex ENTRY_KEYWORD_REGEX        = new UnitRegex("entry"       , 1);
+	private static final LexerRegex EXCEPTION_KEYWORD_REGEX    = new UnitRegex("exception"   , 1);
+	private static final LexerRegex EXIT_KEYWORD_REGEX         = new UnitRegex("exit"        , 1);
 	
-	private static final OORegex FOR_KEYWORD_REGEX          = new UnitRegex("for"         , 1);
-	private static final OORegex FUNCTION_KEYWORD_REGEX     = new UnitRegex("function"    , 1);
+	private static final LexerRegex FOR_KEYWORD_REGEX          = new UnitRegex("for"         , 1);
+	private static final LexerRegex FUNCTION_KEYWORD_REGEX     = new UnitRegex("function"    , 1);
 	
-	private static final OORegex GENERIC_KEYWORD_REGEX      = new UnitRegex("generic"     , 1);
-	private static final OORegex GOTO_KEYWORD_REGEX         = new UnitRegex("goto"        , 1);
+	private static final LexerRegex GENERIC_KEYWORD_REGEX      = new UnitRegex("generic"     , 1);
+	private static final LexerRegex GOTO_KEYWORD_REGEX         = new UnitRegex("goto"        , 1);
 	
-	private static final OORegex IF_KEYWORD_REGEX           = new UnitRegex("if"          , 1);
-	private static final OORegex IN_KEYWORD_REGEX           = new UnitRegex("in"          , 1);
-	private static final OORegex INTERFACE_KEYWORD_REGEX    = new UnitRegex("interface"   , 1);
-	private static final OORegex IS_KEYWORD_REGEX           = new UnitRegex("is"          , 1);
+	private static final LexerRegex IF_KEYWORD_REGEX           = new UnitRegex("if"          , 1);
+	private static final LexerRegex IN_KEYWORD_REGEX           = new UnitRegex("in"          , 1);
+	private static final LexerRegex INTERFACE_KEYWORD_REGEX    = new UnitRegex("interface"   , 1);
+	private static final LexerRegex IS_KEYWORD_REGEX           = new UnitRegex("is"          , 1);
 	
-	private static final OORegex LIMITED_KEYWORD_REGEX      = new UnitRegex("limited"     , 1);
-	private static final OORegex LOOP_KEYWORD_REGEX         = new UnitRegex("loop"        , 1);
+	private static final LexerRegex LIMITED_KEYWORD_REGEX      = new UnitRegex("limited"     , 1);
+	private static final LexerRegex LOOP_KEYWORD_REGEX         = new UnitRegex("loop"        , 1);
 	
-	private static final OORegex MOD_KEYWORD_REGEX          = new UnitRegex("mod"         , 1);
+	private static final LexerRegex MOD_KEYWORD_REGEX          = new UnitRegex("mod"         , 1);
 	
-	private static final OORegex NEW_KEYWORD_REGEX          = new UnitRegex("new"         , 1);
-	private static final OORegex NOT_KEYWORD_REGEX          = new UnitRegex("not"         , 1);
-	private static final OORegex NULL_KEYWORD_REGEX         = new UnitRegex("null"        , 1);
+	private static final LexerRegex NEW_KEYWORD_REGEX          = new UnitRegex("new"         , 1);
+	private static final LexerRegex NOT_KEYWORD_REGEX          = new UnitRegex("not"         , 1);
+	private static final LexerRegex NULL_KEYWORD_REGEX         = new UnitRegex("null"        , 1);
 	
-	private static final OORegex OF_KEYWORD_REGEX           = new UnitRegex("of"          , 1);
-	private static final OORegex OR_KEYWORD_REGEX           = new UnitRegex("or"          , 1);
-	private static final OORegex OTHERS_KEYWORD_REGEX       = new UnitRegex("others"      , 1);
-	private static final OORegex OUT_KEYWORD_REGEX          = new UnitRegex("out"         , 1);
-	private static final OORegex OVERRIDING_KEYWORD_REGEX   = new UnitRegex("overriding"  , 1);
+	private static final LexerRegex OF_KEYWORD_REGEX           = new UnitRegex("of"          , 1);
+	private static final LexerRegex OR_KEYWORD_REGEX           = new UnitRegex("or"          , 1);
+	private static final LexerRegex OTHERS_KEYWORD_REGEX       = new UnitRegex("others"      , 1);
+	private static final LexerRegex OUT_KEYWORD_REGEX          = new UnitRegex("out"         , 1);
+	private static final LexerRegex OVERRIDING_KEYWORD_REGEX   = new UnitRegex("overriding"  , 1);
 	
-	private static final OORegex PACKAGE_KEYWORD_REGEX      = new UnitRegex("package"     , 1);
-	private static final OORegex PRAGMA_KEYWORD_REGEX       = new UnitRegex("pragma"      , 1);
-	private static final OORegex PRIVATE_KEYWORD_REGEX      = new UnitRegex("private"     , 1);
-	private static final OORegex PROCEDURE_KEYWORD_REGEX    = new UnitRegex("procedure"   , 1);
-	private static final OORegex PROTECTED_KEYWORD_REGEX    = new UnitRegex("protected"   , 1);
+	private static final LexerRegex PACKAGE_KEYWORD_REGEX      = new UnitRegex("package"     , 1);
+	private static final LexerRegex PRAGMA_KEYWORD_REGEX       = new UnitRegex("pragma"      , 1);
+	private static final LexerRegex PRIVATE_KEYWORD_REGEX      = new UnitRegex("private"     , 1);
+	private static final LexerRegex PROCEDURE_KEYWORD_REGEX    = new UnitRegex("procedure"   , 1);
+	private static final LexerRegex PROTECTED_KEYWORD_REGEX    = new UnitRegex("protected"   , 1);
 	
-	private static final OORegex RAISE_KEYWORD_REGEX        = new UnitRegex("raise"       , 1);
-	private static final OORegex RANGE_KEYWORD_REGEX        = new UnitRegex("range"       , 1);
-	private static final OORegex RECORD_KEYWORD_REGEX       = new UnitRegex("record"      , 1);
-	private static final OORegex REM_KEYWORD_REGEX          = new UnitRegex("rem"         , 1);
-	private static final OORegex RENAMES_KEYWORD_REGEX      = new UnitRegex("renames"     , 1);
-	private static final OORegex REQUEUE_KEYWORD_REGEX      = new UnitRegex("requeue"     , 1);
-	private static final OORegex RETURN_KEYWORD_REGEX       = new UnitRegex("return"      , 1);
-	private static final OORegex REVERSE_KEYWORD_REGEX      = new UnitRegex("reverse"     , 1);
+	private static final LexerRegex RAISE_KEYWORD_REGEX        = new UnitRegex("raise"       , 1);
+	private static final LexerRegex RANGE_KEYWORD_REGEX        = new UnitRegex("range"       , 1);
+	private static final LexerRegex RECORD_KEYWORD_REGEX       = new UnitRegex("record"      , 1);
+	private static final LexerRegex REM_KEYWORD_REGEX          = new UnitRegex("rem"         , 1);
+	private static final LexerRegex RENAMES_KEYWORD_REGEX      = new UnitRegex("renames"     , 1);
+	private static final LexerRegex REQUEUE_KEYWORD_REGEX      = new UnitRegex("requeue"     , 1);
+	private static final LexerRegex RETURN_KEYWORD_REGEX       = new UnitRegex("return"      , 1);
+	private static final LexerRegex REVERSE_KEYWORD_REGEX      = new UnitRegex("reverse"     , 1);
 	
-	private static final OORegex SELECT_KEYWORD_REGEX       = new UnitRegex("select"      , 1);
-	private static final OORegex SEPARATE_KEYWORD_REGEX     = new UnitRegex("separate"    , 1);
-	private static final OORegex SOME_KEYWORD_REGEX         = new UnitRegex("some"        , 1);
-	private static final OORegex SUBTYPE_KEYWORD_REGEX      = new UnitRegex("subtype"     , 1);
-	private static final OORegex SYNCHRONIZED_KEYWORD_REGEX = new UnitRegex("synchronized", 1);
+	private static final LexerRegex SELECT_KEYWORD_REGEX       = new UnitRegex("select"      , 1);
+	private static final LexerRegex SEPARATE_KEYWORD_REGEX     = new UnitRegex("separate"    , 1);
+	private static final LexerRegex SOME_KEYWORD_REGEX         = new UnitRegex("some"        , 1);
+	private static final LexerRegex SUBTYPE_KEYWORD_REGEX      = new UnitRegex("subtype"     , 1);
+	private static final LexerRegex SYNCHRONIZED_KEYWORD_REGEX = new UnitRegex("synchronized", 1);
 	
-	private static final OORegex TAGGED_KEYWORD_REGEX       = new UnitRegex("tagged"      , 1);
-	private static final OORegex TASK_KEYWORD_REGEX         = new UnitRegex("task"        , 1);
-	private static final OORegex TERMINATE_KEYWORD_REGEX    = new UnitRegex("terminate"   , 1);
-	private static final OORegex THEN_KEYWORD_REGEX         = new UnitRegex("then"        , 1);
-	private static final OORegex TYPE_KEYWORD_REGEX         = new UnitRegex("type"        , 1);
+	private static final LexerRegex TAGGED_KEYWORD_REGEX       = new UnitRegex("tagged"      , 1);
+	private static final LexerRegex TASK_KEYWORD_REGEX         = new UnitRegex("task"        , 1);
+	private static final LexerRegex TERMINATE_KEYWORD_REGEX    = new UnitRegex("terminate"   , 1);
+	private static final LexerRegex THEN_KEYWORD_REGEX         = new UnitRegex("then"        , 1);
+	private static final LexerRegex TYPE_KEYWORD_REGEX         = new UnitRegex("type"        , 1);
 	
-	private static final OORegex UNTIL_KEYWORD_REGEX        = new UnitRegex("until"       , 1);
-	private static final OORegex USE_KEYWORD_REGEX          = new UnitRegex("use"         , 1);
+	private static final LexerRegex UNTIL_KEYWORD_REGEX        = new UnitRegex("until"       , 1);
+	private static final LexerRegex USE_KEYWORD_REGEX          = new UnitRegex("use"         , 1);
 	
-	private static final OORegex WHEN_KEYWORD_REGEX         = new UnitRegex("when"        , 1);
-	private static final OORegex WHILE_KEYWORD_REGEX        = new UnitRegex("while"       , 1);
-	private static final OORegex WITH_KEYWORD_REGEX         = new UnitRegex("with"        , 1);
+	private static final LexerRegex WHEN_KEYWORD_REGEX         = new UnitRegex("when"        , 1);
+	private static final LexerRegex WHILE_KEYWORD_REGEX        = new UnitRegex("while"       , 1);
+	private static final LexerRegex WITH_KEYWORD_REGEX         = new UnitRegex("with"        , 1);
 	
-	private static final OORegex XOR_KEYWORD_REGEX          = new UnitRegex("xor"         , 1);
+	private static final LexerRegex XOR_KEYWORD_REGEX          = new UnitRegex("xor"         , 1);
 	
 	// Lexer data
 	
@@ -505,12 +505,12 @@ public final class AdaLexer extends LexerBase {
 	 * A map associating root regexes with the token types
 	 * they represent.
 	 */
-	private static final Map<OORegex, IElementType> REGEX_TOKEN_TYPES;
+	private static final Map<LexerRegex, IElementType> REGEX_TOKEN_TYPES;
 	
 	/**
 	 * The set of all root regexes (defined above).
 	 */
-	private static final Set<OORegex> ROOT_REGEXES;
+	private static final Set<LexerRegex> ROOT_REGEXES;
 	
 	/*
 		Static Initializer
@@ -704,7 +704,7 @@ public final class AdaLexer extends LexerBase {
 	/**
 	 * Constructs a new Ada Lexer.
 	 */
-	protected AdaLexer() {}
+	public AdaLexer() {}
 	
 	/*
 		Methods
@@ -801,12 +801,32 @@ public final class AdaLexer extends LexerBase {
 		
 		tokenStart = tokenEnd;
 		
-		Set<OORegex> regexes         = new HashSet<>(ROOT_REGEXES);
-		Set<OORegex> matchingRegexes = new HashSet<>();
+		// The offset by which the lexer needs to be rolled back before
+		// marking the end of the matched token. This happens for example
+		// when lexing the sequence "'Access" where:
+		// 1. After the "'" character, only the following regexes advance:
+		//    * APOSTROPHE_REGEX and it is nullable at this point
+		//    * CHARACTER_LITERAL_REGEX and it is not nullable at this point
+		// 2. After the "A" character, only the following regex advances:
+		//    * CHARACTER_LITERAL_REGEX and it is not nullable at this point
+		// 3. After the first "c" character, no regexes advance
+		// At this point, the matching regex is the nullable APOSTROPHE_REGEX
+		// obtained at step 1, so the lexer needs to "mark" the sequence "'"
+		// as the apostrophe token and roll back to the "A" character in
+		// order to start from there during the next call to `advance`
+		int rollBackOffset = 0;
+		
+		// The set of regexes that successfully advanced so far
+		Set<LexerRegex> regexes = new HashSet<>(ROOT_REGEXES);
+		
+		// The last set of regexes, resulting from an iteration of
+		// characterLoop, that contained at least one nullable regex
+		// (see rollBackOffset description for an example)
+		Set<LexerRegex> matchingRegexes = new HashSet<>();
 		
 		// A map specifying the root regex from which every regex originates
 		// by a series of calls to regex.advanced(char)
-		Map<OORegex, OORegex> regexLineages = new HashMap<>();
+		final Map<LexerRegex, LexerRegex> regexLineages = new HashMap<>();
 		
 		// The next character to be analysed
 		char nextCharacter = text.charAt(lexingOffset);
@@ -816,11 +836,11 @@ public final class AdaLexer extends LexerBase {
 		characterLoop: // label only used for reference in comments
 		while (tokenEnd == tokenStart) {
 			
-			final char CHARACTER = nextCharacter;
+			final char character = nextCharacter;
 			
-			// The set of regexes that advanced successfully in this
-			// iteration of characterLoop
-			Set<OORegex> advancedRegexes = new HashSet<>();
+			// The set of regexes that will have advanced successfully
+			// at the end of this iteration of characterLoop
+			final Set<LexerRegex> advancedRegexes = new HashSet<>();
 			
 			// For each regex that successfully advanced by all
 			// characters so far...
@@ -829,7 +849,7 @@ public final class AdaLexer extends LexerBase {
 				
 				// Try to advance the regex
 				
-				OORegex advancedRegex = regex.advanced(CHARACTER);
+				LexerRegex advancedRegex = regex.advanced(character);
 				
 				// If the regex advanced successfully, store it for the next
 				// iteration of characterLoop, and keep track of the root
@@ -839,7 +859,12 @@ public final class AdaLexer extends LexerBase {
 					
 					advancedRegexes.add(advancedRegex);
 					
-					OORegex ancestor = regexLineages.remove(regex);
+					LexerRegex ancestor = regexLineages.get(regex);
+					
+					if (advancedRegex.nullable() || !regex.nullable()) {
+						regexLineages.remove(regex);
+					}
+					
 					regexLineages.put(advancedRegex, ancestor == null ? regex : ancestor);
 					
 				}
@@ -857,11 +882,12 @@ public final class AdaLexer extends LexerBase {
 			
 			if (remainingRegexCount == 0 || lexingOffset == lexingEndOffset - 1) {
 				
-				Iterator<OORegex> matchingRegexIterator;
+				Iterator<LexerRegex> matchingRegexIterator;
 				
 				// If no remaining matching regexes exist, then choose a regex
-				// from those that matched during the previous iteration of
-				// characterLoop
+				// from those that last matched and had at least one nullable
+				// regex (or the empty set if either that was never the case, or
+				// this is the first iteration of characterLoop)
 				
 				if (remainingRegexCount == 0) {
 					matchingRegexIterator = matchingRegexes.iterator();
@@ -876,7 +902,7 @@ public final class AdaLexer extends LexerBase {
 					lexingOffset = lexingEndOffset;
 				}
 				
-				OORegex highestPriorityRegex = null;
+				LexerRegex highestPriorityRegex = null;
 				
 				// Find the matching regex with the highest priority
 				// The chosen regex still has to be nullable, which prevents for
@@ -889,7 +915,7 @@ public final class AdaLexer extends LexerBase {
 				
 				while (matchingRegexIterator.hasNext()) {
 					
-					OORegex regex = matchingRegexIterator.next();
+					LexerRegex regex = matchingRegexIterator.next();
 					
 					if (
 						regex.nullable() &&
@@ -910,7 +936,7 @@ public final class AdaLexer extends LexerBase {
 				
 				if (highestPriorityRegex != null) {
 					
-					OORegex rootRegex =
+					LexerRegex rootRegex =
 						regexLineages.getOrDefault(highestPriorityRegex, highestPriorityRegex);
 					
 					tokenType =
@@ -926,11 +952,19 @@ public final class AdaLexer extends LexerBase {
 					
 					// If this is a single-character, then the lexing offset
 					// needs to be advanced manually to avoid infinite calls
-					// to advance()
+					// to `advance`
 					
 					if (lexingOffset == tokenStart) { lexingOffset++; }
 					
+					// Reset the rollback offset
+					
+					rollBackOffset = 0;
+					
 				}
+				
+				// Roll the lexer back by the necessary offset
+				
+				lexingOffset -= rollBackOffset;
 				
 				// Set the token end offset to the lexing offset
 				// This will also break the execution of characterLoop
@@ -945,14 +979,29 @@ public final class AdaLexer extends LexerBase {
 			
 			else {
 				
+				// If at least one of the regexes that advanced successfully in
+				// this iteration of characterLoop is nullable, then store that
+				// set of regexes to be potentially used in the next iteration
+				// to find matching regexes, and reset the rollback offset
+				
+				if (regexes.stream().anyMatch(LexerRegex::nullable)) {
+					
+					matchingRegexes = new HashSet<>(regexes);
+					
+					rollBackOffset = 0;
+					
+				}
+				
+				// Otherwise, do not overwrite the last set of regexes with at
+				// least one nullable regex and increase the rollback offset
+				
+				else {
+					rollBackOffset++;
+				}
+				
 				// Advance the lexer to the next character
 				
 				nextCharacter = text.charAt(++lexingOffset);
-				
-				// Store the set of regexes that advanced successfully in this
-				// iteration of characterLoop (useful for the next iteration)
-				
-				matchingRegexes = new HashSet<>(regexes);
 				
 			}
 			
@@ -972,5 +1021,127 @@ public final class AdaLexer extends LexerBase {
 	 */
 	@Override
 	public int getBufferEnd() { return lexingEndOffset; }
+	
+	/*
+		Convenience Classes and Methods
+	*/
+	
+	/**
+	 * Simple data class representing a token.
+	 */
+	public static class Token {
+		
+		/**
+		 * The token's properties.
+		 */
+		public final IElementType TOKEN_TYPE;
+		public final int          START_OFFSET;
+		public final int          END_OFFSET;
+		
+		/**
+		 * Constructs a new token given a token type, start offset and
+		 * end offset.
+		 *
+		 * @param tokenType The token's type.
+		 * @param startOffset The token's start offset.
+		 * @param endOffset The token's end offset.
+		 */
+		public Token(IElementType tokenType, int startOffset, int endOffset) {
+			TOKEN_TYPE   = tokenType;
+			START_OFFSET = startOffset;
+			END_OFFSET   = endOffset;
+		}
+		
+		/**
+		 * Returns whether or not this token is equal to the given object.
+		 *
+		 * @param object The object to compare to this token.
+		 * @return The result of the comparison.
+		 */
+		@Override
+		public boolean equals(Object object) {
+			
+			if (!(object instanceof Token)) { return false; }
+			else {
+				
+				Token token = (Token)object;
+				
+				return token.TOKEN_TYPE.toString().equals(TOKEN_TYPE.toString()) &&
+					token.START_OFFSET == START_OFFSET && token.END_OFFSET == END_OFFSET;
+				
+			}
+			
+		}
+		
+		/**
+		 * Returns a string representation of this token.
+		 *
+		 * @return A string representation of this token.
+		 */
+		@Override
+		public String toString() {
+			return "Token(" + TOKEN_TYPE + ", " + START_OFFSET + ", " + END_OFFSET + ")";
+		}
+		
+	}
+	
+	/**
+	 * Performs lexical analysis over the given text by running a single
+	 * iteration of `advance` and returning the first token encountered.
+	 *
+	 * @param text The text over which to perform analysis.
+	 * @return The first token in the given text.
+	 */
+	@Nullable
+	public static Token firstToken(CharSequence text) {
+		
+		AdaLexer lexer = new AdaLexer();
+		
+		lexer.start(text, 0, text.length(), 0);
+		
+		return new Token(lexer.getTokenType(), lexer.getTokenStart(), lexer.getTokenEnd());
+		
+	}
+	
+	/**
+	 * Returns a token iterator that can be used to perform lazy lexical
+	 * analysis over the entire given text.
+	 *
+	 * @param text The text over which to perform analysis.
+	 * @return A lazy iterator over the tokens in the given text.
+	 */
+	public static Iterator<Token> textTokens(CharSequence text) {
+		
+		final AdaLexer lexer = new AdaLexer();
+		
+		lexer.start(text, 0, text.length(), 0);
+		
+		return new Iterator<Token>() {
+			
+			/**
+			 * @see java.util.Iterator#hasNext()
+			 */
+			@Override
+			public boolean hasNext() { return lexer.getTokenType() != null; }
+			
+			/**
+			 * @see java.util.Iterator#next()
+			 */
+			@Override
+			public Token next() {
+			
+				IElementType tokenType   = lexer.getTokenType();
+				int          startOffset = lexer.getTokenStart();
+				int          endOffset   = lexer.getTokenEnd();
+				
+				lexer.advance();
+				
+				return new Token(tokenType, startOffset, endOffset);
+			
+			}
+			
+		};
+		
+	}
 	
 }
