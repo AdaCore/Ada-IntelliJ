@@ -1,45 +1,56 @@
 -- Token list for the "code-with-comments.adb" source file.
 -- Intended for testing token generation for Ada comments.
 
-WHITE_SPACE                     0   1
+WHITE_SPACE        0   1
 
-AdaTokenType.COMMENT            1  38 -- Comment token for "-- This is an ..."
+COMMENT            1  38 -- Comment token for "-- This is an ..."
 
-WHITE_SPACE                    38  39
+WHITE_SPACE       38  39
 
-AdaTokenType.COMMENT           39 107 -- Comment token for "-- Each of these..."
+COMMENT           39 107 -- Comment token for "-- Each of these..."
 
-WHITE_SPACE                   107 108
+WHITE_SPACE      107 108
 
-AdaTokenType.FUNCTION_KEYWORD 108 116 -- function
-WHITE_SPACE                   116 117
-AdaTokenType.IDENTIFIER       117 121 --          test
-WHITE_SPACE                   121 122
-AdaTokenType.IS_KEYWORD       122 124 --               is
+FUNCTION_KEYWORD 108 116 -- function
+WHITE_SPACE      116 117
+IDENTIFIER       117 121 --          test
+WHITE_SPACE      121 122
+RETURN_KEYWORD   122 128 --               return
+WHITE_SPACE      128 129
+IDENTIFIER       129 136 --                      Integer
+WHITE_SPACE      136 137
+IS_KEYWORD       137 139 --                              is
 
-WHITE_SPACE                   124 125
+WHITE_SPACE      139 140
 
-AdaTokenType.BEGIN_KEYWORD    125 130 -- begin
+BEGIN_KEYWORD    140 145 -- begin
 
-WHITE_SPACE                   130 132
+WHITE_SPACE      145 147
 
-AdaTokenType.COMMENT          132 151 -- Comment token for "-------------------"
+COMMENT          147 166 -- Comment token for "-------------------"
 
-WHITE_SPACE                   151 153
+WHITE_SPACE      166 168
 
-AdaTokenType.COMMENT          153 172 -- Comment token for "-- Function body --"
+COMMENT          168 187 -- Comment token for "-- Function body --"
 
-WHITE_SPACE                   172 174
+WHITE_SPACE      187 189
 
-AdaTokenType.COMMENT          174 193 -- Comment token for "-------------------"
+COMMENT          189 208 -- Comment token for "-------------------"
 
-WHITE_SPACE                   193 194
+WHITE_SPACE      208 210
 
-AdaTokenType.END_KEYWORD      194 197 -- end
-WHITE_SPACE                   197 198
-AdaTokenType.IDENTIFIER       198 202 --     test
-AdaTokenType.SEMICOLON        202 203 --         ;
+RETURN_KEYWORD   210 216 -- return
+WHITE_SPACE      216 217
+DECIMAL_LITERAL  217 219 --        42
+SEMICOLON        219 220 --          ;
 
-WHITE_SPACE                   203 205
+WHITE_SPACE      220 221
 
-AdaTokenType.COMMENT          205 264 -- Comment token for "-- This comment should..."
+END_KEYWORD      221 224 -- end
+WHITE_SPACE      224 225
+IDENTIFIER       225 229 --     test
+SEMICOLON        229 230 --         ;
+
+WHITE_SPACE      230 232
+
+COMMENT          232 291 -- Comment token for "-- This comment should..."

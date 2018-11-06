@@ -4,160 +4,160 @@
 -- is to test the lexer's token generation for syntactically valid
 -- Ada literals.
 
-AdaTokenType.COMMENT             0  19 -- Comment token for "-- Numeric Literals"
+COMMENT             0  19 -- Comment token for "-- Numeric Literals"
 
-WHITE_SPACE                     19  20
+WHITE_SPACE        19  20
 
 ----------------------
 -- Numeric Literals --
 ----------------------
 
-AdaTokenType.DECIMAL_LITERAL    20  23 -- 123
+DECIMAL_LITERAL    20  23 -- 123
 
-WHITE_SPACE                     23  24
+WHITE_SPACE        23  24
 
-AdaTokenType.DECIMAL_LITERAL    24  31 -- 123_456
+DECIMAL_LITERAL    24  31 -- 123_456
 
-WHITE_SPACE                     31  32
+WHITE_SPACE        31  32
 
-AdaTokenType.DECIMAL_LITERAL    32  40 -- 12_34_56
+DECIMAL_LITERAL    32  40 -- 12_34_56
 
-WHITE_SPACE                     40  41
+WHITE_SPACE        40  41
 
-AdaTokenType.DECIMAL_LITERAL    41  48 -- 123.456
+DECIMAL_LITERAL    41  48 -- 123.456
 
-WHITE_SPACE                     48  49
+WHITE_SPACE        48  49
 
-AdaTokenType.DECIMAL_LITERAL    49  60 -- 123_456.789
+DECIMAL_LITERAL    49  60 -- 123_456.789
 
-WHITE_SPACE                     60  61
+WHITE_SPACE        60  61
 
-AdaTokenType.DECIMAL_LITERAL    61  72 -- 123.456_789
+DECIMAL_LITERAL    61  72 -- 123.456_789
 
-WHITE_SPACE                     72  73
+WHITE_SPACE        72  73
 
-AdaTokenType.DECIMAL_LITERAL    73  85 -- 12_34.567_89
+DECIMAL_LITERAL    73  85 -- 12_34.567_89
 
-WHITE_SPACE                     85  86
+WHITE_SPACE        85  86
 
-AdaTokenType.DECIMAL_LITERAL    86  92 -- 123E12
+DECIMAL_LITERAL    86  92 -- 123E12
 
-WHITE_SPACE                     92  93
+WHITE_SPACE        92  93
 
-AdaTokenType.DECIMAL_LITERAL    93 101 -- 1.23e5_4
+DECIMAL_LITERAL    93 101 -- 1.23e5_4
 
-WHITE_SPACE                    101 102
+WHITE_SPACE       101 102
 
-AdaTokenType.DECIMAL_LITERAL   102 109 -- 12_3E+5
+DECIMAL_LITERAL   102 109 -- 12_3E+5
 
-WHITE_SPACE                    109 110
+WHITE_SPACE       109 110
 
-AdaTokenType.DECIMAL_LITERAL   110 118 -- 1.2_3e+5
+DECIMAL_LITERAL   110 118 -- 1.2_3e+5
 
-WHITE_SPACE                    118 119
+WHITE_SPACE       118 119
 
-AdaTokenType.DECIMAL_LITERAL   119 127 -- 1_2.3E-5
+DECIMAL_LITERAL   119 127 -- 1_2.3E-5
 
-WHITE_SPACE                    127 128
+WHITE_SPACE       127 128
 
-AdaTokenType.DECIMAL_LITERAL   128 136 -- 123.4e-5
+DECIMAL_LITERAL   128 136 -- 123.4e-5
 
-WHITE_SPACE                    136 137
+WHITE_SPACE       136 137
 
-AdaTokenType.BASED_LITERAL     137 143 -- 1#123#
+BASED_LITERAL     137 143 -- 1#123#
 
-WHITE_SPACE                    143 144
+WHITE_SPACE       143 144
 
-AdaTokenType.BASED_LITERAL     144 158 -- 1_6#123.3#e-12
+BASED_LITERAL     144 158 -- 1_6#123.3#e-12
 
-WHITE_SPACE                    158 159
+WHITE_SPACE       158 159
 
-AdaTokenType.BASED_LITERAL     159 174 -- 32#12_3_Ab#E4_5
+BASED_LITERAL     159 174 -- 32#12_3_Ab#E4_5
 
-WHITE_SPACE                    174 176
+WHITE_SPACE       174 176
 
-AdaTokenType.COMMENT           176 195 -- Comment token for "-- Textual Literals"
+COMMENT           176 195 -- Comment token for "-- Textual Literals"
 
-WHITE_SPACE                    195 196
+WHITE_SPACE       195 196
 
 ----------------------
 -- Textual Literals --
 ----------------------
 
-AdaTokenType.CHARACTER_LITERAL 196 199 -- ' '
+CHARACTER_LITERAL 196 199 -- ' '
 
-WHITE_SPACE                    199 200
+WHITE_SPACE       199 200
 
-AdaTokenType.CHARACTER_LITERAL 200 203 -- 'A'
+CHARACTER_LITERAL 200 203 -- 'A'
 
-WHITE_SPACE                    203 204
+WHITE_SPACE       203 204
 
-AdaTokenType.CHARACTER_LITERAL 204 207 -- 'b'
+CHARACTER_LITERAL 204 207 -- 'b'
 
-WHITE_SPACE                    207 208
+WHITE_SPACE       207 208
 
-AdaTokenType.CHARACTER_LITERAL 208 211 -- '0'
+CHARACTER_LITERAL 208 211 -- '0'
 
-WHITE_SPACE                    211 212
+WHITE_SPACE       211 212
 
-AdaTokenType.CHARACTER_LITERAL 212 215 -- ';'
+CHARACTER_LITERAL 212 215 -- ';'
 
-WHITE_SPACE                    215 216
+WHITE_SPACE       215 216
 
-AdaTokenType.CHARACTER_LITERAL 216 219 -- '"'
+CHARACTER_LITERAL 216 219 -- '"'
 
-WHITE_SPACE                    219 220
+WHITE_SPACE       219 220
 
-AdaTokenType.CHARACTER_LITERAL 220 223 -- '['
+CHARACTER_LITERAL 220 223 -- '['
 
-WHITE_SPACE                    223 224
+WHITE_SPACE       223 224
 
-AdaTokenType.CHARACTER_LITERAL 224 227 -- '}'
+CHARACTER_LITERAL 224 227 -- '}'
 
-WHITE_SPACE                    227 228
+WHITE_SPACE       227 228
 
-AdaTokenType.CHARACTER_LITERAL 228 231 -- '#'
+CHARACTER_LITERAL 228 231 -- '#'
 
-WHITE_SPACE                    231 232
+WHITE_SPACE       231 232
 
-AdaTokenType.CHARACTER_LITERAL 232 235 -- '='
+CHARACTER_LITERAL 232 235 -- '='
 
-WHITE_SPACE                    235 236
+WHITE_SPACE       235 236
 
-AdaTokenType.CHARACTER_LITERAL 236 239 -- '+'
+CHARACTER_LITERAL 236 239 -- '+'
 
-WHITE_SPACE                    239 240
+WHITE_SPACE       239 240
 
-AdaTokenType.CHARACTER_LITERAL 240 243 -- '/'
+CHARACTER_LITERAL 240 243 -- '/'
 
-WHITE_SPACE                    243 244
+WHITE_SPACE       243 244
 
-AdaTokenType.CHARACTER_LITERAL 244 247 -- '?'
+CHARACTER_LITERAL 244 247 -- '?'
 
-WHITE_SPACE                    247 248
+WHITE_SPACE       247 248
 
-AdaTokenType.STRING_LITERAL    248 255 -- "Hello"
+STRING_LITERAL    248 255 -- "Hello"
 
-WHITE_SPACE                    255 256
+WHITE_SPACE       255 256
 
-AdaTokenType.STRING_LITERAL    256 270 -- "Hello world!"
+STRING_LITERAL    256 270 -- "Hello world!"
 
-WHITE_SPACE                    270 271
+WHITE_SPACE       270 271
 
-AdaTokenType.STRING_LITERAL    271 309 -- "A single quote..."
+STRING_LITERAL    271 309 -- "A single quote..."
 
-WHITE_SPACE                    309 310
+WHITE_SPACE       309 310
 
-AdaTokenType.STRING_LITERAL    310 358 -- "The following is..."
+STRING_LITERAL    310 358 -- "The following is..."
 
-WHITE_SPACE                    358 359
+WHITE_SPACE       358 359
 
-AdaTokenType.STRING_LITERAL    359 407 -- "This is a"" single..."
+STRING_LITERAL    359 409 -- "This is a ""single..."
 
-WHITE_SPACE                    407 408
+WHITE_SPACE       409 410
 
-AdaTokenType.STRING_LITERAL    408 432 -- "But these are separate"
-WHITE_SPACE                    432 433
-AdaTokenType.STRING_LITERAL    433 457 --                          "string literals in Ada"
+STRING_LITERAL    410 434 -- "But these are separate"
+WHITE_SPACE       434 435
+STRING_LITERAL    435 459 --                          "string literals in Ada"
 
-WHITE_SPACE                    457 458
+WHITE_SPACE       459 460

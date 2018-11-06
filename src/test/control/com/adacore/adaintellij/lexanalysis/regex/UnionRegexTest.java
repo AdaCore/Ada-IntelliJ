@@ -1,12 +1,12 @@
 package com.adacore.adaintellij.lexanalysis.regex;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import static com.adacore.adaintellij.lexanalysis.regex.OORegexTestUtils.*;
-
 import java.util.*;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import static com.adacore.adaintellij.lexanalysis.regex.LexerRegexTestUtils.*;
 
 /**
  * JUnit test class for the UnionRegex class.
@@ -15,26 +15,26 @@ final class UnionRegexTest {
 	
 	// Constants
 	
-	private static final OORegex LOWER_CASE_A_UNIT_REGEX = new UnitRegex("a");
-	private static final OORegex LOWER_CASE_B_UNIT_REGEX = new UnitRegex("b");
-	private static final OORegex LOWER_CASE_C_UNIT_REGEX = new UnitRegex("c");
-	private static final OORegex LOWER_CASE_D_UNIT_REGEX = new UnitRegex("d");
-	private static final OORegex LOWER_CASE_E_UNIT_REGEX = new UnitRegex("e");
+	private static final LexerRegex LOWER_CASE_A_UNIT_REGEX = new UnitRegex("a");
+	private static final LexerRegex LOWER_CASE_B_UNIT_REGEX = new UnitRegex("b");
+	private static final LexerRegex LOWER_CASE_C_UNIT_REGEX = new UnitRegex("c");
+	private static final LexerRegex LOWER_CASE_D_UNIT_REGEX = new UnitRegex("d");
+	private static final LexerRegex LOWER_CASE_E_UNIT_REGEX = new UnitRegex("e");
 	
-	private static final OORegex UNION_REGEX_1 =
+	private static final LexerRegex UNION_REGEX_1 =
 		UnionRegex.fromRegexes(
 			LOWER_CASE_A_UNIT_REGEX,
 			LOWER_CASE_B_UNIT_REGEX,
 			LOWER_CASE_C_UNIT_REGEX
 		);
 	
-	private static final OORegex UNION_REGEX_2 =
+	private static final LexerRegex UNION_REGEX_2 =
 		UnionRegex.fromRegexes(
 			new UnitRegex("abc"),
 			new UnitRegex("cba")
 		);
 	
-	private static final OORegex UNION_REGEX_3 =
+	private static final LexerRegex UNION_REGEX_3 =
 		UnionRegex.fromRegexes(
 			new UnitRegex("hello"),
 			new UnitRegex("h")
@@ -47,7 +47,7 @@ final class UnionRegexTest {
 		
 		// Initialization
 		
-		List<OORegex> regexes = new ArrayList<>();
+		List<LexerRegex> regexes = new ArrayList<>();
 		
 		regexes.add(LOWER_CASE_A_UNIT_REGEX);
 		regexes.add(LOWER_CASE_B_UNIT_REGEX);
@@ -78,13 +78,13 @@ final class UnionRegexTest {
 		
 		int regexCount = 5;
 		
-		List<OORegex> regexes = new ArrayList<>();
+		List<LexerRegex> regexes = new ArrayList<>();
 		
 		for (int i = 0 ; i < regexCount ; i++) {
 			regexes.add(new UnitRegex(""));
 		}
 		
-		OORegex regex = UnionRegex.fromList(regexes);
+		LexerRegex regex = UnionRegex.fromList(regexes);
 		
 		// Testing
 		
@@ -157,8 +157,8 @@ final class UnionRegexTest {
 		
 		// Initialization
 		
-		OORegex nullableRegex    = new UnitRegex("");
-		OORegex nonNullableRegex = new UnitRegex("abc");
+		LexerRegex nullableRegex    = new UnitRegex("");
+		LexerRegex nonNullableRegex = new UnitRegex("abc");
 		
 		// Testing
 		

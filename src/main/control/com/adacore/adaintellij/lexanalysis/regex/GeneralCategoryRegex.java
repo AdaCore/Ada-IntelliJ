@@ -10,18 +10,18 @@ import org.jetbrains.annotations.*;
  * Internally, a regex of this class stores a Java pattern compiled to
  * match only characters from a specific general category.
  */
-public final class GeneralCategoryRegex implements OORegex {
+public final class GeneralCategoryRegex implements LexerRegex {
 	
 	/**
 	 * The internal pattern used to match a character
 	 * based on its general category.
 	 */
-	public final Pattern PATTERN;
+	private final Pattern PATTERN;
 	
 	/**
 	 * The priority of this regex.
 	 */
-	public final int PRIORITY;
+	private final int PRIORITY;
 	
 	/**
 	 * Constructs a new general category regex given a general category
@@ -40,34 +40,34 @@ public final class GeneralCategoryRegex implements OORegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public GeneralCategoryRegex(@NotNull String generalCategory, int priority) {
-		PATTERN          = Pattern.compile(String.format("\\p{%s}", generalCategory));
-		PRIORITY         = priority;
+		PATTERN  = Pattern.compile(String.format("\\p{%s}", generalCategory));
+		PRIORITY = priority;
 	}
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#nullable()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#nullable()
 	 */
 	@Override
 	public boolean nullable() { return false; }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#charactersMatched()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#charactersMatched()
 	 */
 	@Override
 	public int charactersMatched() { return 1; }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#getPriority()
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#getPriority()
 	 */
 	@Override
 	public int getPriority() { return PRIORITY; }
 	
 	/**
-	 * @see com.adacore.adaintellij.lexanalysis.regex.OORegex#advanced(char)
+	 * @see com.adacore.adaintellij.lexanalysis.regex.LexerRegex#advanced(char)
 	 */
 	@Nullable
 	@Override
-	public OORegex advanced(char character) {
+	public LexerRegex advanced(char character) {
 		
 		return PATTERN.matcher(String.valueOf(character)).find() ?
 			new UnitRegex("") : null;

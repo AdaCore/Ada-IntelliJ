@@ -1,0 +1,197 @@
+-- Token list for the "keywords.adb" source file.
+-- Note that for the sake of conciseness, the source code is
+-- intentionally not a compilable Ada program, as its only purpose
+-- is to test the lexer's token generation for syntactically valid
+-- Ada keywords.
+
+COMMENT                0  15 -- Comment token for "-- Ada Keywords"
+
+WHITE_SPACE           15  16
+
+------------------
+-- Ada Keywords --
+------------------
+
+ABORT_KEYWORD         16  21 -- abort
+WHITE_SPACE           21  22
+ABS_KEYWORD           22  25 -- abs
+WHITE_SPACE           25  26
+ABSTRACT_KEYWORD      26  34 -- abstract
+WHITE_SPACE           34  35
+ACCEPT_KEYWORD        35  41 -- accept
+WHITE_SPACE           41  42
+ACCESS_KEYWORD        42  48 -- access
+WHITE_SPACE           48  49
+ALIASED_KEYWORD       49  56 -- aliased
+WHITE_SPACE           56  57
+ALL_KEYWORD           57  60 -- all
+WHITE_SPACE           60  61
+AND_KEYWORD           61  64 -- and
+WHITE_SPACE           64  65
+ARRAY_KEYWORD         65  70 -- array
+WHITE_SPACE           70  71
+AT_KEYWORD            71  73 -- at
+
+WHITE_SPACE           73  74
+
+BEGIN_KEYWORD         74  79 -- begin
+WHITE_SPACE           79  80
+BODY_KEYWORD          80  84 -- body
+
+WHITE_SPACE           84  85
+
+CASE_KEYWORD          85  89 -- case
+WHITE_SPACE           89  90
+CONSTANT_KEYWORD      90  98 -- constant
+
+WHITE_SPACE           98  99
+
+DECLARE_KEYWORD       99 106 -- declare
+WHITE_SPACE          106 107
+DELAY_KEYWORD        107 112 -- delay
+WHITE_SPACE          112 113
+DELTA_KEYWORD        113 118 -- delta
+WHITE_SPACE          118 119
+DIGITS_KEYWORD       119 125 -- digits
+WHITE_SPACE          125 126
+DO_KEYWORD           126 128 -- do
+
+WHITE_SPACE          128 129
+
+ELSE_KEYWORD         129 133 -- else
+WHITE_SPACE          133 134
+ELSIF_KEYWORD        134 139 -- elsif
+WHITE_SPACE          139 140
+END_KEYWORD          140 143 -- end
+WHITE_SPACE          143 144
+ENTRY_KEYWORD        144 149 -- entry
+WHITE_SPACE          149 150
+EXCEPTION_KEYWORD    150 159 -- exception
+WHITE_SPACE          159 160
+EXIT_KEYWORD         160 164 -- exit
+
+WHITE_SPACE          164 165
+
+FOR_KEYWORD          165 168 -- for
+WHITE_SPACE          168 169
+FUNCTION_KEYWORD     169 177 -- function
+
+WHITE_SPACE          177 178
+
+GENERIC_KEYWORD      178 185 -- generic
+WHITE_SPACE          185 186
+GOTO_KEYWORD         186 190 -- goto
+
+WHITE_SPACE          190 191
+
+IF_KEYWORD           191 193 -- if
+WHITE_SPACE          193 194
+IN_KEYWORD           194 196 -- in
+WHITE_SPACE          196 197
+INTERFACE_KEYWORD    197 206 -- interface
+WHITE_SPACE          206 207
+IS_KEYWORD           207 209 -- is
+
+WHITE_SPACE          209 210
+
+LIMITED_KEYWORD      210 217 -- limited
+WHITE_SPACE          217 218
+LOOP_KEYWORD         218 222 -- loop
+
+WHITE_SPACE          222 223
+
+MOD_KEYWORD          223 226 -- mod
+
+WHITE_SPACE          226 227
+
+NEW_KEYWORD          227 230 -- new
+WHITE_SPACE          230 231
+NOT_KEYWORD          231 234 -- not
+WHITE_SPACE          234 235
+NULL_KEYWORD         235 239 -- null
+
+WHITE_SPACE          239 240
+
+OF_KEYWORD           240 242 -- of
+WHITE_SPACE          242 243
+OR_KEYWORD           243 245 -- or
+WHITE_SPACE          245 246
+OTHERS_KEYWORD       246 252 -- others
+WHITE_SPACE          252 253
+OUT_KEYWORD          253 256 -- out
+WHITE_SPACE          256 257
+OVERRIDING_KEYWORD   257 267 -- overriding
+
+WHITE_SPACE          267 268
+
+PACKAGE_KEYWORD      268 275 -- package
+WHITE_SPACE          275 276
+PRAGMA_KEYWORD       276 282 -- pragma
+WHITE_SPACE          282 283
+PRIVATE_KEYWORD      283 290 -- private
+WHITE_SPACE          290 291
+PROCEDURE_KEYWORD    291 300 -- procedure
+WHITE_SPACE          300 301
+PROTECTED_KEYWORD    301 310 -- protected
+
+WHITE_SPACE          310 311
+
+RAISE_KEYWORD        311 316 -- raise
+WHITE_SPACE          316 317
+RANGE_KEYWORD        317 322 -- range
+WHITE_SPACE          322 323
+RECORD_KEYWORD       323 329 -- record
+WHITE_SPACE          329 330
+REM_KEYWORD          330 333 -- rem
+WHITE_SPACE          333 334
+RENAMES_KEYWORD      334 341 -- renames
+WHITE_SPACE          341 342
+REQUEUE_KEYWORD      342 349 -- requeue
+WHITE_SPACE          349 350
+RETURN_KEYWORD       350 356 -- return
+WHITE_SPACE          356 357
+REVERSE_KEYWORD      357 364 -- reverse
+
+WHITE_SPACE          364 365
+
+SELECT_KEYWORD       365 371 -- select
+WHITE_SPACE          371 372
+SEPARATE_KEYWORD     372 380 -- separate
+WHITE_SPACE          380 381
+SOME_KEYWORD         381 385 -- some
+WHITE_SPACE          385 386
+SUBTYPE_KEYWORD      386 393 -- subtype
+WHITE_SPACE          393 394
+SYNCHRONIZED_KEYWORD 394 406 -- synchronized
+
+WHITE_SPACE          406 407
+
+TAGGED_KEYWORD       407 413 -- tagged
+WHITE_SPACE          413 414
+TASK_KEYWORD         414 418 -- task
+WHITE_SPACE          418 419
+TERMINATE_KEYWORD    419 428 -- terminate
+WHITE_SPACE          428 429
+THEN_KEYWORD         429 433 -- then
+WHITE_SPACE          433 434
+TYPE_KEYWORD         434 438 -- type
+
+WHITE_SPACE          438 439
+
+UNTIL_KEYWORD        439 444 -- until
+WHITE_SPACE          444 445
+USE_KEYWORD          445 448 -- use
+
+WHITE_SPACE          448 449
+
+WHEN_KEYWORD         449 453 -- when
+WHITE_SPACE          453 454
+WHILE_KEYWORD        454 459 -- while
+WHITE_SPACE          459 460
+WITH_KEYWORD         460 464 -- with
+
+WHITE_SPACE          464 465
+
+XOR_KEYWORD          465 468 -- xor
+
+WHITE_SPACE          468 469

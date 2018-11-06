@@ -34,5 +34,5 @@
 "Hello world!"
 "A single quote ' in a string literal"
 "The following is not a comment -- hello world!"
-"This is a""single valid string""literal in Ada"
+"This is a ""single valid string literal"" in Ada"
 "But these are separate" "string literals in Ada"

@@ -6,19 +6,19 @@ import org.jetbrains.annotations.*;
  * Object-Based Regular Expression specifically designed
  * to be used by a Lexical Analyser.
  * The main feature of this lexer-targeting regex interface
- * is the advanced method which allows matching a sequence of
+ * is the `advanced` method which allows matching a sequence of
  * characters incrementally, filtering out non matching regexes
  * along the way.
  * Any implementing class must be immutable by design. This
  * allows regexes to be reused when defining complex regexes.
  */
-public interface OORegex {
+public interface LexerRegex {
 	
 	/**
 	 * Returns whether or not this regex is nullable, i.e. whether
 	 * or not it accepts the empty string.
 	 * Not to be confused with the possibility of a variable being null,
-	 * as can be indicated with JetBrains' @NotNull annotation.
+	 * as can be indicated with JetBrains' @Nullable annotation.
 	 *
 	 * @return The "nullability" of this regex.
 	 */
@@ -68,6 +68,6 @@ public interface OORegex {
 	 * @return The advanced regex.
 	 */
 	@Nullable
-	OORegex advanced(char character);
+	LexerRegex advanced(char character);
 	
 }
