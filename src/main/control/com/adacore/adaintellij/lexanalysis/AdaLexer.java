@@ -831,6 +831,20 @@ public final class AdaLexer extends LexerBase {
 		// The next character to be analysed
 		char nextCharacter = text.charAt(lexingOffset);
 		
+		// If the next character is an apostrophe and the last token
+		// was an identifier, then immediately mark this token as an
+		// apostrophe token and return
+		
+		if (nextCharacter == '\'' && tokenType == AdaTokenTypes.IDENTIFIER) {
+			
+			lexingOffset = tokenEnd = tokenStart + 1;
+			
+			tokenType = AdaTokenTypes.APOSTROPHE;
+			
+			return;
+		
+		}
+		
 		// While the next token has not been determined...
 		
 		characterLoop: // label only used for reference in comments

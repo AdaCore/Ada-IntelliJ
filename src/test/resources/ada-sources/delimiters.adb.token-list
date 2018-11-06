@@ -109,14 +109,23 @@ GREATER_THAN_SIGN   144 145 --   >
 
 WHITE_SPACE         145 146
 
-IDENTIFIER          146 150 -- char
-CHARACTER_LITERAL   150 153 --     'a'
-IDENTIFIER          153 165 --        cter_literal
+IDENTIFIER          146 163 -- character_literal
+LEFT_PARENTHESIS    163 164 --                  (
+CHARACTER_LITERAL   164 167 --                   'a'
+RIGHT_PARENTHESIS   167 168 --                      )
 
-WHITE_SPACE         165 166
+WHITE_SPACE         168 169
 
-IDENTIFIER          166 176 -- apostrophe
-APOSTROPHE          176 177 --           '
-IDENTIFIER          177 186 --            delimiter
+IDENTIFIER          169 179 -- apostrophe
+APOSTROPHE          179 180 --           '
+IDENTIFIER          180 189 --            delimiter
 
-WHITE_SPACE         186 187
+WHITE_SPACE         189 190
+
+IDENTIFIER          190 199 -- Character
+APOSTROPHE          199 200 --          '
+LEFT_PARENTHESIS    200 201 --           (
+CHARACTER_LITERAL   201 204 --            'a'
+RIGHT_PARENTHESIS   204 205 --               )
+
+WHITE_SPACE         205 206

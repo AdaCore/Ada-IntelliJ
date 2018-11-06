@@ -10,5 +10,6 @@
 <<>
 <<>>
 <>>
-char'a'cter_literal
+character_literal('a')
 apostrophe'delimiter
+Character'('a')
