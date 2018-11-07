@@ -1,16 +1,14 @@
 package com.adacore.adaintellij.dialogs;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
-import java.util.Vector;
-import java.util.function.Consumer;
 
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.NotNull;
-
-import com.adacore.adaintellij.UIUtils;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A simple dialog allowing the user to select an item from a list:
@@ -31,100 +29,86 @@ import com.adacore.adaintellij.UIUtils;
  *         |                      |   Ok   | Cancel |
  *         +----------------------+--------+--------+
  */
-public final class ListChooserDialog<T> extends JDialog {
+public final class ListChooserDialog<T> extends DialogWrapper {
 	
 	/**
 	 * UI components.
 	 */
-	private JPanel   contentPane;
-	private JButton  okButton;
-	private JButton  cancelButton;
-	private JLabel   mainTextLabel;
-	private JList<T> optionList;
-	private JLabel   footnoteLabel;
+	private JPanel    contentPane;
+	private JTextPane mainTextPane;
+	private JList<T>  optionList;
+	private JTextPane footnoteTextPane;
 	
 	/**
 	 * Constructs a new ListChooserDialog given some parameters,
 	 * without a footnote.
 	 *
+	 * @param project The project to which the dialog belongs.
+	 * @param title The title of the dialog.
 	 * @param mainText The main text of the dialog.
 	 * @param options The list of items for the user to choose from.
-	 * @param okConsumer The consumer to run with the chosen option.
-	 * @param cancelRunnable The runnable to run in case the user cancels.
 	 * @param listSelectionMode The list selection mode.
 	 */
 	public ListChooserDialog(
-		@NotNull String      mainText,
-		@NotNull List<T>     options,
-		@NotNull Consumer<T> okConsumer,
-		@NotNull Runnable    cancelRunnable,
-		         int         listSelectionMode
-	) {
-		this(mainText,
-			options,
-			null,
-			okConsumer,
-			cancelRunnable,
-			listSelectionMode
-		);
-	}
+		@NotNull Project project,
+		@NotNull String  title,
+		@NotNull String  mainText,
+		@NotNull List<T> options,
+		         int     listSelectionMode
+	) { this(project, title, mainText, options, null, listSelectionMode); }
 	
 	/**
 	 * Constructs a new ListChooserDialog given some parameters.
 	 *
+	 * @param project The project to which the dialog belongs.
+	 * @param title The title of the dialog.
 	 * @param mainText The main text of the dialog.
 	 * @param options The list of items for the user to choose from.
 	 * @param footnote The footnote text of the dialog.
-	 * @param okConsumer The consumer to run with the chosen option.
-	 * @param cancelRunnable The runnable to run in case the user cancels.
 	 * @param listSelectionMode The list selection mode.
 	 */
 	public ListChooserDialog(
-		@NotNull String      mainText,
-		@NotNull List<T>     options,
-		         String      footnote,
-		@NotNull Consumer<T> okConsumer,
-		@NotNull Runnable    cancelRunnable,
-		         int         listSelectionMode
+		@NotNull  Project project,
+		@NotNull  String  title,
+		@NotNull  String  mainText,
+		@NotNull  List<T> options,
+		@Nullable String  footnote,
+		          int     listSelectionMode
 	) {
 		
-		setContentPane(contentPane);
-		setModal(true);
-		getRootPane().setDefaultButton(okButton);
-		setLocationRelativeTo(null);
+		super(project, false, IdeModalityType.PROJECT);
 		
-		// Set Ok and Cancel buttons listeners
-		okButton.addActionListener(event -> consumeAndDispose(okConsumer));
-		cancelButton.addActionListener(event -> runAndDispose(cancelRunnable));
+		// Check parameters
 		
-		// call onCancel() when cross is clicked
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		addWindowListener(new WindowAdapter() {
-			
-			@Override
-			public void windowClosing(WindowEvent windowEvent) {
-				runAndDispose(cancelRunnable);
-			}
-			
-		});
+		assert options.size() > 0 : "Cannot create list-chooser-dialog from empty option list";
 		
-		// call onCancel() on ESCAPE
-		contentPane.registerKeyboardAction(
-			event -> runAndDispose(cancelRunnable),
-			KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT
-		);
+		// Initialize the dialog
 		
-		mainTextLabel.setText(UIUtils.toHtml(mainText));
+		init();
+		
+		centerRelativeToParent();
+		
+		// Set the title
+		
+		setTitle(title);
+		
+		// Set the main text
+		
+		mainTextPane.setText(mainText);
+		
+		// Set up the option list
+		
+		// TODO: Set maximum width on option list to avoid very
+		//       wide dialogs when there are gpr file paths that
+		//       are too long
 		
 		DefaultListModel<T> model = new DefaultListModel<>();
 		options.forEach(model::addElement);
-		
 		optionList.setModel(model);
-		optionList.setVisibleRowCount(10);
 		optionList.setSelectionMode(listSelectionMode);
+		
 		optionList.setSelectedIndex(0);
-		optionList.setBorder(new LineBorder(UIUtils.HARD_BORDER_COLOR));
+		optionList.setVisibleRowCount(Math.min(options.size() + 2, 10));
 		optionList.setCellRenderer(new DefaultListCellRenderer() {
 			
 			@Override
@@ -146,54 +130,76 @@ public final class ListChooserDialog<T> extends JDialog {
 			}
 			
 		});
+		
 		optionList.addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mouseClicked(MouseEvent mouseEvent) {
-			
+				
 				if (mouseEvent.getClickCount() >= 2) {
-					consumeAndDispose(okConsumer);
+					getOKAction().actionPerformed(null);
 				}
-			
+				
 			}
 			
 		});
 		
+		// Set the footnote if it is not null
+		
 		if (footnote == null) {
-			footnoteLabel.setVisible(false);
+			footnoteTextPane.setVisible(false);
 		} else {
-			footnoteLabel.setText(UIUtils.toHtml(footnote));
+			footnoteTextPane.setText(footnote);
 		}
 		
 	}
 	
 	/**
-	 * Runs the given runnable and disposes of this dialog.
-	 *
-	 * @param runnable The runnable to run.
+	 * @see com.intellij.openapi.ui.DialogWrapper#createCenterPanel()
 	 */
-	private void runAndDispose(Runnable runnable) {
-		runnable.run();
-		dispose();
+	@Nullable
+	@Override
+	protected JComponent createCenterPanel() { return contentPane; }
+	
+	/**
+	 * @see com.intellij.openapi.ui.DialogWrapper#getPreferredFocusedComponent()
+	 */
+	@Override
+	public JComponent getPreferredFocusedComponent() { return optionList; }
+	
+	/**
+	 * Displays this dialog to the user, waits for user action and returns
+	 * the list of selected options, or null if no selection was made.
+	 *
+	 * @return The list of selected options.
+	 */
+	@Nullable
+	public List<T> showAndGetSelections() {
+		
+		boolean selectionMade = showAndGet();
+		
+		return selectionMade ? optionList.getSelectedValuesList() : null;
+		
 	}
 	
 	/**
-	 * Runs the given consumer with the selected item and disposes
-	 * of this dialog.
+	 * Single selection version of `showAndGetSelections`, returning a
+	 * single selection instead of a list, or null if no selection was made.
+	 * Throws an assertion error if it is called for a ListChooserDialog
+	 * that was created in a multi-selection mode.
 	 *
-	 * @param consumer The consumer to run.
+	 * @return The selected option.
 	 */
-	private void consumeAndDispose(Consumer<T> consumer) {
-		consumer.accept(optionList.getSelectedValue());
-		dispose();
-	}
+	@Nullable
+	public T showAndGetSelection() {
 	
-	/**
-	 * Displays this dialog to the user.
-	 */
-	public void display() {
-		pack();
-		setVisible(true);
+		assert optionList.getSelectionMode() == ListSelectionModel.SINGLE_SELECTION :
+			"ListChooserDialog#showAndGetSelection() must not be used in multi-selection mode";
+		
+		List<T> selections = showAndGetSelections();
+		
+		return selections == null || selections.size() == 0 ? null : selections.get(0);
+	
 	}
 	
 }

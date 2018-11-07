@@ -35,6 +35,10 @@
 	</application-components>
 	
 	<project-components>
+		<!-- Ada project component -->
+		<component>
+			<implementation-class>com.adacore.adaintellij.project.AdaProject</implementation-class>
+		</component>
 		<!-- GPR file manager component -->
 		<component>
 			<implementation-class>com.adacore.adaintellij.project.GPRFileManager</implementation-class>
