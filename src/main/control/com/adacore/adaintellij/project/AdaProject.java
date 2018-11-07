@@ -19,9 +19,6 @@ import com.adacore.adaintellij.file.GPRFileType;
  * Therefore, despite the class name `AdaProject` and even though the doc
  * sometimes refers to "this Ada project", an instance of this class could
  * be a component of a project that is in fact not an Ada project.
- *
- * TODO: Add this project component as a dependency to all
- *       other project components
  */
 public final class AdaProject implements ProjectComponent {
 	
