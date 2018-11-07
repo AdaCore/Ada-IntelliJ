@@ -10,11 +10,12 @@ import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
 
 import com.adacore.adaintellij.notifications.AdaIJNotification;
+import com.adacore.adaintellij.project.AdaProject;
 
 /**
  * Project component handling GPRbuild configuration management.
  */
-public class GPRbuildConfigurationManager implements ProjectComponent {
+public final class GPRbuildConfigurationManager implements ProjectComponent {
 	
 	/**
 	 * The project to which this component belongs.
@@ -22,19 +23,30 @@ public class GPRbuildConfigurationManager implements ProjectComponent {
 	private Project project;
 	
 	/**
+	 * The corresponding Ada project component.
+	 */
+	private AdaProject adaProject;
+	
+	/**
 	 * Constructs a new GPRbuildConfigurationManager.
 	 *
 	 * @param project The project to attach to the constructed manager.
 	 */
-	public GPRbuildConfigurationManager(Project project) {
-		this.project = project;
+	public GPRbuildConfigurationManager(Project project, AdaProject adaProject) {
+		this.project    = project;
+		this.adaProject = adaProject;
 	}
 	
 	/**
 	 * @see com.intellij.openapi.components.ProjectComponent#projectOpened()
+	 *
+	 * Checks the run manager for GPRbuild run configurations, and if no
+	 * configurations are found, creates a default one.
 	 */
 	@Override
 	public void projectOpened() {
+		
+		if (!adaProject.isAdaProject()) { return; }
 		
 		RunManagerImpl runManager = RunManagerImpl.getInstanceImpl(project);
 		

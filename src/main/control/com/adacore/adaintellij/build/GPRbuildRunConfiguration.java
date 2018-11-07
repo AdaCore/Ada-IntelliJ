@@ -88,6 +88,9 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 		
 		return new CommandLineState(executionEnvironment) {
 			
+			/**
+			 * @see com.intellij.execution.configurations.RunProfileState#execute(Executor, ProgramRunner)
+			 */
 			@NotNull
 			@Override
 			public ExecutionResult execute(
@@ -106,6 +109,9 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 				
 			}
 			
+			/**
+			 * @see com.intellij.execution.configurations.CommandLineState#startProcess()
+			 */
 			@NotNull
 			@Override
 			protected ProcessHandler startProcess() throws ExecutionException {
@@ -171,7 +177,7 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 		GPRFileManager gprFileManager = project.getComponent(GPRFileManager.class);
 		
 		return "".equals(customGprFilePath) ?
-			gprFileManager.defaultGprFilePath() : customGprFilePath;
+			gprFileManager.defaultGprFilePath(true) : customGprFilePath;
 		
 	}
 	
