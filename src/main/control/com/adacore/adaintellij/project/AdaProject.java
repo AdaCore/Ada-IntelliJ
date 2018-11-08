@@ -51,27 +51,24 @@ public final class AdaProject implements ProjectComponent {
 	 * @see com.intellij.openapi.components.ProjectComponent#projectOpened()
 	 *
 	 * Checks if the project is an Ada project. Currently, a project is
-	 * considered to be an Ada project if it contains in its file hierarchy
-	 * any Ada spec file, Ada body file or GPR file.
+	 * considered to be an Ada project if it contains at least one GPR file
+	 * in its file hierarchy.
 	 */
 	@Override
 	public void projectOpened() {
 		
-		String adsFileExtension = AdaSpecFileType.INSTANCE.getDefaultExtension();
-		String adbFileExtension = AdaBodyFileType.INSTANCE.getDefaultExtension();
-		String gprFileExtension = GPRFileType.INSTANCE.getDefaultExtension();
+		final String gprFileExtension = GPRFileType.INSTANCE.getDefaultExtension();
 		
 		VfsUtilCore.iterateChildrenRecursively(
 			project.getBaseDir(),
 			null,
 			fileOrDir -> {
 				
-				if (!fileOrDir.isDirectory() && (
-						adsFileExtension.equals(fileOrDir.getExtension()) ||
-						adbFileExtension.equals(fileOrDir.getExtension()) ||
-						gprFileExtension.equals(fileOrDir.getExtension())
-					))
-				{
+				if (
+					fileOrDir.isValid() &&
+					!fileOrDir.isDirectory() &&
+					gprFileExtension.equals(fileOrDir.getExtension())
+				) {
 					isAdaProject = true;
 					return false;
 				}

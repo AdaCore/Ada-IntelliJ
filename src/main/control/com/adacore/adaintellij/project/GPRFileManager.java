@@ -246,7 +246,7 @@ public final class GPRFileManager implements ProjectComponent {
 		// Iterate over the project files and add the paths of files
 		// with the GPR file extension to the list of GPR file paths
 		
-		String gprFileExtension = GPRFileType.INSTANCE.getDefaultExtension();
+		final String gprFileExtension = GPRFileType.INSTANCE.getDefaultExtension();
 		
 		VfsUtilCore.iterateChildrenRecursively(
 			project.getBaseDir(),
