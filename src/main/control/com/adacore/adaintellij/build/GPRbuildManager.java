@@ -1,12 +1,13 @@
 package com.adacore.adaintellij.build;
 
-import com.adacore.adaintellij.Utils;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.ApplicationComponent;
 import org.jetbrains.annotations.Nullable;
 
 import com.adacore.adaintellij.notifications.AdaIJNotification;
+
+import static com.adacore.adaintellij.Utils.getPathFromSystemPath;
 
 /**
  * Application component handling GPRbuild-related tasks.
@@ -35,7 +36,7 @@ public final class GPRbuildManager implements ApplicationComponent {
 	@Override
 	public void initComponent() {
 		
-		String path = Utils.getPathFromSystemPath(GPRBUILD_NAME, false);
+		String path = getPathFromSystemPath(GPRBUILD_NAME, false);
 		
 		if (path == null) {
 			

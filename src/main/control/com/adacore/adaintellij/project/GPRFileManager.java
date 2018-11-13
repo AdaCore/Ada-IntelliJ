@@ -79,6 +79,10 @@ public final class GPRFileManager implements ProjectComponent {
 		this.adaProject = adaProject;
 	}
 	
+	public static GPRFileManager getInstance(Project project) {
+		return project.getComponent(GPRFileManager.class);
+	}
+	
 	/**
 	 * @see com.intellij.openapi.components.NamedComponent#getComponentName()
 	 */
@@ -234,10 +238,6 @@ public final class GPRFileManager implements ProjectComponent {
 	 * default GPR file.
 	 */
 	private void locateGprFiles() {
-		
-		// Refresh the project
-		
-		project.getBaseDir().refresh(false, true);
 		
 		// Reset the list of GPR file paths
 		

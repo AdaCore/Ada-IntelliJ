@@ -174,7 +174,7 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 	@Nullable
 	private String getEffectiveGprFilePath() {
 		
-		GPRFileManager gprFileManager = project.getComponent(GPRFileManager.class);
+		GPRFileManager gprFileManager = GPRFileManager.getInstance(project);
 		
 		return "".equals(customGprFilePath) ?
 			gprFileManager.defaultGprFilePath(true) : customGprFilePath;
