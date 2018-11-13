@@ -78,6 +78,14 @@ public final class AdaProject implements ProjectComponent {
 			}
 		);
 		
+		if (isAdaProject) {
+			
+			// Refresh the project
+			
+			project.getBaseDir().refresh(false, true);
+			
+		}
+		
 	}
 	
 	/**
