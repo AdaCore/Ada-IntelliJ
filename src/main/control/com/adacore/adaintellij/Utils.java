@@ -1,14 +1,57 @@
 package com.adacore.adaintellij;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import org.jetbrains.annotations.*;
 
 /**
  * Global plugin utilities.
  */
 public final class Utils {
+	
+	/**
+	 * Class-wide logger for the Utils class.
+	 */
+	private static Logger LOGGER = Logger.getInstance(Utils.class);
+	
+	/**
+	 * File/document manager for retrieving `VirtualFile` and `Document` instances.
+	 */
+	private static FileDocumentManager fileDocumentManager = FileDocumentManager.getInstance();
+	
+	/**
+	 * Performs a checked conversion from a URL string to a URL object:
+	 * - If the string represents a valid URL, the corresponding URL object
+	 *   is returned
+	 * - Otherwise if the conversion fails due to an invalid URL string,
+	 *   then the failure is logged and null is returned
+	 *
+	 * @param urlString The URL string to convert to an object.
+	 * @return The converted URL object or null if the conversion failed.
+	 */
+	@Nullable
+	public static URL urlStringToUrl(String urlString) {
+	
+		URL url = null;
+	
+		try {
+			url = new URL(urlString);
+		} catch (MalformedURLException exception) {
+			LOGGER.error("An invalid URL string was used to construct a URL object", exception);
+		}
+		
+		return url;
+		
+	}
 	
 	/**
 	 * Returns whether or not an executable with the given name is on
@@ -91,6 +134,51 @@ public final class Utils {
 		
 		return null;
 		
+	}
+	
+	/**
+	 * Returns the document corresponding to the given virtual file.
+	 *
+	 * @param file The virtual file for which to get the document.
+	 * @return The file's corresponding document.
+	 */
+	@Nullable
+	public static Document getVirtualFileDocument(@NotNull VirtualFile file) {
+		return fileDocumentManager.getDocument(file);
+	}
+	
+	/**
+	 * Returns the virtual file corresponding to the given document.
+	 *
+	 * @param document The document for which to get the virtual file.
+	 * @return The document's corresponding virtual file.
+	 */
+	@Nullable
+	public static VirtualFile getDocumentVirtualFile(@NotNull Document document) {
+		return fileDocumentManager.getFile(document);
+	}
+	
+	/**
+	 * Returns the document corresponding to the given PSI file.
+	 *
+	 * @param file The PSI file for which to get the document.
+	 * @return The file's corresponding document.
+	 */
+	@Nullable
+	public static Document getPsiFileDocument(@NotNull PsiFile file) {
+		return file.getViewProvider().getDocument();
+	}
+	
+	/**
+	 * Returns the PSI file corresponding to the given virtual file.
+	 *
+	 * @param project The project to which the returned PSI file belongs.
+	 * @param file The virtual file for which to get the PSI file.
+	 * @return The file's corresponding PSI file.
+	 */
+	@Nullable
+	public static PsiFile getVirtualFilePsiFile(@NotNull Project project, @NotNull VirtualFile file) {
+		return PsiManager.getInstance(project).findFile(file);
 	}
 	
 }
