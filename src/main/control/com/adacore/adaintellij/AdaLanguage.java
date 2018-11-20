@@ -15,6 +15,6 @@ public final class AdaLanguage extends Language {
 	/**
 	 * Constructs a new instance of the Ada language.
 	 */
-	private AdaLanguage() { super("AdaLanguage"); }
+	private AdaLanguage() { super("Ada"); }
 	
 }

@@ -7,8 +7,10 @@ Features currently supported:
 * Recognizing `.adb`, `.ads` and `.gpr` files
 * Syntax highlighting for `.adb` and `.ads` files
 * Basic gprbuild support
+* Basic references/usages features (goto definition, usage highlighting, find references)
+* Basic code completion
 
-The plugin is currently under development. If you encounter problems/bugs, please [submit an issue](https://github.com/AdaCore/Ada-IntelliJ/issues/new) to this repository.
+The plugin is currently under development and most supported features are still experimental. If you encounter problems/bugs, please [submit an issue](https://github.com/AdaCore/Ada-IntelliJ/issues/new) to this repository.
 
 Sections:
 * [Gradle](#gradle)
@@ -111,6 +113,14 @@ A comprehensive test report including success rates and execution durations is a
 
 ## Change Notes
 
+###### 0.3-dev
+
+* LSP integration
+* Ada parser creating PSI trees from Ada source files
+* Resolving references (using ALS)
+* Finding references (using ALS)
+* Completion contributor (using ALS)
+
 ###### 0.2-dev
 
 * IDE recognizes GPR (.gpr) files (no syntax highlighting)
@@ -124,4 +134,3 @@ A comprehensive test report including success rates and execution durations is a
 * Basic syntax highlighting for body and spec files
 
 ##### 0-dev
-

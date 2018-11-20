@@ -19,7 +19,7 @@ public final class AdaTokenType extends IElementType {
 	 *
 	 * @see com.intellij.psi.tree.IElementType#IElementType(String, Language)
 	 */
-	public AdaTokenType(@NotNull @NonNls String debugName) {
+	AdaTokenType(@NotNull @NonNls String debugName) {
 		super(debugName, AdaLanguage.INSTANCE);
 	}
 	
