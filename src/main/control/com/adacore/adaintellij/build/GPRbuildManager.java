@@ -3,7 +3,7 @@ package com.adacore.adaintellij.build;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.ApplicationComponent;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 import com.adacore.adaintellij.notifications.AdaIJNotification;
 
@@ -67,14 +67,15 @@ public final class GPRbuildManager implements ApplicationComponent {
 	 *
 	 * @return The gprbuild path.
 	 */
+	@Contract(pure = true)
 	@Nullable
 	public static String getGprbuildPath() { return gprbuildPath; }
 	
 	/**
-	 * Sets the gprbuilc path in the system.
+	 * Sets the gprbuild path in the system.
 	 *
 	 * @param path The new gprbuild path.
 	 */
-	public static void setGprBuildPath(String path) { gprbuildPath = path; }
+	public static void setGprBuildPath(@NotNull String path) { gprbuildPath = path; }
 	
 }

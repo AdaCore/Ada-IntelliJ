@@ -82,6 +82,9 @@
 	
 	<extensions defaultExtensionNs="com.intellij">
 		
+		<!-- Ada global settings -->
+		<applicationConfigurable instance="com.adacore.adaintellij.settings.AdaGlobalSettings" groupId="language"/>
+		
 		<!-- Ada file type factory -->
 		<fileTypeFactory implementation="com.adacore.adaintellij.file.AdaFileTypeFactory"/>
 		
@@ -100,7 +103,9 @@
 		<completion.contributor language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.completion.AdaCompletionContributor"/>
 		
 		<!-- GPRbuild run configuration type -->
-		<configurationType implementation="com.adacore.adaintellij.build.GPRbuildRunConfigurationType"/>
+		<configurationType implementation="com.adacore.adaintellij.build.GPRbuildConfigurationType"/>
+		<!-- GPRbuild configuration tool window -->
+		<toolWindow id="GPRbuild" anchor="left" secondary="false" factoryClass="com.adacore.adaintellij.build.GPRbuildConfigurationToolWindowFactory"/>
 		
 	</extensions>
 	

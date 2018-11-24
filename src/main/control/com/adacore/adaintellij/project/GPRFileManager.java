@@ -79,7 +79,14 @@ public final class GPRFileManager implements ProjectComponent {
 		this.adaProject = adaProject;
 	}
 	
-	public static GPRFileManager getInstance(Project project) {
+	/**
+	 * Returns the GPRFileManager project component of the given project.
+	 *
+	 * @param project The project for which to get the component.
+	 * @return The project component.
+	 */
+	@NotNull
+	public static GPRFileManager getInstance(@NotNull Project project) {
 		return project.getComponent(GPRFileManager.class);
 	}
 	
