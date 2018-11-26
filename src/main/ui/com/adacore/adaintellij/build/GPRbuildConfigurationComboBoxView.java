@@ -15,7 +15,7 @@ import com.adacore.adaintellij.AdaIntelliJUI;
 /**
  * Simple UI view with a combo-box containing GPRbuild configurations.
  */
-public class GPRbuildConfigurationComboBoxView extends AdaIntelliJUI {
+public final class GPRbuildConfigurationComboBoxView extends AdaIntelliJUI {
 	
 	/**
 	 * Root UI component.

@@ -14,7 +14,7 @@ import com.adacore.adaintellij.AdaIntelliJUI;
 /**
  * GPRbuild scenario variable settings view.
  */
-public class ScenarioSettingsView extends AdaIntelliJUI {
+public final class ScenarioSettingsView extends AdaIntelliJUI {
 	
 	/**
 	 * Root UI component.
@@ -35,9 +35,7 @@ public class ScenarioSettingsView extends AdaIntelliJUI {
 	/**
 	 * Constructs a new ScenarioSettingsView.
 	 */
-	ScenarioSettingsView() {
-		this(null);
-	}
+	ScenarioSettingsView() { this(null); }
 	
 	/**
 	 * Constructs a new ScenarioSettingsView given an optional parent UI.

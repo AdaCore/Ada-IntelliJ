@@ -23,12 +23,6 @@
           <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
-      <component id="8a2c9" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="customGprFilePathField">
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
       <component id="8d222" class="com.intellij.ui.components.JBTextField" binding="buildArgumentsField">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -40,9 +34,8 @@
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <component value="8a2c9"/>
           <labelInsets top="2" left="4" bottom="0" right="0"/>
-          <text value="Custom GPR File Path"/>
+          <text value="Project File"/>
         </properties>
       </component>
       <component id="38cc" class="com.intellij.openapi.ui.LabeledComponent">
@@ -63,6 +56,15 @@
           <component value="a2105"/>
           <labelInsets top="2" left="4" bottom="0" right="0"/>
           <text value="Scenario Variables"/>
+        </properties>
+      </component>
+      <component id="aac78" class="javax.swing.JLabel" binding="gprFilePathLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font style="2"/>
+          <text value="No project file set."/>
         </properties>
       </component>
     </children>

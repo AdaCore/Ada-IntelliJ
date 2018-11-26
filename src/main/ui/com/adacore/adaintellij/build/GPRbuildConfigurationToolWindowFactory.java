@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Tool window factory for the GPRbuild configuration tool window.
  */
-public class GPRbuildConfigurationToolWindowFactory implements ToolWindowFactory, DumbAware {
+public final class GPRbuildConfigurationToolWindowFactory implements ToolWindowFactory, DumbAware {
 	
 	/**
 	 * Creates content for a GPRbuild configuration tool window and

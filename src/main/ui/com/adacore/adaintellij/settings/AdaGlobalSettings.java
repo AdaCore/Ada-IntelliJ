@@ -14,7 +14,7 @@ import com.adacore.adaintellij.UIUtils;
 /**
  * Global IDE settings for Ada development.
  */
-public class AdaGlobalSettings implements Configurable {
+public final class AdaGlobalSettings implements Configurable {
 	
 	/**
 	 * Root UI component.

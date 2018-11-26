@@ -305,7 +305,7 @@ public final class GPRFileManager implements ProjectComponent {
 			"Multiple GPR files were found in this project. " +
 				"Please choose one to be used as the default project file:",
 			gprFilePaths,
-			"You can always a set the default project file later, but this is required " +
+			"You can always set the default project file later, but this is required " +
 				"for semantic features to work, such as reference highlighting and " +
 				"code completion.\n\n" +
 				"You may still set up custom build configurations that use other GPR files.",

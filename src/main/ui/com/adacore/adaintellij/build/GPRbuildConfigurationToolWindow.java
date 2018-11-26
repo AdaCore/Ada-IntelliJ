@@ -14,7 +14,7 @@ import com.adacore.adaintellij.AdaIntelliJUI;
 /**
  * GPRbuild configuration tool window.
  */
-public class GPRbuildConfigurationToolWindow extends AdaIntelliJUI {
+public final class GPRbuildConfigurationToolWindow extends AdaIntelliJUI {
 	
 	/**
 	 * Root UI component.
@@ -45,9 +45,7 @@ public class GPRbuildConfigurationToolWindow extends AdaIntelliJUI {
 	 *
 	 * @param project The project to which this tool window belongs.
 	 */
-	GPRbuildConfigurationToolWindow(@NotNull Project project) {
-		this(project, null);
-	}
+	GPRbuildConfigurationToolWindow(@NotNull Project project) { this(project, null); }
 	
 	/**
 	 * Constructs a new GPRbuildConfigurationToolWindow given a project

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * UI-specific utilities.
  */
-public class UIUtils {
+public final class UIUtils {
 	
 	/**
 	 * Light/dark color pair used for component borders.

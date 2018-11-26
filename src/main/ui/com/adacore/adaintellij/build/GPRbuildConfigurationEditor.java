@@ -3,19 +3,21 @@ package com.adacore.adaintellij.build;
 import javax.swing.*;
 
 import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.ui.TextBrowseFolderListener;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBTextField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adacore.adaintellij.UIUtils;
+import com.adacore.adaintellij.project.GPRFileManager;
 import com.adacore.adaintellij.AdaIntelliJUI;
+import com.adacore.adaintellij.Utils;
+
+import java.awt.*;
 
 /**
  * Configuration editor UI for GPRbuild configurations.
  */
-public class GPRbuildConfigurationEditor extends AdaIntelliJUI {
+public final class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 	
 	/**
 	 * Root UI component.
@@ -25,9 +27,9 @@ public class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 	/**
 	 * Child UI components.
 	 */
-	private TextFieldWithBrowseButton customGprFilePathField;
-	private JBTextField               buildArgumentsField;
-	private JScrollPane               scenarioScrollPane;
+	private JLabel      gprFilePathLabel;
+	private JBTextField buildArgumentsField;
+	private JScrollPane scenarioScrollPane;
 	
 	/**
 	 * External UI components.
@@ -37,9 +39,7 @@ public class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 	/**
 	 * Constructs a new GPRbuildConfigurationEditor.
 	 */
-	GPRbuildConfigurationEditor() {
-		this(null);
-	}
+	GPRbuildConfigurationEditor() { this(null); }
 	
 	/**
 	 * Constructs a new GPRbuildConfigurationEditor given an optional
@@ -51,11 +51,6 @@ public class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 	GPRbuildConfigurationEditor(@Nullable AdaIntelliJUI parentUI) {
 		
 		super(parentUI);
-		
-		// Set up GPR file path file chooser
-		
-		customGprFilePathField.addBrowseFolderListener(
-			new TextBrowseFolderListener(UIUtils.SINGLE_FILE_CHOOSER_DESCRIPTOR));
 		
 		// Set up the scenario variable settings view
 		
@@ -73,7 +68,7 @@ public class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 	 *                              reset this editor.
 	 */
 	void resetEditorFrom(@NotNull GPRbuildConfiguration gprBuildConfiguration) {
-		customGprFilePathField.setText(gprBuildConfiguration.getCustomGprFilePath());
+		setGprFilePathLabel(gprBuildConfiguration.getProject());
 		buildArgumentsField.setText(gprBuildConfiguration.getGprbuildArguments());
 		scenarioSettingsView.setScenarioVariables(gprBuildConfiguration.getScenarioVariables());
 	}
@@ -85,7 +80,7 @@ public class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 	 *                              apply the data in this editor.
 	 */
 	void applyEditorTo(@NotNull GPRbuildConfiguration gprBuildConfiguration) {
-		gprBuildConfiguration.setCustomGprFilePath(customGprFilePathField.getText());
+		setGprFilePathLabel(gprBuildConfiguration.getProject());
 		gprBuildConfiguration.setGprbuildArguments(buildArgumentsField.getText());
 		gprBuildConfiguration.setScenarioVariables(scenarioSettingsView.getScenarioVariables());
 	}
@@ -96,6 +91,37 @@ public class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 	@NotNull
 	@Override
 	public JComponent getUIRoot() { return rootPanel; }
+	
+	/**
+	 * Sets the GPR file path label value.
+	 *
+	 * @param project The project from which to get the project file.
+	 */
+	private void setGprFilePathLabel(@NotNull Project project) {
+		
+		String gprFilePath = GPRFileManager.getInstance(project).defaultGprFilePath(false);
+		
+		String newLabelText;
+		String newTooltipText;
+		int    newLabelStyle;
+		
+		if (gprFilePath == null) {
+			newLabelText   = "No project file set.";
+			newTooltipText = "";
+			newLabelStyle  = Font.ITALIC;
+		} else {
+			newLabelText   = Utils.getPathRelativeToProjectBase(project, gprFilePath);
+			newTooltipText = gprFilePath;
+			newLabelStyle  = Font.PLAIN;
+		}
+		
+		Font labelFont = gprFilePathLabel.getFont();
+		
+		gprFilePathLabel.setText(newLabelText);
+		gprFilePathLabel.setToolTipText(newTooltipText);
+		gprFilePathLabel.setFont(new Font(labelFont.getName(), newLabelStyle, labelFont.getSize()));
+		
+	}
 	
 	/**
 	 * Adapter of this editor to the `SettingsEditor` class.
