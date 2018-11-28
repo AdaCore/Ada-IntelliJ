@@ -3,16 +3,11 @@ package com.adacore.adaintellij.build;
 import javax.swing.*;
 
 import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBTextField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adacore.adaintellij.project.GPRFileManager;
 import com.adacore.adaintellij.AdaIntelliJUI;
-import com.adacore.adaintellij.Utils;
-
-import java.awt.*;
 
 /**
  * Configuration editor UI for GPRbuild configurations.
@@ -27,7 +22,6 @@ public final class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 	/**
 	 * Child UI components.
 	 */
-	private JLabel      gprFilePathLabel;
 	private JBTextField buildArgumentsField;
 	private JScrollPane scenarioScrollPane;
 	
@@ -68,7 +62,6 @@ public final class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 	 *                              reset this editor.
 	 */
 	void resetEditorFrom(@NotNull GPRbuildConfiguration gprBuildConfiguration) {
-		setGprFilePathLabel(gprBuildConfiguration.getProject());
 		buildArgumentsField.setText(gprBuildConfiguration.getGprbuildArguments());
 		scenarioSettingsView.setScenarioVariables(gprBuildConfiguration.getScenarioVariables());
 	}
@@ -80,7 +73,6 @@ public final class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 	 *                              apply the data in this editor.
 	 */
 	void applyEditorTo(@NotNull GPRbuildConfiguration gprBuildConfiguration) {
-		setGprFilePathLabel(gprBuildConfiguration.getProject());
 		gprBuildConfiguration.setGprbuildArguments(buildArgumentsField.getText());
 		gprBuildConfiguration.setScenarioVariables(scenarioSettingsView.getScenarioVariables());
 	}
@@ -91,37 +83,6 @@ public final class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 	@NotNull
 	@Override
 	public JComponent getUIRoot() { return rootPanel; }
-	
-	/**
-	 * Sets the GPR file path label value.
-	 *
-	 * @param project The project from which to get the project file.
-	 */
-	private void setGprFilePathLabel(@NotNull Project project) {
-		
-		String gprFilePath = GPRFileManager.getInstance(project).defaultGprFilePath(false);
-		
-		String newLabelText;
-		String newTooltipText;
-		int    newLabelStyle;
-		
-		if (gprFilePath == null) {
-			newLabelText   = "No project file set.";
-			newTooltipText = "";
-			newLabelStyle  = Font.ITALIC;
-		} else {
-			newLabelText   = Utils.getPathRelativeToProjectBase(project, gprFilePath);
-			newTooltipText = gprFilePath;
-			newLabelStyle  = Font.PLAIN;
-		}
-		
-		Font labelFont = gprFilePathLabel.getFont();
-		
-		gprFilePathLabel.setText(newLabelText);
-		gprFilePathLabel.setToolTipText(newTooltipText);
-		gprFilePathLabel.setFont(new Font(labelFont.getName(), newLabelStyle, labelFont.getSize()));
-		
-	}
 	
 	/**
 	 * Adapter of this editor to the `SettingsEditor` class.

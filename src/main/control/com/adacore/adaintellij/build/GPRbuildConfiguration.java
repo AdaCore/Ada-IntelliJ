@@ -16,8 +16,6 @@ import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.vfs.*;
 import org.jetbrains.annotations.*;
 
@@ -36,13 +34,6 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 	 * The project in which this configuration will be run.
 	 */
 	private Project project;
-	
-	/**
-	 * The path to the GPR file to use in this configuration.
-	 * This path may be the empty string, in which case the project's
-	 * default GPR file will be used.
-	 */
-	private String customGprFilePath = "";
 	
 	/**
 	 * The arguments that will be passed to gprbuild.
@@ -87,7 +78,7 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 	/**
 	 * @see com.intellij.execution.configurations.RunProfile#getState(Executor, ExecutionEnvironment)
 	 */
-	@Nullable
+	@NotNull
 	@Override
 	public RunProfileState getState(
 		@NotNull Executor executor,
@@ -124,17 +115,19 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 			@Override
 			protected ProcessHandler startProcess() throws ExecutionException {
 				
-				String gprbuildPath = GPRbuildManager.getGprbuildPath();
-				String gprFilePath  = getEffectiveGprFilePath();
+				GPRFileManager gprFileManager = GPRFileManager.getInstance(project);
 				
-				if (gprbuildPath == null) {
+				String gprbuildPath = GPRbuildManager.getGprbuildPath();
+				String gprFilePath  = gprFileManager.getGprFilePathOrChoose();
+				
+				if ("".equals(gprbuildPath)) {
 					throw new ExecutionException(
-						"No gprbuild path specified. Go to `Run | Edit" +
-							" Configurations...` to set the gprbuild path."
+						"No gprbuild path specified. Go to `File | Settings... | " +
+							"Languages & Frameworks | Ada` to set the gprbuild path."
 					);
-				} else if (gprFilePath == null) {
+				} else if ("".equals(gprFilePath)) {
 					throw new ExecutionException(
-						"No `.gpr` file found in project. Add a" +
+						"No GPR file found in project. Add a" +
 							"`.gpr` file to the project's base directory."
 					);
 				}
@@ -179,11 +172,9 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 	@Override
 	public void writeExternal(@NotNull Element element) {
 		
-		Element customGprFilePathElement = new Element("customGprFilePath");
 		Element gprbuildArgumentsElement = new Element("gprbuildArguments");
 		Element scenarioVariablesElement = new Element("scenarioVariables");
 		
-		customGprFilePathElement.addContent(customGprFilePath);
 		gprbuildArgumentsElement.addContent(gprbuildArguments);
 		
 		scenarioVariables.forEach((variable, value) -> {
@@ -197,7 +188,6 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 			
 		});
 		
-		element.addContent(customGprFilePathElement);
 		element.addContent(gprbuildArgumentsElement);
 		element.addContent(scenarioVariablesElement);
 	
@@ -212,13 +202,8 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 	@Override
 	public void readExternal(@NotNull Element element) {
 		
-		Element customGprFilePathElement = element.getChild("customGprFilePath");
 		Element gprbuildArgumentsElement = element.getChild("gprbuildArguments");
 		Element scenarioVariablesElement = element.getChild("scenarioVariables");
-		
-		if (customGprFilePathElement != null) {
-			customGprFilePath = customGprFilePathElement.getText();
-		}
 		
 		if (gprbuildArgumentsElement != null) {
 			gprbuildArguments = gprbuildArgumentsElement.getText();
@@ -239,24 +224,6 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 			
 		}
 		
-	}
-	
-	/**
-	 * Returns the path of the custom GPR file used in this configuration.
-	 *
-	 * @return The path of the custom GPR file.
-	 */
-	@Contract(pure = true)
-	@NotNull
-	String getCustomGprFilePath() { return customGprFilePath; }
-	
-	/**
-	 * Sets the path of the custom GPR file used in this configuration.
-	 *
-	 * @param customGprFilePath The new GPR file path.
-	 */
-	void setCustomGprFilePath(@NotNull String customGprFilePath) {
-		this.customGprFilePath = customGprFilePath;
 	}
 	
 	/**
@@ -299,24 +266,6 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 		this.scenarioVariables = new HashMap<>();
 	
 		this.scenarioVariables.putAll(scenarioVariables);
-		
-	}
-	
-	/**
-	 * Returns the path of the effective GPR file used in this configuration,
-	 * that is:
-	 * - The custom GPR file if its path is not the empty string
-	 * - The project's default GPR file path (which may be null) otherwise
-	 *
-	 * @return The effective GPR file used in this configuration.
-	 */
-	@Nullable
-	private String getEffectiveGprFilePath() {
-		
-		GPRFileManager gprFileManager = GPRFileManager.getInstance(project);
-		
-		return "".equals(customGprFilePath) ?
-			gprFileManager.defaultGprFilePath(true) : customGprFilePath;
 		
 	}
 	
@@ -414,7 +363,9 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 				
 				List<String> sources;
 				
-				String gprFilePath = getEffectiveGprFilePath();
+				GPRFileManager gprFileManager = GPRFileManager.getInstance(project);
+				
+				String gprFilePath = gprFileManager.getGprFilePathOrChoose();
 				
 				try {
 					sources = GpsCli.projectSources(project, gprFilePath);
