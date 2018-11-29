@@ -109,4 +109,15 @@
 		
 	</extensions>
 	
+	<!-- Plugin actions -->
+	
+	<actions>
+		<group text="Ada">
+			<add-to-group group-id="MainMenu" anchor="after" relative-to-action="RefactoringMenu"/>
+			<action class="com.adacore.adaintellij.actions.ProjectSettingsAction" text="Project Settings">
+				<keyboard-shortcut first-keystroke="control alt A" keymap="$default"/>
+			</action>
+		</group>
+	</actions>
+	
 </idea-plugin>

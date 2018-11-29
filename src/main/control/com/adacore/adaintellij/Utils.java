@@ -57,6 +57,18 @@ public final class Utils {
 	}
 	
 	/**
+	 * Returns whether or not the given path points to a file or directory
+	 * that is in the file hierarchy of the given project.
+	 *
+	 * @param project The base project.
+	 * @param path The absolute path to test.
+	 * @return Whether or not the path target is in the project hierarchy.
+	 */
+	public static boolean isInProjectHierarchy(@NotNull Project project, @NotNull String path) {
+		return getPathRelativeToProjectBase(project, path) != null;
+	}
+	
+	/**
 	 * Returns the path representing the target of the given path, but
 	 * relative to the base directory of the given project.
 	 * Returns null if the target of the given path is not a descendant

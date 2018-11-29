@@ -22,7 +22,7 @@ public final class GPRbuildManager implements ApplicationComponent {
 	/**
 	 * The gprbuild path in the system.
 	 */
-	private static String gprbuildPath;
+	private static String gprbuildPath = "";
 	
 	/**
 	 * @see com.intellij.openapi.components.NamedComponent#getComponentName()
@@ -68,7 +68,7 @@ public final class GPRbuildManager implements ApplicationComponent {
 	 * @return The gprbuild path.
 	 */
 	@Contract(pure = true)
-	@Nullable
+	@NotNull
 	public static String getGprbuildPath() { return gprbuildPath; }
 	
 	/**

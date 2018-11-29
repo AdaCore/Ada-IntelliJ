@@ -188,9 +188,9 @@ public final class AdaLSPDriver implements ProjectComponent {
 		
 		server.initialized(new InitializedParams());
 		
-		// Try to set up the LSP server with the GPR file path being used.
+		// Try to set up the LSP server with the project's GPR file path.
 		// This may not complete in case no GPR files exist in the project
-		// or multiple ones exist and the user has not chosen a default one,
+		// or in case multiple ones exist and the user has not chosen one,
 		// in which case the server will not be marked as initialized and
 		// no requests will be made to it until a GPR file path is set and
 		// successfully communicated to the server.
@@ -200,13 +200,7 @@ public final class AdaLSPDriver implements ProjectComponent {
 		// Add a GPR file change listener in order to communicate GPR file
 		// changes to the server.
 		
-		gprFileManager.addGprFileChangeListener(GPR_FILE_CHANGE_LISTENER_KEY, gprFilePath -> {
-			
-			if (gprFilePath == null) { return; }
-			
-			setGprFile(gprFilePath);
-			
-		});
+		gprFileManager.addGprFileChangeListener(GPR_FILE_CHANGE_LISTENER_KEY, this::setGprFile);
 		
 	}
 	
@@ -290,21 +284,21 @@ public final class AdaLSPDriver implements ProjectComponent {
 		
 		String path = gprFilePath;
 		
-		// If no GPR file path was provided, get the default path from
-		// the GPR file manager
+		// If no GPR file path was provided, get it
+		// from the GPR file manager
 		
-		if (path == null) {
+		if (path == null || "".equals(path)) {
 			
-			path = gprFileManager.defaultGprFilePath(false);
+			path = gprFileManager.getGprFilePath();
 			
-			// If no default GPR file path is set, return
+			// If no GPR file path is set, return
 			
-			if (path == null) { return; }
+			if ("".equals(path)) { return; }
 			
 		}
 		
-		// Send the `workspace/didChangeConfiguration` notification to
-		// set the project file
+		// Send the `workspace/didChangeConfiguration`
+		// notification to set the project file
 		
 		server.didChangeConfiguration(path, null);
 		

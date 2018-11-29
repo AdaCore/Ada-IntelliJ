@@ -86,8 +86,6 @@ public final class ListChooserDialog<T> extends DialogWrapper {
 		
 		init();
 		
-		centerRelativeToParent();
-		
 		// Set the title
 		
 		setTitle(title);

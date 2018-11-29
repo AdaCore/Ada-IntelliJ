@@ -8,9 +8,7 @@ import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.*;
 
 import com.adacore.adaintellij.dialogs.ListChooserDialog;
@@ -20,7 +18,7 @@ import com.adacore.adaintellij.notifications.AdaIJNotification;
 /**
  * Project component handling everything related to GPR files.
  */
-public final class GPRFileManager implements ProjectComponent {
+public class GPRFileManager implements ProjectComponent {
 	
 	/**
 	 * The project to which this component belongs.
@@ -33,39 +31,31 @@ public final class GPRFileManager implements ProjectComponent {
 	private AdaProject adaProject;
 	
 	/**
-	 * A list of paths to GPR files in this project.
+	 * The path to the GPR file configured for the project
+	 * to which this manager component belongs.
 	 */
-	private List<String> gprFilePaths;
+	private String gprFilePath = "";
 	
 	/**
-	 * The index, in gprFilePaths, of the GPR file path that is set
-	 * as the project's default GPR file, or -1 if no such path exists.
-	 */
-	private int defaultGprFilePathIndex = -1;
-	
-	/**
-	 * The set of registered listeners for the event of setting the default
-	 * GPR file path after it was unset.
+	 * The set of registered listeners for changes of the GPR file path.
 	 * Every listener is identified by a unique string key that can be used
-	 * to register/unregister the listener (see `addGprFileSetListener` and
-	 * `removeGprFileSetListener`).
+	 * to register/unregister the listener (see `addGprFileChangeListener`
+	 * and `removeGprFileChangeListener`).
 	 * To avoid collisions, all listeners registered from within a class
 	 * should use a key prefixed by the fully qualified class name of that
 	 * class, for example:
-	 * `com.adacore.adaintellij.project.GPRFileManager@myGprFileSetListener`
+	 * `com.adacore.adaintellij.project.GPRFileManager@myGprFileChangeListener`
 	 * Moreover, every class should assign different names to its own keys
 	 * to avoid collisions.
 	 */
-	private Map<String, Consumer<String>> gprFileSetListeners = new HashMap<>();
+	private Map<String, Consumer<String>> gprFileChangeListeners = new HashMap<>();
 	
 	/**
-	 * Similar to `gprFileSetListeners` but notifies its listeners every
-	 * time the default GPR file path changes.
-	 * Listeners can be registered/unregistered with `addGprFileChangeListener`
-	 * and `removeGprFileChangeListener`.
-	 * The same listener key conventions apply.
+	 * Whether or not the user has already been notified about the selected
+	 * GPR file, or about the fact that no such file was found in the project
+	 * structure.
 	 */
-	private Map<String, Consumer<String>> gprFileChangeListeners = new HashMap<>();
+	private boolean notifiedAboutGprFile = false;
 	
 	/**
 	 * Constructs a new GPRFileManager given a project.
@@ -105,155 +95,58 @@ public final class GPRFileManager implements ProjectComponent {
 		
 		if (!adaProject.isAdaProject()) { return; }
 		
-		// Locate GPR files in the project
+		setGprFilePath(getGprFilePathOrChoose());
 		
-		locateGprFiles();
-		
-		switch (gprFilePaths.size()) {
+		if (!"".equals(gprFilePath) && !notifiedAboutGprFile) {
 			
-			// If no files are found, reset the default GPR
-			// file path index warn the user
+			Notifications.Bus.notify(new AdaIJNotification(
+				"Project File",
+				"Using the following project file:\n" + gprFilePath,
+				NotificationType.INFORMATION
+			));
 			
-			case 0: {
-				
-				setDefaultGprFilePathIndex(-1);
-				
-				Notifications.Bus.notify(new AdaIJNotification(
-					"No Project File Found",
-					"Add a GPR file to the project structure, or" +
-						" specify one in `Run | Edit Configurations...`",
-					NotificationType.WARNING
-				));
-				
-				return;
-				
-			}
+			notifiedAboutGprFile = true;
 			
-			// If one GPR file is found, set it as the default
-			// GPR file
-			
-			case 1:
-				setDefaultGprFilePathIndex(0);
-				break;
-			
-			// If multiple GPR files are found, ask the user
-			// to choose one as default GPR file
-			
-			default:
-				chooseDefaultGprFilePath();
-				break;
-			
-		}
-		
-		// If multiple GPR files were found and the user has not chosen
-		// one as default GPR file, return
-		
-		String gprFilePath = selectedGprFilePath();
-		
-		if (gprFilePath == null) { return; }
-		
-		// Notify the user about the selected default GPR file
-		
-		Notifications.Bus.notify(new AdaIJNotification(
-			"Default Project File",
-			"Using the following project file:\n" + selectedGprFilePath(),
-			NotificationType.INFORMATION
-		));
-		
-	}
-	
-	/**
-	 * Returns the path to the project's default GPR file, or null if
-	 * no such file exists.
-	 * This is the public GPR file path getter which does slightly more
-	 * work than its private counterpart `selectedGprFilePath`: if no
-	 * default GPR file path is set, or if it is but the corresponding file
-	 * no longer exists, it will search the project structure for GPR files
-	 * before finally returning the newly found unique GPR file or null if
-	 * no GPR files are found.
-	 * This method also allows to ask the user to choose a default GPR file
-	 * if multiple files were found during the search, and will also return
-	 * null if the user dismisses the dialog without choosing a file.
-	 *
-	 * @param chooseIfUnsetAndMultiple Whether or not to ask the user to
-	 *                                 choose a default GPR file in case no
-	 *                                 such file was previously set and
-	 *                                 multiple GPR files are found.
-	 * @return The default GPR file path, or null.
-	 */
-	@Nullable
-	public String defaultGprFilePath(boolean chooseIfUnsetAndMultiple) {
-		
-		if (!adaProject.isAdaProject()) { return null; }
-		
-		String defaultGprFilePath = selectedGprFilePath();
-		
-		boolean noDefaultGprFile = false;
-		
-		if (defaultGprFilePath == null) {
-			noDefaultGprFile = true;
-		} else {
-			
-			// Check that the file exists
-			
-			VirtualFile defaultGprFile =
-				LocalFileSystem.getInstance().findFileByPath(defaultGprFilePath);
-			
-			if (defaultGprFile == null || !defaultGprFile.isValid()) {
-				noDefaultGprFile = true;
-			}
-			
-		}
-		
-		// If no default GPR file exists, try to locate GPR files again
-		
-		if (noDefaultGprFile) {
-			
-			locateGprFiles();
-			
-			// If multiple GPR files were found and `chooseIfUnsetAndMultiple`
-			// is true, ask the user to choose a default GPR file
-			
-			if (gprFilePaths.size() > 1 && chooseIfUnsetAndMultiple) {
-				chooseDefaultGprFilePath();
-			}
-			
-			// Return active path, or null if no gpr files found
-			
-			return selectedGprFilePath();
-			
-		}
-		
-		// Otherwise return the default GPR file path
-		
-		else {
-			return defaultGprFilePath;
 		}
 		
 	}
 	
 	/**
-	 * Iterates over all files in the project's file hierarchy and stores
-	 * the paths of all those that have the .gpr file extension.
+	 * Returns the path to the GPR file of this manager's project.
+	 * The returned path may be the empty string in case the path
+	 * is not set.
 	 *
-	 * This method also notifies the user when no GPR files are found or
-	 * when only one GPR file is found and will be automatically used as
-	 * the project's default GPR file.
-	 *
-	 * In case multiple GPR files are found, this method displays a dialog
-	 * allowing the user to choose which GPR file to use as the project's
-	 * default GPR file.
+	 * @return The configured GPR file path.
 	 */
-	private void locateGprFiles() {
+	@NotNull
+	public String getGprFilePath() { return gprFilePath; }
+	
+	/**
+	 * Returns the path to the GPR file of this manager's project.
+	 * In case the path is not set, this method searches the project
+	 * file hierarchy for files with the `.gpr` extension and asks
+	 * the user to choose one to be used for the project. If the user
+	 * chooses a file, the GPR file path will be set and returned.
+	 * Note that the user may still discard the choose-file dialog,
+	 * in which case this method returns the empty string.
+	 *
+	 * @return The configured GPR file path.
+	 */
+	@NotNull
+	public String getGprFilePathOrChoose() {
 		
-		// Reset the list of GPR file paths
+		if (!adaProject.isAdaProject()) { return gprFilePath; }
 		
-		gprFilePaths = new ArrayList<>();
+		// If the GPR file path is set, then return it
+		
+		if (!"".equals(gprFilePath)) { return gprFilePath; }
 		
 		// Iterate over the project files and add the paths of files
 		// with the GPR file extension to the list of GPR file paths
 		
 		final String gprFileExtension = GPRFileType.INSTANCE.getDefaultExtension();
+		
+		final List<String> gprFilePaths = new ArrayList<>();
 		
 		VfsUtilCore.iterateChildrenRecursively(
 			project.getBaseDir(),
@@ -265,8 +158,8 @@ public final class GPRFileManager implements ProjectComponent {
 				
 				if (
 					fileOrDir.isValid() &&
-					!fileOrDir.isDirectory() &&
-					gprFileExtension.equals(fileOrDir.getExtension())
+						!fileOrDir.isDirectory() &&
+						gprFileExtension.equals(fileOrDir.getExtension())
 				) {
 					gprFilePaths.add(fileOrDir.getPath());
 				}
@@ -276,99 +169,94 @@ public final class GPRFileManager implements ProjectComponent {
 			}
 		);
 		
-	}
-	
-	/**
-	 * Returns the path to the currently selected project default GPR file,
-	 * or null if no such file exists.
-	 * This is the purely internal GPR file path getter that simply gets the
-	 * path from `gprFilePaths`, if the current GPR file path index is set.
-	 *
-	 * @return The currently selected default GPR file path, or null.
-	 */
-	@Nullable
-	private String selectedGprFilePath() {
-		return defaultGprFilePathIndex == -1 ? null : gprFilePaths.get(defaultGprFilePathIndex);
-	}
-	
-	/**
-	 * Displays a dialog asking the user to choose a default GPR file from
-	 * the list of GPR files found in the project structure.
-	 */
-	private void chooseDefaultGprFilePath() {
+		// If no GPR files were found, set the path to the empty string,
+		// otherwise if one file was found, set the path to that of that
+		// file, otherwise ask the user to choose one of the found files
 		
-		// Show the dialog and get the user selection
+		String newGprFilePath = "";
 		
-		ListChooserDialog<String> dialog = new ListChooserDialog<>(
-			project,
-			"Choose Project File",
-			"Multiple GPR files were found in this project. " +
-				"Please choose one to be used as the default project file:",
-			gprFilePaths,
-			"You can always set the default project file later, but this is required " +
-				"for semantic features to work, such as reference highlighting and " +
-				"code completion.\n\n" +
-				"You may still set up custom build configurations that use other GPR files.",
-			ListSelectionModel.SINGLE_SELECTION
-		);
-		
-		String selectedPath = dialog.showAndGetSelection();
-		
-		// If the user made a selection, set the GPR file path index
-		
-		if (selectedPath != null) {
-			setDefaultGprFilePathIndex(gprFilePaths.indexOf(selectedPath));
+		switch (gprFilePaths.size()) {
+			
+			case 0: {
+				
+				if (!notifiedAboutGprFile) {
+					
+					Notifications.Bus.notify(new AdaIJNotification(
+						"No Project File Found",
+						"Add a GPR file to the project structure, or" +
+							" specify one in `Run | Edit Configurations...`",
+						NotificationType.WARNING
+					));
+					
+					notifiedAboutGprFile = true;
+					
+				}
+				
+				break;
+				
+			}
+			
+			case 1:
+				newGprFilePath = gprFilePaths.get(0);
+				break;
+			
+			default: {
+				
+				// Show the dialog and get the user selection
+				
+				ListChooserDialog<String> dialog = new ListChooserDialog<>(
+					project,
+					"Choose Project File",
+					"Multiple GPR files were found in this project. " +
+						"Please choose one to be used as project file:",
+					gprFilePaths,
+					"You can always set the project file later (under `Ada | Project " +
+						"Settings`), but this is required for semantic features to work, " +
+						"such as reference highlighting and code completion.",
+					ListSelectionModel.SINGLE_SELECTION
+				);
+				
+				String selectedPath = dialog.showAndGetSelection();
+				
+				// If the user made a selection, then set the GPR file path
+				// to the selected path
+				
+				if (selectedPath != null) {
+					newGprFilePath = selectedPath;
+				}
+				
+			}
+			
 		}
 		
+		// Set the GPR file path
+		
+		setGprFilePath(newGprFilePath);
+		
+		// Return the GPR file path
+		
+		return gprFilePath;
+		
 	}
 	
 	/**
-	 * Sets the index of the default GPR file path in the list of
-	 * GPR files in the project structure.
-	 * If the new index is different from the previous index, all
-	 * registered listeners for the event are notified.
+	 * Sets the GPR file path to the given path and notifies all
+	 * GPR file path change listeners.
 	 *
-	 * @param newIndex The new default GPR file path index.
+	 * @param path The new GPR file path.
 	 */
-	private void setDefaultGprFilePathIndex(int newIndex) {
+	public void setGprFilePath(@NotNull final String path) {
 		
-		if (newIndex == defaultGprFilePathIndex) { return; }
+		if (!adaProject.isAdaProject()) { return; }
 		
-		assert newIndex >= -1 && newIndex < gprFilePaths.size();
-		
-		boolean unset = defaultGprFilePathIndex == -1;
-		
-		defaultGprFilePathIndex = newIndex;
-		
-		final String defaultGprFilePath = defaultGprFilePath(false);
-		
-		if (unset) {
-			gprFileSetListeners.forEach((key, listener) -> listener.accept(defaultGprFilePath));
+		if (!path.equals(gprFilePath)) {
+			
+			gprFilePath = path;
+			
+			gprFileChangeListeners.forEach((key, listener) -> listener.accept(path));
+			
 		}
 		
-		gprFileChangeListeners.forEach((key, listener) -> listener.accept(defaultGprFilePath));
-		
-	}
-	
-	/**
-	 * Registers the given listener with the given key to GPR file set events.
-	 * @see GPRFileManager#gprFileSetListeners
-	 *
-	 * @param key The key of the listener to register.
-	 * @param listener The listener to register.
-	 */
-	public void addGprFileSetListener(String key, Consumer<String> listener) {
-		gprFileSetListeners.put(key, listener);
-	}
-	
-	/**
-	 * Unregisters the listener with the given key from GPR file set events.
-	 * @see GPRFileManager#gprFileSetListeners
-	 *
-	 * @param key The key of the listener to unregister.
-	 */
-	public void removeGprFileSetListener(String key) {
-		gprFileSetListeners.remove(key);
 	}
 	
 	/**
@@ -379,7 +267,11 @@ public final class GPRFileManager implements ProjectComponent {
 	 * @param listener The listener to register.
 	 */
 	public void addGprFileChangeListener(String key, Consumer<String> listener) {
+		
+		if (!adaProject.isAdaProject()) { return; }
+		
 		gprFileChangeListeners.put(key, listener);
+		
 	}
 	
 	/**
@@ -389,7 +281,11 @@ public final class GPRFileManager implements ProjectComponent {
 	 * @param key The key of the listener to unregister.
 	 */
 	public void removeGprFileChangeListener(String key) {
+		
+		if (!adaProject.isAdaProject()) { return; }
+		
 		gprFileChangeListeners.remove(key);
+		
 	}
 	
 }
