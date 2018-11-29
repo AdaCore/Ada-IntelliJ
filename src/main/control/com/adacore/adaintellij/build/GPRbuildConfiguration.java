@@ -1,7 +1,6 @@
 package com.adacore.adaintellij.build;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.*;
 import java.util.stream.Collectors;
 
@@ -23,7 +22,6 @@ import org.jdom.Element;
 
 import com.adacore.adaintellij.notifications.AdaIJNotification;
 import com.adacore.adaintellij.project.GPRFileManager;
-import com.adacore.adaintellij.Utils;
 
 /**
  * Run configuration for running GPRbuild.
@@ -44,6 +42,12 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 	 * The scenario variables that will be passed to gprbuild.
 	 */
 	private Map<String, String> scenarioVariables = new HashMap<>();
+	
+	/**
+	 * Whether or not the user has already been notified about using
+	 * the "-gnatef" flag for gprbuild output file location hyperlinks.
+	 */
+	private static boolean notifiedAboutFullPathFlag = false;
 	
 	/**
 	 * Constructs a new GPRbuildConfiguration given a project, a factory
@@ -96,6 +100,19 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 				@NotNull Executor executor,
 				@NotNull ProgramRunner runner
 			) throws ExecutionException {
+				
+				if (!notifiedAboutFullPathFlag && !gprbuildArguments.contains("-gnatef")) {
+					
+					Notifications.Bus.notify(new AdaIJNotification(
+						"Use `-gnatef` build flag for output file location hyperlinks",
+						"To be able to resolve file locations in the output of gprbuild, the " +
+							"Ada-IntelliJ plugin currently requires the use of the `-gnatef` flag.",
+						NotificationType.INFORMATION
+					));
+					
+					notifiedAboutFullPathFlag = true;
+					
+				}
 				
 				ProcessHandler processHandler = startProcess();
 				ConsoleView    consoleView    =
@@ -270,20 +287,6 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 	}
 	
 	/**
-	 * TEMPORARY!
-	 *
-	 * Whether or not the user has already been notified about
-	 * gps_cli not being on the PATH.
-	 *
-	 * TODO: Remove this with gps_cli hack
-	 */
-	/////////////////////////////////////////////////////////////////////////
-	//                                                                     //
-	private static boolean notifiedAboutGpsCli = false;
-	//                                                                     //
-	/////////////////////////////////////////////////////////////////////////
-	
-	/**
 	 * Output filter, to be used with the output of gprbuild, for attaching
 	 * hyperlinks to certain parts of the output, such as a link to line 23
 	 * column 7 of file main.adb for the string "main.adb:23:7".
@@ -303,155 +306,39 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 		@Override
 		public Filter.Result applyFilter(String line, int entireLength) {
 			
-			/**
-			 * TEMPORARY!
-			 *
-			 * TODO: Remove this with gps_cli hack
-			 */
-			/////////////////////////////////////////////////////////////////////////
-			//                                                                     //
-			if (!Utils.isOnSystemPath(GpsCli.COMMAND, false)) {
-				
-				if (!notifiedAboutGpsCli) {
-					
-					// Notify the user that gps_cli needs to be on the path
-					Notifications.Bus.notify(new AdaIJNotification(
-						"Add gps_cli to PATH for output file location hyperlinks",
-						"File location hyperlinks from gprbuild output is an in-dev" +
-							" feature and currently requires gps_cli to be on the PATH.",
-						NotificationType.INFORMATION
-					));
-					
-					notifiedAboutGpsCli = true;
-					
-				}
-				
-				return null;
-				
-			}
-			//                                                                     //
-			/////////////////////////////////////////////////////////////////////////
-			
 			Matcher matcher = PATTERN.matcher(line);
 			
 			int lineStart = entireLength - line.length();
 			
-			while (matcher.find()) {
-				
-				MatchResult      matchResult       = matcher.toMatchResult();
-				String           match             = matchResult.group();
-				Iterator<String> matchPartIterator = Arrays.asList(match.split(":")).iterator();
-				
-				StringBuilder    filenameBuilder   = new StringBuilder(matchPartIterator.next());
-				
-				if (match.charAt(1) == ':') {
-					filenameBuilder.append(':');
-					filenameBuilder.append(matchPartIterator.next());
-				}
-				
-				String filename = filenameBuilder.toString();
-				String filePath = "";
-				
-				/**
-				 * TEMPORARY HACK:
-				 * @see com.adacore.adaintellij.build.GpsCli
-				 *
-				 * TODO: Properly get sources from GPR files instead
-				 */
-				/////////////////////////////////////////////////////////////////////////
-				//                                                                     //
-				
-				List<String> sources;
-				
-				GPRFileManager gprFileManager = GPRFileManager.getInstance(project);
-				
-				String gprFilePath = gprFileManager.getGprFilePathOrChoose();
-				
-				try {
-					sources = GpsCli.projectSources(project, gprFilePath);
-				} catch (Exception e) { return null; }
-				
-				String filePathSeparator = System.getProperty("file.separator");
-				
-				for (String sourcePath : sources) {
-					
-					String[] pathParts = sourcePath.split(filePathSeparator);
-					
-					if (pathParts[pathParts.length - 1].equals(filename)) {
-						filePath = sourcePath;
-						break;
-					}
-					
-				}
-				
-				if ("".equals(filePath)) {
-					
-					filePath = null;
-					
-					List<String> objectDirectories;
-					
-					try {
-						objectDirectories = GpsCli.projectObjectDirectories(project, gprFilePath);
-					} catch (Exception e) { return null; }
-					
-					final AtomicReference<String> objectFilePathReference = new AtomicReference<>();
-					
-					for (String objectDirectoryPath : objectDirectories) {
-					
-						VirtualFile objectDirectory =
-							LocalFileSystem.getInstance().findFileByPath(objectDirectoryPath);
-						
-						if (objectDirectory == null) { continue; }
-						
-						VfsUtilCore.iterateChildrenRecursively(
-							objectDirectory,
-							null,
-							fileOrDir -> {
-								
-								if (fileOrDir.isDirectory()) { return true; }
-								
-								if (fileOrDir.getName().equals(filename)) {
-									objectFilePathReference.set(fileOrDir.getPath());
-									return false;
-								}
-								
-								return true;
-								
-							}
-						);
-						
-						filePath = objectFilePathReference.get();
-						
-						if (filePath != null) { break; }
-						
-					}
-					
-					if (filePath == null) { return null; }
-					
-				}
-				
-				//                                                                     //
-				/////////////////////////////////////////////////////////////////////////
-				
-				VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(filePath);
-				
-				if (virtualFile == null) { continue; }
-				
-				int lineNumber   = Integer.parseInt(matchPartIterator.next()) - 1;
-				int columnNumber = matchPartIterator.hasNext() ?
-					Integer.parseInt(matchPartIterator.next()) - 1 : 0;
-				
-				// TODO: Find a way to return results for all matches in a line, see:
-				//       https://upsource.jetbrains.com/idea-ce/file/idea-ce-d00d8b4ae3ed33097972b8a4286b336bf4ffcfab/platform/lang-api/src/com/intellij/execution/filters/Filter.java
-				return new Filter.Result(
-					lineStart + matchResult.start(),
-					lineStart + matchResult.end(),
-					new OpenFileHyperlinkInfo(project, virtualFile, lineNumber, columnNumber)
-				);
-				
-			}
+			// Try to find a match
 			
-			return null;
+			if (!matcher.find()) { return null; }
+			
+			MatchResult      matchResult       = matcher.toMatchResult();
+			String           match             = matchResult.group();
+			Iterator<String> matchPartIterator = Arrays.asList(match.split(":")).iterator();
+			
+			String filePath = matchPartIterator.next();
+			
+			// Find the referenced file
+			
+			VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(filePath);
+			
+			if (virtualFile == null) { return null; }
+			
+			// Parse line/column numbers
+			
+			int lineNumber   = Integer.parseInt(matchPartIterator.next()) - 1;
+			int columnNumber = matchPartIterator.hasNext() ?
+				Integer.parseInt(matchPartIterator.next()) - 1 : 0;
+			
+			// Return the result
+			
+			return new Filter.Result(
+				lineStart + matchResult.start(),
+				lineStart + matchResult.end(),
+				new OpenFileHyperlinkInfo(project, virtualFile, lineNumber, columnNumber)
+			);
 			
 		}
 		
