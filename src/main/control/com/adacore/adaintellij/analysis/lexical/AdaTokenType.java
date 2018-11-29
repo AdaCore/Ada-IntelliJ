@@ -10,12 +10,12 @@ import com.adacore.adaintellij.AdaLanguage;
 /**
  * Ada 2012 token type.
  */
-public final class AdaTokenType extends IElementType {
+public class AdaTokenType extends IElementType {
 	
 	/**
 	 * Constructs a new Ada token type.
 	 *
-	 * @param debugName the name of the token type, used for debugging purposes.
+	 * @param debugName The name of the token type, used for debugging purposes.
 	 *
 	 * @see com.intellij.psi.tree.IElementType#IElementType(String, Language)
 	 */
