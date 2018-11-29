@@ -90,7 +90,8 @@ public final class AdaFindUsagesHandler extends FindUsagesHandler {
 		@NotNull SearchScope searchScope
 	) {
 		return findReferences(target, true)
-			.filter(reference -> AdaPsiElement.areInSameFile(reference.getElement(), target))
+			.filter(reference -> searchScope.contains(
+				reference.getElement().getContainingFile().getVirtualFile()))
 			.collect(Collectors.toSet());
 	}
 	
