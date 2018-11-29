@@ -4,9 +4,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 /**
  * Ada AST node that is not a root node.
@@ -20,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * Ada-IntelliJ Ada parser:
  * @see com.adacore.adaintellij.analysis.semantic.AdaParser
  */
-public class AdaPsiElement extends LeafPsiElement {
+public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiElement {
 	
 	/**
 	 * The underlying tree node.
@@ -143,6 +141,45 @@ public class AdaPsiElement extends LeafPsiElement {
 	public int getStartOffset() { return node.getStartOffset(); }
 	
 	/**
+	 * Returns the `AdaPsiElement` corresponding to the given element,
+	 * or null if the latter has no such corresponding element.
+	 * For more information:
+	 * @see com.adacore.adaintellij.analysis.semantic.AdaParser
+	 *
+	 * @param element The element for which to get the corresponding
+	 *                Ada PSI element.
+	 * @return The corresponding `AdaPsiElement` or null.
+	 */
+	@Contract(pure = true)
+	@Nullable
+	public static AdaPsiElement getFrom(@NotNull PsiElement element) {
+		
+		// If the given PSI element is an Ada PSI element,
+		// then cast it and return it
+		
+		if (element instanceof AdaPsiElement) {
+			return (AdaPsiElement)element;
+		}
+		
+		// Else it is probably a leaf PSI element whose parent
+		// is an Ada PSI element (see explanation in `AdaParser`),
+		// so check if its parent is an Ada PSI element and if it
+		// is, cast it and return it
+		
+		PsiElement parent = element.getParent();
+		
+		if (parent instanceof AdaPsiElement) {
+			return (AdaPsiElement)parent;
+		}
+		
+		// Otherwise, the element has no corresponding Ada PSI
+		// element, so return null
+		
+		return null;
+		
+	}
+	
+	/**
 	 * Compares two PSI elements and returns true if they represent the
 	 * same element in the same file. Due to the flat nature of the ASTs
 	 * built by the Ada parser, this comparison can be accomplished by
@@ -173,6 +210,16 @@ public class AdaPsiElement extends LeafPsiElement {
 	public static boolean areInSameFile(@NotNull PsiElement element1, @NotNull PsiElement element2) {
 		return element1.getContainingFile().getVirtualFile()
 			.equals(element2.getContainingFile().getVirtualFile());
+	}
+	
+	/**
+	 * Returns a string representation of this PSI element.
+	 *
+	 * @return A string representation of this PSI element.
+	 */
+	@Override
+	public String toString() {
+		return "AdaPsiElement(" + getElementType().toString() + ")";
 	}
 	
 }

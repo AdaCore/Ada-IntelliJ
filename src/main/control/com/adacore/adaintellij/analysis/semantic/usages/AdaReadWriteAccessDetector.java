@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 
+import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
 import com.adacore.adaintellij.analysis.semantic.AdaPsiReference;
 
 /**
@@ -22,8 +23,7 @@ public final class AdaReadWriteAccessDetector extends ReadWriteAccessDetector {
 	 */
 	@Override
 	public boolean isReadWriteAccessible(@NotNull PsiElement element) {
-		return element instanceof AdaPsiReference ||
-			element.getParent() instanceof AdaPsiReference;
+		return AdaPsiElement.getFrom(element) instanceof AdaPsiReference;
 	}
 	
 	/**

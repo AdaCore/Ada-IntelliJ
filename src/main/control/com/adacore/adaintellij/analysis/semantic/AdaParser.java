@@ -70,6 +70,37 @@ import org.jetbrains.annotations.NotNull;
  *
  * See this diagram from the IntelliJ platform SDK tutorial:
  * https://www.jetbrains.org/intellij/sdk/docs/reference_guide/custom_language_support/img/PsiBuilder.gif
+ *
+ * The intermediate tree does not necessarily have a one-to-one mapping to the
+ * final PSI tree. In fact, for every "leaf" marker (except for whitespace and
+ * comments), the PSI builder seems to add to the intermediate tree a
+ * `CompositeElement` containing a single child `LeafElement`. In the final PSI
+ * tree, the `CompositeElement` is mapped to an `AdaPsiElement` or an
+ * `AdaPsiReference` and the `LeafElement` is mapped to some other instance of a
+ * class implementing `PsiElement`. This means that, unlike what is shown in the
+ * example above, the actual final parsed PSI tree has a depth of 2. Here is an
+ * example diagram with arrows illustrating references:
+ *
+ *                                  AdaPsiFile
+ *                                   ^ ^  ^ ^
+ *                                   | |  | |
+ *             ----------------------- |  | ----------------------
+ *             |                --------  --------               |
+ *             |                |                |               |
+ *             v                v                v               v
+ *       AdaPsiElement   AdaPsiReference   AdaPsiElement   AdaPsiElement
+ *             ^                ^                ^               ^
+ *             |                |                |               |
+ *         PsiElement      PsiElement      PsiElement      PsiElement
+ *
+ * As you can see, Ada PSI elements do not hold references to their "child"
+ * nodes since they are implemented as leaf nodes.
+ * It is important to keep this structure in mind as the IntelliJ platform API
+ * deals with instances of `PsiElement`, and in some cases those instances
+ * happen to be the the "hidden" leaves of the PSI tree when the Ada-IntelliJ
+ * plugin actually needs to work with the first-level `AdaPsiElement` leaves. In
+ * those cases, you should use the static method `AdaPsiElement.getFrom` to
+ * ensure that the element you are working with is an Ada PSI element.
  */
 public final class AdaParser implements PsiParser {
 	
