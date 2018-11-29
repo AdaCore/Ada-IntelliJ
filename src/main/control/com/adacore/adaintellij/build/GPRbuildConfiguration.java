@@ -1,10 +1,9 @@
 package com.adacore.adaintellij.build;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.*;
+import java.util.stream.Collectors;
 
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
@@ -20,6 +19,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
 import org.jetbrains.annotations.*;
 
+import org.jdom.Element;
+
 import com.adacore.adaintellij.notifications.AdaIJNotification;
 import com.adacore.adaintellij.project.GPRFileManager;
 import com.adacore.adaintellij.Utils;
@@ -27,7 +28,7 @@ import com.adacore.adaintellij.Utils;
 /**
  * Run configuration for running GPRbuild.
  */
-public final class GPRbuildRunConfiguration extends RunConfigurationBase {
+public final class GPRbuildConfiguration extends RunConfigurationBase {
 	
 	/**
 	 * The project in which this configuration will be run.
@@ -40,21 +41,19 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 	private String gprbuildArguments = "";
 	
 	/**
-	 * The path to the GPR file to use in this configuration.
-	 * This path may be the empty string, in which case the project's
-	 * default GPR file will be used.
+	 * The scenario variables that will be passed to gprbuild.
 	 */
-	private String customGprFilePath = "";
+	private Map<String, String> scenarioVariables = new HashMap<>();
 	
 	/**
-	 * Constructs a new GPRbuildRunConfiguration given a project, a factory
+	 * Constructs a new GPRbuildConfiguration given a project, a factory
 	 * and a name.
 	 *
 	 * @param project The project in which this configuration will be run.
 	 * @param factory The factory that generated this configuration.
 	 * @param name The name of this configuration.
 	 */
-	GPRbuildRunConfiguration(Project project, GPRbuildConfigurationFactory factory, String name) {
+	GPRbuildConfiguration(Project project, GPRbuildConfigurationFactory factory, String name) {
 		super(project, factory, name);
 		this.project = project;
 	}
@@ -65,7 +64,7 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 	@NotNull
 	@Override
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-		return new GPRbuildSettingsEditor();
+		return new GPRbuildConfigurationEditor.SettingsEditorAdapter();
 	}
 	
 	/**
@@ -79,7 +78,7 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 	/**
 	 * @see com.intellij.execution.configurations.RunProfile#getState(Executor, ExecutionEnvironment)
 	 */
-	@Nullable
+	@NotNull
 	@Override
 	public RunProfileState getState(
 		@NotNull Executor executor,
@@ -116,23 +115,40 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 			@Override
 			protected ProcessHandler startProcess() throws ExecutionException {
 				
-				String gprbuildPath = GPRbuildManager.getGprbuildPath();
-				String gprFilePath  = getEffectiveGprFilePath();
+				GPRFileManager gprFileManager = GPRFileManager.getInstance(project);
 				
-				if (gprbuildPath == null) {
+				String gprbuildPath = GPRbuildManager.getGprbuildPath();
+				String gprFilePath  = gprFileManager.getGprFilePathOrChoose();
+				
+				if ("".equals(gprbuildPath)) {
 					throw new ExecutionException(
-						"No gprbuild path specified. Go to `Run | Edit" +
-							" Configurations...` to set the gprbuild path."
+						"No gprbuild path specified. Go to `File | Settings... | " +
+							"Languages & Frameworks | Ada` to set the gprbuild path."
 					);
-				} else if (gprFilePath == null) {
+				} else if ("".equals(gprFilePath)) {
 					throw new ExecutionException(
-						"No `.gpr` file found in project. Add a" +
+						"No GPR file found in project. Add a" +
 							"`.gpr` file to the project's base directory."
 					);
 				}
 				
+				// Store scenario variable settings as strings
+				
+				List<String> commandLineScenarioVariables =
+					scenarioVariables.entrySet()
+						.stream()
+						.map(entry -> "-X" + entry.getKey() + "=" + entry.getValue())
+						.collect(Collectors.toList());
+				
+				// Construct the gprbuild command to run
+				
 				GeneralCommandLine commandLine =
 					new GeneralCommandLine(gprbuildPath, "-P" + gprFilePath, gprbuildArguments);
+				
+				commandLine.addParameters(commandLineScenarioVariables);
+				
+				// Start the command process
+				
 				commandLine.createProcess();
 				
 				OSProcessHandler processHandler = new OSProcessHandler(commandLine);
@@ -148,36 +164,108 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 	}
 	
 	/**
-	 * Returns the path of the custom GPR file used in this configuration.
+	 * Serializes the settings in this configuration into the given XML element.
+	 * Used to save the state of configurations when the IDE is closed.
 	 *
-	 * @return The path of the custom GPR file.
+	 * @param element The element to which to write data.
 	 */
-	String getCustomGprFilePath() { return customGprFilePath; }
+	@Override
+	public void writeExternal(@NotNull Element element) {
+		
+		Element gprbuildArgumentsElement = new Element("gprbuildArguments");
+		Element scenarioVariablesElement = new Element("scenarioVariables");
+		
+		gprbuildArgumentsElement.addContent(gprbuildArguments);
+		
+		scenarioVariables.forEach((variable, value) -> {
+			
+			Element variableElement = new Element("scenarioVariable");
+			
+			variableElement.setAttribute("variable", variable);
+			variableElement.setAttribute("value"   , value);
+			
+			scenarioVariablesElement.addContent(variableElement);
+			
+		});
+		
+		element.addContent(gprbuildArgumentsElement);
+		element.addContent(scenarioVariablesElement);
 	
-	/**
-	 * Sets the path of the custom GPR file used in this configuration.
-	 *
-	 * @param customGprFilePath The new GPR file path.
-	 */
-	void setCustomGprFilePath(String customGprFilePath) {
-		this.customGprFilePath = customGprFilePath;
 	}
 	
 	/**
-	 * Returns the path of the effective GPR file used in this configuration,
-	 * that is:
-	 * - The custom GPR file if its path is not the empty string
-	 * - The project's default GPR file path (which may be null) otherwise
+	 * Deserializes the data in the given XML element into this configuration.
+	 * Used to restore the state of configurations when the IDE is started.
 	 *
-	 * @return The effective GPR file used in this configuration.
+	 * @param element The element from which to read data.
 	 */
-	@Nullable
-	private String getEffectiveGprFilePath() {
+	@Override
+	public void readExternal(@NotNull Element element) {
 		
-		GPRFileManager gprFileManager = GPRFileManager.getInstance(project);
+		Element gprbuildArgumentsElement = element.getChild("gprbuildArguments");
+		Element scenarioVariablesElement = element.getChild("scenarioVariables");
 		
-		return "".equals(customGprFilePath) ?
-			gprFileManager.defaultGprFilePath(true) : customGprFilePath;
+		if (gprbuildArgumentsElement != null) {
+			gprbuildArguments = gprbuildArgumentsElement.getText();
+		}
+		
+		if (scenarioVariablesElement != null) {
+			
+			scenarioVariablesElement.getContent().forEach(content -> {
+				
+				Element variableElement = (Element)content;
+				
+				scenarioVariables.put(
+					variableElement.getAttributeValue("variable"),
+					variableElement.getAttributeValue("value")
+				);
+				
+			});
+			
+		}
+		
+	}
+	
+	/**
+	 * Returns the gprbuild build arguments of this configuration.
+	 *
+	 * @return The build arguments of this configuration.
+	 */
+	@Contract(pure = true)
+	@NotNull
+	String getGprbuildArguments() { return gprbuildArguments; }
+	
+	/**
+	 * Sets the gprbuild build arguments of this configuration.
+	 *
+	 * @param buildArguments The new build arguments.
+	 */
+	void setGprbuildArguments(@NotNull String buildArguments) {
+		gprbuildArguments = buildArguments;
+	}
+	
+	/**
+	 * Returns the scenario variable settings of this configuration.
+	 *
+	 * @return The scenario variable settings of this configuration.
+	 */
+	@Contract(pure = true)
+	@NotNull
+	Map<String, String> getScenarioVariables() {
+		return Collections.unmodifiableMap(scenarioVariables);
+	}
+	
+	/**
+	 * Sets the scenario variables of this configuration.
+	 *
+	 * @param scenarioVariables The new scenario variables of this
+	 *                          configuration.
+	 */
+	void setScenarioVariables(@NotNull Map<String, String> scenarioVariables) {
+	
+		this.scenarioVariables = new HashMap<>();
+	
+		this.scenarioVariables.putAll(scenarioVariables);
 		
 	}
 	
@@ -275,7 +363,9 @@ public final class GPRbuildRunConfiguration extends RunConfigurationBase {
 				
 				List<String> sources;
 				
-				String gprFilePath = getEffectiveGprFilePath();
+				GPRFileManager gprFileManager = GPRFileManager.getInstance(project);
+				
+				String gprFilePath = gprFileManager.getGprFilePathOrChoose();
 				
 				try {
 					sources = GpsCli.projectSources(project, gprFilePath);

@@ -18,6 +18,9 @@ import org.jetbrains.annotations.*;
  */
 public final class Utils {
 	
+	public static final String FILE_PATH_SEPARATOR        = System.getProperty("file.separator");
+	public static final String ENVIRONMENT_PATH_SEPARATOR = System.getProperty("path.separator");
+	
 	/**
 	 * Class-wide logger for the Utils class.
 	 */
@@ -39,7 +42,7 @@ public final class Utils {
 	 * @return The converted URL object or null if the conversion failed.
 	 */
 	@Nullable
-	public static URL urlStringToUrl(String urlString) {
+	public static URL urlStringToUrl(@NotNull String urlString) {
 	
 		URL url = null;
 	
@@ -50,6 +53,47 @@ public final class Utils {
 		}
 		
 		return url;
+		
+	}
+	
+	/**
+	 * Returns whether or not the given path points to a file or directory
+	 * that is in the file hierarchy of the given project.
+	 *
+	 * @param project The base project.
+	 * @param path The absolute path to test.
+	 * @return Whether or not the path target is in the project hierarchy.
+	 */
+	public static boolean isInProjectHierarchy(@NotNull Project project, @NotNull String path) {
+		return getPathRelativeToProjectBase(project, path) != null;
+	}
+	
+	/**
+	 * Returns the path representing the target of the given path, but
+	 * relative to the base directory of the given project.
+	 * Returns null if the target of the given path is not a descendant
+	 * of the project base directory.
+	 *
+	 * @param project The base project.
+	 * @param path The absolute path for which to get the relative path.
+	 * @return The corresponding relative path or null.
+	 */
+	@Nullable
+	public static String getPathRelativeToProjectBase(@NotNull Project project, @NotNull String path) {
+		
+		String projectBasePath = project.getBasePath();
+		
+		if (projectBasePath == null || !path.startsWith(projectBasePath)) {
+			return null;
+		} else if (path.equals(projectBasePath)) {
+			return "";
+		}
+		
+		String relativePath = path.substring(projectBasePath.length());
+		
+		if (!relativePath.startsWith(FILE_PATH_SEPARATOR)) { return null; }
+		
+		return relativePath.substring(1);
 		
 	}
 	
@@ -79,10 +123,7 @@ public final class Utils {
 	@Nullable
 	public static String getPathFromSystemPath(@NotNull String executableName, boolean withExtension) {
 		
-		char   fileSeparator = System.getProperty("file.separator").charAt(0);
-		String pathSeparator = System.getProperty("path.separator");
-		
-		String[] paths = System.getenv("PATH").split(pathSeparator);
+		String[] paths = System.getenv("PATH").split(ENVIRONMENT_PATH_SEPARATOR);
 		
 		// For each entry in the PATH...
 		
@@ -115,8 +156,8 @@ public final class Utils {
 					// at the end of the PATH entry
 					// It should generally not be the case, but just to be safe
 					
-					if (path.charAt(path.length() - 1) != fileSeparator) {
-						executablePathBuilder.append(fileSeparator);
+					if (!FILE_PATH_SEPARATOR.equals(String.valueOf(path.charAt(path.length() - 1)))) {
+						executablePathBuilder.append(FILE_PATH_SEPARATOR);
 					}
 					
 					// Return the full path to the executable

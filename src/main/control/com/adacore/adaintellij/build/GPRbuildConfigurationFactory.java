@@ -19,17 +19,17 @@ public final class GPRbuildConfigurationFactory extends ConfigurationFactory {
 	/**
 	 * @see com.intellij.execution.configurations.ConfigurationFactory#createTemplateConfiguration(Project)
 	 */
+	@NotNull
 	@Override
 	public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
-		return new GPRbuildRunConfiguration(project, this, "GPRbuild");
+		return new GPRbuildConfiguration(project, this, "GPRbuild");
 	}
 	
 	/**
 	 * @see com.intellij.execution.configurations.ConfigurationFactory#getName()
 	 */
+	@NotNull
 	@Override
-	public String getName() {
-		return "GPRbuild Configuration Factory";
-	}
+	public String getName() { return "GPRbuild Configuration Factory"; }
 	
 }

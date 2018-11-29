@@ -5,8 +5,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import org.jetbrains.annotations.NotNull;
 
-import com.adacore.adaintellij.file.AdaBodyFileType;
-import com.adacore.adaintellij.file.AdaSpecFileType;
 import com.adacore.adaintellij.file.GPRFileType;
 
 /**
