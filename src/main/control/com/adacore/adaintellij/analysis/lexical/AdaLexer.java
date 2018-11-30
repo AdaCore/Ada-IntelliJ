@@ -8,6 +8,8 @@ import org.jetbrains.annotations.*;
 
 import com.adacore.adaintellij.analysis.lexical.regex.*;
 
+import static com.adacore.adaintellij.analysis.lexical.AdaTokenTypes.*;
+
 /**
  * Lexical Analyser for Ada 2012 (ISO/IEC 8652:2012(E)).
  */
@@ -53,36 +55,36 @@ public final class AdaLexer extends LexerBase {
 	/**
 	 * Unit regexes for matching Ada single delimiters.
 	 */
-	private static final LexerRegex AMPERSAND_REGEX         = new UnitRegex("&");
-	private static final LexerRegex APOSTROPHE_REGEX        = new UnitRegex("'");
-	private static final LexerRegex LEFT_PARENTHESIS_REGEX  = new UnitRegex("(");
-	private static final LexerRegex RIGHT_PARENTHESIS_REGEX = new UnitRegex(")");
-	private static final LexerRegex ASTERISK_REGEX          = new UnitRegex("*");
-	private static final LexerRegex PLUS_SIGN_REGEX         = new UnitRegex("+");
-	private static final LexerRegex COMMA_REGEX             = new UnitRegex(",");
-	private static final LexerRegex HYPHEN_MINUS_REGEX      = new UnitRegex("-");
-	private static final LexerRegex FULL_STOP_REGEX         = new UnitRegex(".");
-	private static final LexerRegex SOLIDUS_REGEX           = new UnitRegex("/");
-	private static final LexerRegex COLON_REGEX             = new UnitRegex(":");
-	private static final LexerRegex SEMICOLON_REGEX         = new UnitRegex(";");
-	private static final LexerRegex LESS_THAN_SIGN_REGEX    = new UnitRegex("<");
-	private static final LexerRegex EQUALS_SIGN_REGEX       = new UnitRegex("=");
-	private static final LexerRegex GREATER_THAN_SIGN_REGEX = new UnitRegex(">");
-	private static final LexerRegex VERTICAL_LINE_REGEX     = new UnitRegex("|");
+	private static final LexerRegex AMPERSAND_REGEX         = new UnitRegex(AMPERSAND.TOKEN_TEXT);
+	private static final LexerRegex APOSTROPHE_REGEX        = new UnitRegex(APOSTROPHE.TOKEN_TEXT);
+	private static final LexerRegex LEFT_PARENTHESIS_REGEX  = new UnitRegex(LEFT_PARENTHESIS.TOKEN_TEXT);
+	private static final LexerRegex RIGHT_PARENTHESIS_REGEX = new UnitRegex(RIGHT_PARENTHESIS.TOKEN_TEXT);
+	private static final LexerRegex ASTERISK_REGEX          = new UnitRegex(ASTERISK.TOKEN_TEXT);
+	private static final LexerRegex PLUS_SIGN_REGEX         = new UnitRegex(PLUS_SIGN.TOKEN_TEXT);
+	private static final LexerRegex COMMA_REGEX             = new UnitRegex(COMMA.TOKEN_TEXT);
+	private static final LexerRegex HYPHEN_MINUS_REGEX      = new UnitRegex(HYPHEN_MINUS.TOKEN_TEXT);
+	private static final LexerRegex FULL_STOP_REGEX         = new UnitRegex(FULL_STOP.TOKEN_TEXT);
+	private static final LexerRegex SOLIDUS_REGEX           = new UnitRegex(SOLIDUS.TOKEN_TEXT);
+	private static final LexerRegex COLON_REGEX             = new UnitRegex(COLON.TOKEN_TEXT);
+	private static final LexerRegex SEMICOLON_REGEX         = new UnitRegex(SEMICOLON.TOKEN_TEXT);
+	private static final LexerRegex LESS_THAN_SIGN_REGEX    = new UnitRegex(LESS_THAN_SIGN.TOKEN_TEXT);
+	private static final LexerRegex EQUALS_SIGN_REGEX       = new UnitRegex(EQUALS_SIGN.TOKEN_TEXT);
+	private static final LexerRegex GREATER_THAN_SIGN_REGEX = new UnitRegex(GREATER_THAN_SIGN.TOKEN_TEXT);
+	private static final LexerRegex VERTICAL_LINE_REGEX     = new UnitRegex(VERTICAL_LINE.TOKEN_TEXT);
 	
 	/**
 	 * Unit regexes for matching Ada compound delimiters.
 	 */
-	private static final LexerRegex ARROW_REGEX               = new UnitRegex("=>");
-	private static final LexerRegex DOUBLE_DOT_REGEX          = new UnitRegex("..");
-	private static final LexerRegex DOUBLE_ASTERISK_REGEX     = new UnitRegex("**");
-	private static final LexerRegex ASSIGNMENT_REGEX          = new UnitRegex(":=");
-	private static final LexerRegex NOT_EQUAL_SIGN_REGEX      = new UnitRegex("/=");
-	private static final LexerRegex GREATER_EQUAL_SIGN_REGEX  = new UnitRegex(">=");
-	private static final LexerRegex LESS_EQUAL_SIGN_REGEX     = new UnitRegex("<=");
-	private static final LexerRegex LEFT_LABEL_BRACKET_REGEX  = new UnitRegex("<<");
-	private static final LexerRegex RIGHT_LABEL_BRACKET_REGEX = new UnitRegex(">>");
-	private static final LexerRegex BOX_SIGN_REGEX            = new UnitRegex("<>");
+	private static final LexerRegex ARROW_REGEX               = new UnitRegex(ARROW.TOKEN_TEXT);
+	private static final LexerRegex DOUBLE_DOT_REGEX          = new UnitRegex(DOUBLE_DOT.TOKEN_TEXT);
+	private static final LexerRegex DOUBLE_ASTERISK_REGEX     = new UnitRegex(DOUBLE_ASTERISK.TOKEN_TEXT);
+	private static final LexerRegex ASSIGNMENT_REGEX          = new UnitRegex(ASSIGNMENT.TOKEN_TEXT);
+	private static final LexerRegex NOT_EQUAL_SIGN_REGEX      = new UnitRegex(NOT_EQUAL_SIGN.TOKEN_TEXT);
+	private static final LexerRegex GREATER_EQUAL_SIGN_REGEX  = new UnitRegex(GREATER_EQUAL_SIGN.TOKEN_TEXT);
+	private static final LexerRegex LESS_EQUAL_SIGN_REGEX     = new UnitRegex(LESS_EQUAL_SIGN.TOKEN_TEXT);
+	private static final LexerRegex LEFT_LABEL_BRACKET_REGEX  = new UnitRegex(LEFT_LABEL_BRACKET.TOKEN_TEXT);
+	private static final LexerRegex RIGHT_LABEL_BRACKET_REGEX = new UnitRegex(RIGHT_LABEL_BRACKET.TOKEN_TEXT);
+	private static final LexerRegex BOX_SIGN_REGEX            = new UnitRegex(BOX_SIGN.TOKEN_TEXT);
 	
 	// Character Categories
 	
@@ -407,97 +409,97 @@ public final class AdaLexer extends LexerBase {
 	/**
 	 * Unit regexes for matching Ada keywords.
 	 */
-	private static final LexerRegex ABORT_KEYWORD_REGEX        = new UnitRegex("abort"       , 1);
-	private static final LexerRegex ABS_KEYWORD_REGEX          = new UnitRegex("abs"         , 1);
-	private static final LexerRegex ABSTRACT_KEYWORD_REGEX     = new UnitRegex("abstract"    , 1);
-	private static final LexerRegex ACCEPT_KEYWORD_REGEX       = new UnitRegex("accept"      , 1);
-	private static final LexerRegex ACCESS_KEYWORD_REGEX       = new UnitRegex("access"      , 1);
-	private static final LexerRegex ALIASED_KEYWORD_REGEX      = new UnitRegex("aliased"     , 1);
-	private static final LexerRegex ALL_KEYWORD_REGEX          = new UnitRegex("all"         , 1);
-	private static final LexerRegex AND_KEYWORD_REGEX          = new UnitRegex("and"         , 1);
-	private static final LexerRegex ARRAY_KEYWORD_REGEX        = new UnitRegex("array"       , 1);
-	private static final LexerRegex AT_KEYWORD_REGEX           = new UnitRegex("at"          , 1);
+	private static final LexerRegex ABORT_KEYWORD_REGEX        = new UnitRegex(ABORT_KEYWORD.TOKEN_TEXT       , 1);
+	private static final LexerRegex ABS_KEYWORD_REGEX          = new UnitRegex(ABS_KEYWORD.TOKEN_TEXT         , 1);
+	private static final LexerRegex ABSTRACT_KEYWORD_REGEX     = new UnitRegex(ABSTRACT_KEYWORD.TOKEN_TEXT    , 1);
+	private static final LexerRegex ACCEPT_KEYWORD_REGEX       = new UnitRegex(ACCEPT_KEYWORD.TOKEN_TEXT      , 1);
+	private static final LexerRegex ACCESS_KEYWORD_REGEX       = new UnitRegex(ACCESS_KEYWORD.TOKEN_TEXT      , 1);
+	private static final LexerRegex ALIASED_KEYWORD_REGEX      = new UnitRegex(ALIASED_KEYWORD.TOKEN_TEXT     , 1);
+	private static final LexerRegex ALL_KEYWORD_REGEX          = new UnitRegex(ALL_KEYWORD.TOKEN_TEXT         , 1);
+	private static final LexerRegex AND_KEYWORD_REGEX          = new UnitRegex(AND_KEYWORD.TOKEN_TEXT         , 1);
+	private static final LexerRegex ARRAY_KEYWORD_REGEX        = new UnitRegex(ARRAY_KEYWORD.TOKEN_TEXT       , 1);
+	private static final LexerRegex AT_KEYWORD_REGEX           = new UnitRegex(AT_KEYWORD.TOKEN_TEXT          , 1);
 	
-	private static final LexerRegex BEGIN_KEYWORD_REGEX        = new UnitRegex("begin"       , 1);
-	private static final LexerRegex BODY_KEYWORD_REGEX         = new UnitRegex("body"        , 1);
+	private static final LexerRegex BEGIN_KEYWORD_REGEX        = new UnitRegex(BEGIN_KEYWORD.TOKEN_TEXT       , 1);
+	private static final LexerRegex BODY_KEYWORD_REGEX         = new UnitRegex(BODY_KEYWORD.TOKEN_TEXT        , 1);
 	
-	private static final LexerRegex CASE_KEYWORD_REGEX         = new UnitRegex("case"        , 1);
-	private static final LexerRegex CONSTANT_KEYWORD_REGEX     = new UnitRegex("constant"    , 1);
+	private static final LexerRegex CASE_KEYWORD_REGEX         = new UnitRegex(CASE_KEYWORD.TOKEN_TEXT        , 1);
+	private static final LexerRegex CONSTANT_KEYWORD_REGEX     = new UnitRegex(CONSTANT_KEYWORD.TOKEN_TEXT    , 1);
 	
-	private static final LexerRegex DECLARE_KEYWORD_REGEX      = new UnitRegex("declare"     , 1);
-	private static final LexerRegex DELAY_KEYWORD_REGEX        = new UnitRegex("delay"       , 1);
-	private static final LexerRegex DELTA_KEYWORD_REGEX        = new UnitRegex("delta"       , 1);
-	private static final LexerRegex DIGITS_KEYWORD_REGEX       = new UnitRegex("digits"      , 1);
-	private static final LexerRegex DO_KEYWORD_REGEX           = new UnitRegex("do"          , 1);
+	private static final LexerRegex DECLARE_KEYWORD_REGEX      = new UnitRegex(DECLARE_KEYWORD.TOKEN_TEXT     , 1);
+	private static final LexerRegex DELAY_KEYWORD_REGEX        = new UnitRegex(DELAY_KEYWORD.TOKEN_TEXT       , 1);
+	private static final LexerRegex DELTA_KEYWORD_REGEX        = new UnitRegex(DELTA_KEYWORD.TOKEN_TEXT       , 1);
+	private static final LexerRegex DIGITS_KEYWORD_REGEX       = new UnitRegex(DIGITS_KEYWORD.TOKEN_TEXT      , 1);
+	private static final LexerRegex DO_KEYWORD_REGEX           = new UnitRegex(DO_KEYWORD.TOKEN_TEXT          , 1);
 	
-	private static final LexerRegex ELSE_KEYWORD_REGEX         = new UnitRegex("else"        , 1);
-	private static final LexerRegex ELSIF_KEYWORD_REGEX        = new UnitRegex("elsif"       , 1);
-	private static final LexerRegex END_KEYWORD_REGEX          = new UnitRegex("end"         , 1);
-	private static final LexerRegex ENTRY_KEYWORD_REGEX        = new UnitRegex("entry"       , 1);
-	private static final LexerRegex EXCEPTION_KEYWORD_REGEX    = new UnitRegex("exception"   , 1);
-	private static final LexerRegex EXIT_KEYWORD_REGEX         = new UnitRegex("exit"        , 1);
+	private static final LexerRegex ELSE_KEYWORD_REGEX         = new UnitRegex(ELSE_KEYWORD.TOKEN_TEXT        , 1);
+	private static final LexerRegex ELSIF_KEYWORD_REGEX        = new UnitRegex(ELSIF_KEYWORD.TOKEN_TEXT       , 1);
+	private static final LexerRegex END_KEYWORD_REGEX          = new UnitRegex(END_KEYWORD.TOKEN_TEXT         , 1);
+	private static final LexerRegex ENTRY_KEYWORD_REGEX        = new UnitRegex(ENTRY_KEYWORD.TOKEN_TEXT       , 1);
+	private static final LexerRegex EXCEPTION_KEYWORD_REGEX    = new UnitRegex(EXCEPTION_KEYWORD.TOKEN_TEXT   , 1);
+	private static final LexerRegex EXIT_KEYWORD_REGEX         = new UnitRegex(EXIT_KEYWORD.TOKEN_TEXT        , 1);
 	
-	private static final LexerRegex FOR_KEYWORD_REGEX          = new UnitRegex("for"         , 1);
-	private static final LexerRegex FUNCTION_KEYWORD_REGEX     = new UnitRegex("function"    , 1);
+	private static final LexerRegex FOR_KEYWORD_REGEX          = new UnitRegex(FOR_KEYWORD.TOKEN_TEXT         , 1);
+	private static final LexerRegex FUNCTION_KEYWORD_REGEX     = new UnitRegex(FUNCTION_KEYWORD.TOKEN_TEXT    , 1);
 	
-	private static final LexerRegex GENERIC_KEYWORD_REGEX      = new UnitRegex("generic"     , 1);
-	private static final LexerRegex GOTO_KEYWORD_REGEX         = new UnitRegex("goto"        , 1);
+	private static final LexerRegex GENERIC_KEYWORD_REGEX      = new UnitRegex(GENERIC_KEYWORD.TOKEN_TEXT     , 1);
+	private static final LexerRegex GOTO_KEYWORD_REGEX         = new UnitRegex(GOTO_KEYWORD.TOKEN_TEXT        , 1);
 	
-	private static final LexerRegex IF_KEYWORD_REGEX           = new UnitRegex("if"          , 1);
-	private static final LexerRegex IN_KEYWORD_REGEX           = new UnitRegex("in"          , 1);
-	private static final LexerRegex INTERFACE_KEYWORD_REGEX    = new UnitRegex("interface"   , 1);
-	private static final LexerRegex IS_KEYWORD_REGEX           = new UnitRegex("is"          , 1);
+	private static final LexerRegex IF_KEYWORD_REGEX           = new UnitRegex(IF_KEYWORD.TOKEN_TEXT          , 1);
+	private static final LexerRegex IN_KEYWORD_REGEX           = new UnitRegex(IN_KEYWORD.TOKEN_TEXT          , 1);
+	private static final LexerRegex INTERFACE_KEYWORD_REGEX    = new UnitRegex(INTERFACE_KEYWORD.TOKEN_TEXT   , 1);
+	private static final LexerRegex IS_KEYWORD_REGEX           = new UnitRegex(IS_KEYWORD.TOKEN_TEXT          , 1);
 	
-	private static final LexerRegex LIMITED_KEYWORD_REGEX      = new UnitRegex("limited"     , 1);
-	private static final LexerRegex LOOP_KEYWORD_REGEX         = new UnitRegex("loop"        , 1);
+	private static final LexerRegex LIMITED_KEYWORD_REGEX      = new UnitRegex(LIMITED_KEYWORD.TOKEN_TEXT     , 1);
+	private static final LexerRegex LOOP_KEYWORD_REGEX         = new UnitRegex(LOOP_KEYWORD.TOKEN_TEXT        , 1);
 	
-	private static final LexerRegex MOD_KEYWORD_REGEX          = new UnitRegex("mod"         , 1);
+	private static final LexerRegex MOD_KEYWORD_REGEX          = new UnitRegex(MOD_KEYWORD.TOKEN_TEXT         , 1);
 	
-	private static final LexerRegex NEW_KEYWORD_REGEX          = new UnitRegex("new"         , 1);
-	private static final LexerRegex NOT_KEYWORD_REGEX          = new UnitRegex("not"         , 1);
-	private static final LexerRegex NULL_KEYWORD_REGEX         = new UnitRegex("null"        , 1);
+	private static final LexerRegex NEW_KEYWORD_REGEX          = new UnitRegex(NEW_KEYWORD.TOKEN_TEXT         , 1);
+	private static final LexerRegex NOT_KEYWORD_REGEX          = new UnitRegex(NOT_KEYWORD.TOKEN_TEXT         , 1);
+	private static final LexerRegex NULL_KEYWORD_REGEX         = new UnitRegex(NULL_KEYWORD.TOKEN_TEXT        , 1);
 	
-	private static final LexerRegex OF_KEYWORD_REGEX           = new UnitRegex("of"          , 1);
-	private static final LexerRegex OR_KEYWORD_REGEX           = new UnitRegex("or"          , 1);
-	private static final LexerRegex OTHERS_KEYWORD_REGEX       = new UnitRegex("others"      , 1);
-	private static final LexerRegex OUT_KEYWORD_REGEX          = new UnitRegex("out"         , 1);
-	private static final LexerRegex OVERRIDING_KEYWORD_REGEX   = new UnitRegex("overriding"  , 1);
+	private static final LexerRegex OF_KEYWORD_REGEX           = new UnitRegex(OF_KEYWORD.TOKEN_TEXT          , 1);
+	private static final LexerRegex OR_KEYWORD_REGEX           = new UnitRegex(OR_KEYWORD.TOKEN_TEXT          , 1);
+	private static final LexerRegex OTHERS_KEYWORD_REGEX       = new UnitRegex(OTHERS_KEYWORD.TOKEN_TEXT      , 1);
+	private static final LexerRegex OUT_KEYWORD_REGEX          = new UnitRegex(OUT_KEYWORD.TOKEN_TEXT         , 1);
+	private static final LexerRegex OVERRIDING_KEYWORD_REGEX   = new UnitRegex(OVERRIDING_KEYWORD.TOKEN_TEXT  , 1);
 	
-	private static final LexerRegex PACKAGE_KEYWORD_REGEX      = new UnitRegex("package"     , 1);
-	private static final LexerRegex PRAGMA_KEYWORD_REGEX       = new UnitRegex("pragma"      , 1);
-	private static final LexerRegex PRIVATE_KEYWORD_REGEX      = new UnitRegex("private"     , 1);
-	private static final LexerRegex PROCEDURE_KEYWORD_REGEX    = new UnitRegex("procedure"   , 1);
-	private static final LexerRegex PROTECTED_KEYWORD_REGEX    = new UnitRegex("protected"   , 1);
+	private static final LexerRegex PACKAGE_KEYWORD_REGEX      = new UnitRegex(PACKAGE_KEYWORD.TOKEN_TEXT     , 1);
+	private static final LexerRegex PRAGMA_KEYWORD_REGEX       = new UnitRegex(PRAGMA_KEYWORD.TOKEN_TEXT      , 1);
+	private static final LexerRegex PRIVATE_KEYWORD_REGEX      = new UnitRegex(PRIVATE_KEYWORD.TOKEN_TEXT     , 1);
+	private static final LexerRegex PROCEDURE_KEYWORD_REGEX    = new UnitRegex(PROCEDURE_KEYWORD.TOKEN_TEXT   , 1);
+	private static final LexerRegex PROTECTED_KEYWORD_REGEX    = new UnitRegex(PROTECTED_KEYWORD.TOKEN_TEXT   , 1);
 	
-	private static final LexerRegex RAISE_KEYWORD_REGEX        = new UnitRegex("raise"       , 1);
-	private static final LexerRegex RANGE_KEYWORD_REGEX        = new UnitRegex("range"       , 1);
-	private static final LexerRegex RECORD_KEYWORD_REGEX       = new UnitRegex("record"      , 1);
-	private static final LexerRegex REM_KEYWORD_REGEX          = new UnitRegex("rem"         , 1);
-	private static final LexerRegex RENAMES_KEYWORD_REGEX      = new UnitRegex("renames"     , 1);
-	private static final LexerRegex REQUEUE_KEYWORD_REGEX      = new UnitRegex("requeue"     , 1);
-	private static final LexerRegex RETURN_KEYWORD_REGEX       = new UnitRegex("return"      , 1);
-	private static final LexerRegex REVERSE_KEYWORD_REGEX      = new UnitRegex("reverse"     , 1);
+	private static final LexerRegex RAISE_KEYWORD_REGEX        = new UnitRegex(RAISE_KEYWORD.TOKEN_TEXT       , 1);
+	private static final LexerRegex RANGE_KEYWORD_REGEX        = new UnitRegex(RANGE_KEYWORD.TOKEN_TEXT       , 1);
+	private static final LexerRegex RECORD_KEYWORD_REGEX       = new UnitRegex(RECORD_KEYWORD.TOKEN_TEXT      , 1);
+	private static final LexerRegex REM_KEYWORD_REGEX          = new UnitRegex(REM_KEYWORD.TOKEN_TEXT         , 1);
+	private static final LexerRegex RENAMES_KEYWORD_REGEX      = new UnitRegex(RENAMES_KEYWORD.TOKEN_TEXT     , 1);
+	private static final LexerRegex REQUEUE_KEYWORD_REGEX      = new UnitRegex(REQUEUE_KEYWORD.TOKEN_TEXT     , 1);
+	private static final LexerRegex RETURN_KEYWORD_REGEX       = new UnitRegex(RETURN_KEYWORD.TOKEN_TEXT      , 1);
+	private static final LexerRegex REVERSE_KEYWORD_REGEX      = new UnitRegex(REVERSE_KEYWORD.TOKEN_TEXT     , 1);
 	
-	private static final LexerRegex SELECT_KEYWORD_REGEX       = new UnitRegex("select"      , 1);
-	private static final LexerRegex SEPARATE_KEYWORD_REGEX     = new UnitRegex("separate"    , 1);
-	private static final LexerRegex SOME_KEYWORD_REGEX         = new UnitRegex("some"        , 1);
-	private static final LexerRegex SUBTYPE_KEYWORD_REGEX      = new UnitRegex("subtype"     , 1);
-	private static final LexerRegex SYNCHRONIZED_KEYWORD_REGEX = new UnitRegex("synchronized", 1);
+	private static final LexerRegex SELECT_KEYWORD_REGEX       = new UnitRegex(SELECT_KEYWORD.TOKEN_TEXT      , 1);
+	private static final LexerRegex SEPARATE_KEYWORD_REGEX     = new UnitRegex(SEPARATE_KEYWORD.TOKEN_TEXT    , 1);
+	private static final LexerRegex SOME_KEYWORD_REGEX         = new UnitRegex(SOME_KEYWORD.TOKEN_TEXT        , 1);
+	private static final LexerRegex SUBTYPE_KEYWORD_REGEX      = new UnitRegex(SUBTYPE_KEYWORD.TOKEN_TEXT     , 1);
+	private static final LexerRegex SYNCHRONIZED_KEYWORD_REGEX = new UnitRegex(SYNCHRONIZED_KEYWORD.TOKEN_TEXT, 1);
 	
-	private static final LexerRegex TAGGED_KEYWORD_REGEX       = new UnitRegex("tagged"      , 1);
-	private static final LexerRegex TASK_KEYWORD_REGEX         = new UnitRegex("task"        , 1);
-	private static final LexerRegex TERMINATE_KEYWORD_REGEX    = new UnitRegex("terminate"   , 1);
-	private static final LexerRegex THEN_KEYWORD_REGEX         = new UnitRegex("then"        , 1);
-	private static final LexerRegex TYPE_KEYWORD_REGEX         = new UnitRegex("type"        , 1);
+	private static final LexerRegex TAGGED_KEYWORD_REGEX       = new UnitRegex(TAGGED_KEYWORD.TOKEN_TEXT      , 1);
+	private static final LexerRegex TASK_KEYWORD_REGEX         = new UnitRegex(TASK_KEYWORD.TOKEN_TEXT        , 1);
+	private static final LexerRegex TERMINATE_KEYWORD_REGEX    = new UnitRegex(TERMINATE_KEYWORD.TOKEN_TEXT   , 1);
+	private static final LexerRegex THEN_KEYWORD_REGEX         = new UnitRegex(THEN_KEYWORD.TOKEN_TEXT        , 1);
+	private static final LexerRegex TYPE_KEYWORD_REGEX         = new UnitRegex(TYPE_KEYWORD.TOKEN_TEXT        , 1);
 	
-	private static final LexerRegex UNTIL_KEYWORD_REGEX        = new UnitRegex("until"       , 1);
-	private static final LexerRegex USE_KEYWORD_REGEX          = new UnitRegex("use"         , 1);
+	private static final LexerRegex UNTIL_KEYWORD_REGEX        = new UnitRegex(UNTIL_KEYWORD.TOKEN_TEXT       , 1);
+	private static final LexerRegex USE_KEYWORD_REGEX          = new UnitRegex(USE_KEYWORD.TOKEN_TEXT         , 1);
 	
-	private static final LexerRegex WHEN_KEYWORD_REGEX         = new UnitRegex("when"        , 1);
-	private static final LexerRegex WHILE_KEYWORD_REGEX        = new UnitRegex("while"       , 1);
-	private static final LexerRegex WITH_KEYWORD_REGEX         = new UnitRegex("with"        , 1);
+	private static final LexerRegex WHEN_KEYWORD_REGEX         = new UnitRegex(WHEN_KEYWORD.TOKEN_TEXT        , 1);
+	private static final LexerRegex WHILE_KEYWORD_REGEX        = new UnitRegex(WHILE_KEYWORD.TOKEN_TEXT       , 1);
+	private static final LexerRegex WITH_KEYWORD_REGEX         = new UnitRegex(WITH_KEYWORD.TOKEN_TEXT        , 1);
 	
-	private static final LexerRegex XOR_KEYWORD_REGEX          = new UnitRegex("xor"         , 1);
+	private static final LexerRegex XOR_KEYWORD_REGEX          = new UnitRegex(XOR_KEYWORD.TOKEN_TEXT         , 1);
 	
 	// Lexer data
 	
@@ -522,135 +524,135 @@ public final class AdaLexer extends LexerBase {
 		
 		REGEX_TOKEN_TYPES = new HashMap<>();
 		
-		REGEX_TOKEN_TYPES.put(WHITESPACES_REGEX         , AdaTokenTypes.WHITESPACES);
+		REGEX_TOKEN_TYPES.put(WHITESPACES_REGEX         , WHITESPACES);
 		
-		REGEX_TOKEN_TYPES.put(AMPERSAND_REGEX           , AdaTokenTypes.AMPERSAND);
-		REGEX_TOKEN_TYPES.put(APOSTROPHE_REGEX          , AdaTokenTypes.APOSTROPHE);
-		REGEX_TOKEN_TYPES.put(LEFT_PARENTHESIS_REGEX    , AdaTokenTypes.LEFT_PARENTHESIS);
-		REGEX_TOKEN_TYPES.put(RIGHT_PARENTHESIS_REGEX   , AdaTokenTypes.RIGHT_PARENTHESIS);
-		REGEX_TOKEN_TYPES.put(ASTERISK_REGEX            , AdaTokenTypes.ASTERISK);
-		REGEX_TOKEN_TYPES.put(PLUS_SIGN_REGEX           , AdaTokenTypes.PLUS_SIGN);
-		REGEX_TOKEN_TYPES.put(COMMA_REGEX               , AdaTokenTypes.COMMA);
-		REGEX_TOKEN_TYPES.put(HYPHEN_MINUS_REGEX        , AdaTokenTypes.HYPHEN_MINUS);
-		REGEX_TOKEN_TYPES.put(FULL_STOP_REGEX           , AdaTokenTypes.FULL_STOP);
-		REGEX_TOKEN_TYPES.put(SOLIDUS_REGEX             , AdaTokenTypes.SOLIDUS);
-		REGEX_TOKEN_TYPES.put(COLON_REGEX               , AdaTokenTypes.COLON);
-		REGEX_TOKEN_TYPES.put(SEMICOLON_REGEX           , AdaTokenTypes.SEMICOLON);
-		REGEX_TOKEN_TYPES.put(LESS_THAN_SIGN_REGEX      , AdaTokenTypes.LESS_THAN_SIGN);
-		REGEX_TOKEN_TYPES.put(EQUALS_SIGN_REGEX         , AdaTokenTypes.EQUALS_SIGN);
-		REGEX_TOKEN_TYPES.put(GREATER_THAN_SIGN_REGEX   , AdaTokenTypes.GREATER_THAN_SIGN);
-		REGEX_TOKEN_TYPES.put(VERTICAL_LINE_REGEX       , AdaTokenTypes.VERTICAL_LINE);
+		REGEX_TOKEN_TYPES.put(AMPERSAND_REGEX           , AMPERSAND);
+		REGEX_TOKEN_TYPES.put(APOSTROPHE_REGEX          , APOSTROPHE);
+		REGEX_TOKEN_TYPES.put(LEFT_PARENTHESIS_REGEX    , LEFT_PARENTHESIS);
+		REGEX_TOKEN_TYPES.put(RIGHT_PARENTHESIS_REGEX   , RIGHT_PARENTHESIS);
+		REGEX_TOKEN_TYPES.put(ASTERISK_REGEX            , ASTERISK);
+		REGEX_TOKEN_TYPES.put(PLUS_SIGN_REGEX           , PLUS_SIGN);
+		REGEX_TOKEN_TYPES.put(COMMA_REGEX               , COMMA);
+		REGEX_TOKEN_TYPES.put(HYPHEN_MINUS_REGEX        , HYPHEN_MINUS);
+		REGEX_TOKEN_TYPES.put(FULL_STOP_REGEX           , FULL_STOP);
+		REGEX_TOKEN_TYPES.put(SOLIDUS_REGEX             , SOLIDUS);
+		REGEX_TOKEN_TYPES.put(COLON_REGEX               , COLON);
+		REGEX_TOKEN_TYPES.put(SEMICOLON_REGEX           , SEMICOLON);
+		REGEX_TOKEN_TYPES.put(LESS_THAN_SIGN_REGEX      , LESS_THAN_SIGN);
+		REGEX_TOKEN_TYPES.put(EQUALS_SIGN_REGEX         , EQUALS_SIGN);
+		REGEX_TOKEN_TYPES.put(GREATER_THAN_SIGN_REGEX   , GREATER_THAN_SIGN);
+		REGEX_TOKEN_TYPES.put(VERTICAL_LINE_REGEX       , VERTICAL_LINE);
 		
-		REGEX_TOKEN_TYPES.put(ARROW_REGEX               , AdaTokenTypes.ARROW);
-		REGEX_TOKEN_TYPES.put(DOUBLE_DOT_REGEX          , AdaTokenTypes.DOUBLE_DOT);
-		REGEX_TOKEN_TYPES.put(DOUBLE_ASTERISK_REGEX     , AdaTokenTypes.DOUBLE_ASTERISK);
-		REGEX_TOKEN_TYPES.put(ASSIGNMENT_REGEX          , AdaTokenTypes.ASSIGNMENT);
-		REGEX_TOKEN_TYPES.put(NOT_EQUAL_SIGN_REGEX      , AdaTokenTypes.NOT_EQUAL_SIGN);
-		REGEX_TOKEN_TYPES.put(GREATER_EQUAL_SIGN_REGEX  , AdaTokenTypes.GREATER_EQUAL_SIGN);
-		REGEX_TOKEN_TYPES.put(LESS_EQUAL_SIGN_REGEX     , AdaTokenTypes.LESS_EQUAL_SIGN);
-		REGEX_TOKEN_TYPES.put(LEFT_LABEL_BRACKET_REGEX  , AdaTokenTypes.LEFT_LABEL_BRACKET);
-		REGEX_TOKEN_TYPES.put(RIGHT_LABEL_BRACKET_REGEX , AdaTokenTypes.RIGHT_LABEL_BRACKET);
-		REGEX_TOKEN_TYPES.put(BOX_SIGN_REGEX            , AdaTokenTypes.BOX_SIGN);
+		REGEX_TOKEN_TYPES.put(ARROW_REGEX               , ARROW);
+		REGEX_TOKEN_TYPES.put(DOUBLE_DOT_REGEX          , DOUBLE_DOT);
+		REGEX_TOKEN_TYPES.put(DOUBLE_ASTERISK_REGEX     , DOUBLE_ASTERISK);
+		REGEX_TOKEN_TYPES.put(ASSIGNMENT_REGEX          , ASSIGNMENT);
+		REGEX_TOKEN_TYPES.put(NOT_EQUAL_SIGN_REGEX      , NOT_EQUAL_SIGN);
+		REGEX_TOKEN_TYPES.put(GREATER_EQUAL_SIGN_REGEX  , GREATER_EQUAL_SIGN);
+		REGEX_TOKEN_TYPES.put(LESS_EQUAL_SIGN_REGEX     , LESS_EQUAL_SIGN);
+		REGEX_TOKEN_TYPES.put(LEFT_LABEL_BRACKET_REGEX  , LEFT_LABEL_BRACKET);
+		REGEX_TOKEN_TYPES.put(RIGHT_LABEL_BRACKET_REGEX , RIGHT_LABEL_BRACKET);
+		REGEX_TOKEN_TYPES.put(BOX_SIGN_REGEX            , BOX_SIGN);
 		
-		REGEX_TOKEN_TYPES.put(IDENTIFIER_REGEX          , AdaTokenTypes.IDENTIFIER);
-		REGEX_TOKEN_TYPES.put(DECIMAL_LITERAL_REGEX     , AdaTokenTypes.DECIMAL_LITERAL);
-		REGEX_TOKEN_TYPES.put(BASED_LITERAL_REGEX       , AdaTokenTypes.BASED_LITERAL);
-		REGEX_TOKEN_TYPES.put(CHARACTER_LITERAL_REGEX   , AdaTokenTypes.CHARACTER_LITERAL);
-		REGEX_TOKEN_TYPES.put(STRING_LITERAL_REGEX      , AdaTokenTypes.STRING_LITERAL);
+		REGEX_TOKEN_TYPES.put(IDENTIFIER_REGEX          , IDENTIFIER);
+		REGEX_TOKEN_TYPES.put(DECIMAL_LITERAL_REGEX     , DECIMAL_LITERAL);
+		REGEX_TOKEN_TYPES.put(BASED_LITERAL_REGEX       , BASED_LITERAL);
+		REGEX_TOKEN_TYPES.put(CHARACTER_LITERAL_REGEX   , CHARACTER_LITERAL);
+		REGEX_TOKEN_TYPES.put(STRING_LITERAL_REGEX      , STRING_LITERAL);
 		
-		REGEX_TOKEN_TYPES.put(COMMENT_REGEX             , AdaTokenTypes.COMMENT);
+		REGEX_TOKEN_TYPES.put(COMMENT_REGEX             , COMMENT);
 		
-		REGEX_TOKEN_TYPES.put(ABORT_KEYWORD_REGEX       , AdaTokenTypes.ABORT_KEYWORD);
-		REGEX_TOKEN_TYPES.put(ABS_KEYWORD_REGEX         , AdaTokenTypes.ABS_KEYWORD);
-		REGEX_TOKEN_TYPES.put(ABSTRACT_KEYWORD_REGEX    , AdaTokenTypes.ABSTRACT_KEYWORD);
-		REGEX_TOKEN_TYPES.put(ACCEPT_KEYWORD_REGEX      , AdaTokenTypes.ACCEPT_KEYWORD);
-		REGEX_TOKEN_TYPES.put(ACCESS_KEYWORD_REGEX      , AdaTokenTypes.ACCESS_KEYWORD);
-		REGEX_TOKEN_TYPES.put(ALIASED_KEYWORD_REGEX     , AdaTokenTypes.ALIASED_KEYWORD);
-		REGEX_TOKEN_TYPES.put(ALL_KEYWORD_REGEX         , AdaTokenTypes.ALL_KEYWORD);
-		REGEX_TOKEN_TYPES.put(AND_KEYWORD_REGEX         , AdaTokenTypes.AND_KEYWORD);
-		REGEX_TOKEN_TYPES.put(ARRAY_KEYWORD_REGEX       , AdaTokenTypes.ARRAY_KEYWORD);
-		REGEX_TOKEN_TYPES.put(AT_KEYWORD_REGEX          , AdaTokenTypes.AT_KEYWORD);
+		REGEX_TOKEN_TYPES.put(ABORT_KEYWORD_REGEX       , ABORT_KEYWORD);
+		REGEX_TOKEN_TYPES.put(ABS_KEYWORD_REGEX         , ABS_KEYWORD);
+		REGEX_TOKEN_TYPES.put(ABSTRACT_KEYWORD_REGEX    , ABSTRACT_KEYWORD);
+		REGEX_TOKEN_TYPES.put(ACCEPT_KEYWORD_REGEX      , ACCEPT_KEYWORD);
+		REGEX_TOKEN_TYPES.put(ACCESS_KEYWORD_REGEX      , ACCESS_KEYWORD);
+		REGEX_TOKEN_TYPES.put(ALIASED_KEYWORD_REGEX     , ALIASED_KEYWORD);
+		REGEX_TOKEN_TYPES.put(ALL_KEYWORD_REGEX         , ALL_KEYWORD);
+		REGEX_TOKEN_TYPES.put(AND_KEYWORD_REGEX         , AND_KEYWORD);
+		REGEX_TOKEN_TYPES.put(ARRAY_KEYWORD_REGEX       , ARRAY_KEYWORD);
+		REGEX_TOKEN_TYPES.put(AT_KEYWORD_REGEX          , AT_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(BEGIN_KEYWORD_REGEX       , AdaTokenTypes.BEGIN_KEYWORD);
-		REGEX_TOKEN_TYPES.put(BODY_KEYWORD_REGEX        , AdaTokenTypes.BODY_KEYWORD);
+		REGEX_TOKEN_TYPES.put(BEGIN_KEYWORD_REGEX       , BEGIN_KEYWORD);
+		REGEX_TOKEN_TYPES.put(BODY_KEYWORD_REGEX        , BODY_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(CASE_KEYWORD_REGEX        , AdaTokenTypes.CASE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(CONSTANT_KEYWORD_REGEX    , AdaTokenTypes.CONSTANT_KEYWORD);
+		REGEX_TOKEN_TYPES.put(CASE_KEYWORD_REGEX        , CASE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(CONSTANT_KEYWORD_REGEX    , CONSTANT_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(DECLARE_KEYWORD_REGEX     , AdaTokenTypes.DECLARE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(DELAY_KEYWORD_REGEX       , AdaTokenTypes.DELAY_KEYWORD);
-		REGEX_TOKEN_TYPES.put(DELTA_KEYWORD_REGEX       , AdaTokenTypes.DELTA_KEYWORD);
-		REGEX_TOKEN_TYPES.put(DIGITS_KEYWORD_REGEX      , AdaTokenTypes.DIGITS_KEYWORD);
-		REGEX_TOKEN_TYPES.put(DO_KEYWORD_REGEX          , AdaTokenTypes.DO_KEYWORD);
+		REGEX_TOKEN_TYPES.put(DECLARE_KEYWORD_REGEX     , DECLARE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(DELAY_KEYWORD_REGEX       , DELAY_KEYWORD);
+		REGEX_TOKEN_TYPES.put(DELTA_KEYWORD_REGEX       , DELTA_KEYWORD);
+		REGEX_TOKEN_TYPES.put(DIGITS_KEYWORD_REGEX      , DIGITS_KEYWORD);
+		REGEX_TOKEN_TYPES.put(DO_KEYWORD_REGEX          , DO_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(ELSE_KEYWORD_REGEX        , AdaTokenTypes.ELSE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(ELSIF_KEYWORD_REGEX       , AdaTokenTypes.ELSIF_KEYWORD);
-		REGEX_TOKEN_TYPES.put(END_KEYWORD_REGEX         , AdaTokenTypes.END_KEYWORD);
-		REGEX_TOKEN_TYPES.put(ENTRY_KEYWORD_REGEX       , AdaTokenTypes.ENTRY_KEYWORD);
-		REGEX_TOKEN_TYPES.put(EXCEPTION_KEYWORD_REGEX   , AdaTokenTypes.EXCEPTION_KEYWORD);
-		REGEX_TOKEN_TYPES.put(EXIT_KEYWORD_REGEX        , AdaTokenTypes.EXIT_KEYWORD);
+		REGEX_TOKEN_TYPES.put(ELSE_KEYWORD_REGEX        , ELSE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(ELSIF_KEYWORD_REGEX       , ELSIF_KEYWORD);
+		REGEX_TOKEN_TYPES.put(END_KEYWORD_REGEX         , END_KEYWORD);
+		REGEX_TOKEN_TYPES.put(ENTRY_KEYWORD_REGEX       , ENTRY_KEYWORD);
+		REGEX_TOKEN_TYPES.put(EXCEPTION_KEYWORD_REGEX   , EXCEPTION_KEYWORD);
+		REGEX_TOKEN_TYPES.put(EXIT_KEYWORD_REGEX        , EXIT_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(FOR_KEYWORD_REGEX         , AdaTokenTypes.FOR_KEYWORD);
-		REGEX_TOKEN_TYPES.put(FUNCTION_KEYWORD_REGEX    , AdaTokenTypes.FUNCTION_KEYWORD);
+		REGEX_TOKEN_TYPES.put(FOR_KEYWORD_REGEX         , FOR_KEYWORD);
+		REGEX_TOKEN_TYPES.put(FUNCTION_KEYWORD_REGEX    , FUNCTION_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(GENERIC_KEYWORD_REGEX     , AdaTokenTypes.GENERIC_KEYWORD);
-		REGEX_TOKEN_TYPES.put(GOTO_KEYWORD_REGEX        , AdaTokenTypes.GOTO_KEYWORD);
+		REGEX_TOKEN_TYPES.put(GENERIC_KEYWORD_REGEX     , GENERIC_KEYWORD);
+		REGEX_TOKEN_TYPES.put(GOTO_KEYWORD_REGEX        , GOTO_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(IF_KEYWORD_REGEX          , AdaTokenTypes.IF_KEYWORD);
-		REGEX_TOKEN_TYPES.put(IN_KEYWORD_REGEX          , AdaTokenTypes.IN_KEYWORD);
-		REGEX_TOKEN_TYPES.put(INTERFACE_KEYWORD_REGEX   , AdaTokenTypes.INTERFACE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(IS_KEYWORD_REGEX          , AdaTokenTypes.IS_KEYWORD);
+		REGEX_TOKEN_TYPES.put(IF_KEYWORD_REGEX          , IF_KEYWORD);
+		REGEX_TOKEN_TYPES.put(IN_KEYWORD_REGEX          , IN_KEYWORD);
+		REGEX_TOKEN_TYPES.put(INTERFACE_KEYWORD_REGEX   , INTERFACE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(IS_KEYWORD_REGEX          , IS_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(LIMITED_KEYWORD_REGEX     , AdaTokenTypes.LIMITED_KEYWORD);
-		REGEX_TOKEN_TYPES.put(LOOP_KEYWORD_REGEX        , AdaTokenTypes.LOOP_KEYWORD);
+		REGEX_TOKEN_TYPES.put(LIMITED_KEYWORD_REGEX     , LIMITED_KEYWORD);
+		REGEX_TOKEN_TYPES.put(LOOP_KEYWORD_REGEX        , LOOP_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(MOD_KEYWORD_REGEX         , AdaTokenTypes.MOD_KEYWORD);
+		REGEX_TOKEN_TYPES.put(MOD_KEYWORD_REGEX         , MOD_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(NEW_KEYWORD_REGEX         , AdaTokenTypes.NEW_KEYWORD);
-		REGEX_TOKEN_TYPES.put(NOT_KEYWORD_REGEX         , AdaTokenTypes.NOT_KEYWORD);
-		REGEX_TOKEN_TYPES.put(NULL_KEYWORD_REGEX        , AdaTokenTypes.NULL_KEYWORD);
+		REGEX_TOKEN_TYPES.put(NEW_KEYWORD_REGEX         , NEW_KEYWORD);
+		REGEX_TOKEN_TYPES.put(NOT_KEYWORD_REGEX         , NOT_KEYWORD);
+		REGEX_TOKEN_TYPES.put(NULL_KEYWORD_REGEX        , NULL_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(OF_KEYWORD_REGEX          , AdaTokenTypes.OF_KEYWORD);
-		REGEX_TOKEN_TYPES.put(OR_KEYWORD_REGEX          , AdaTokenTypes.OR_KEYWORD);
-		REGEX_TOKEN_TYPES.put(OTHERS_KEYWORD_REGEX      , AdaTokenTypes.OTHERS_KEYWORD);
-		REGEX_TOKEN_TYPES.put(OUT_KEYWORD_REGEX         , AdaTokenTypes.OUT_KEYWORD);
-		REGEX_TOKEN_TYPES.put(OVERRIDING_KEYWORD_REGEX  , AdaTokenTypes.OVERRIDING_KEYWORD);
+		REGEX_TOKEN_TYPES.put(OF_KEYWORD_REGEX          , OF_KEYWORD);
+		REGEX_TOKEN_TYPES.put(OR_KEYWORD_REGEX          , OR_KEYWORD);
+		REGEX_TOKEN_TYPES.put(OTHERS_KEYWORD_REGEX      , OTHERS_KEYWORD);
+		REGEX_TOKEN_TYPES.put(OUT_KEYWORD_REGEX         , OUT_KEYWORD);
+		REGEX_TOKEN_TYPES.put(OVERRIDING_KEYWORD_REGEX  , OVERRIDING_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(PACKAGE_KEYWORD_REGEX     , AdaTokenTypes.PACKAGE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(PRAGMA_KEYWORD_REGEX      , AdaTokenTypes.PRAGMA_KEYWORD);
-		REGEX_TOKEN_TYPES.put(PRIVATE_KEYWORD_REGEX     , AdaTokenTypes.PRIVATE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(PROCEDURE_KEYWORD_REGEX   , AdaTokenTypes.PROCEDURE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(PROTECTED_KEYWORD_REGEX   , AdaTokenTypes.PROTECTED_KEYWORD);
+		REGEX_TOKEN_TYPES.put(PACKAGE_KEYWORD_REGEX     , PACKAGE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(PRAGMA_KEYWORD_REGEX      , PRAGMA_KEYWORD);
+		REGEX_TOKEN_TYPES.put(PRIVATE_KEYWORD_REGEX     , PRIVATE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(PROCEDURE_KEYWORD_REGEX   , PROCEDURE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(PROTECTED_KEYWORD_REGEX   , PROTECTED_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(RAISE_KEYWORD_REGEX       , AdaTokenTypes.RAISE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(RANGE_KEYWORD_REGEX       , AdaTokenTypes.RANGE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(RECORD_KEYWORD_REGEX      , AdaTokenTypes.RECORD_KEYWORD);
-		REGEX_TOKEN_TYPES.put(REM_KEYWORD_REGEX         , AdaTokenTypes.REM_KEYWORD);
-		REGEX_TOKEN_TYPES.put(RENAMES_KEYWORD_REGEX     , AdaTokenTypes.RENAMES_KEYWORD);
-		REGEX_TOKEN_TYPES.put(REQUEUE_KEYWORD_REGEX     , AdaTokenTypes.REQUEUE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(RETURN_KEYWORD_REGEX      , AdaTokenTypes.RETURN_KEYWORD);
-		REGEX_TOKEN_TYPES.put(REVERSE_KEYWORD_REGEX     , AdaTokenTypes.REVERSE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(RAISE_KEYWORD_REGEX       , RAISE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(RANGE_KEYWORD_REGEX       , RANGE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(RECORD_KEYWORD_REGEX      , RECORD_KEYWORD);
+		REGEX_TOKEN_TYPES.put(REM_KEYWORD_REGEX         , REM_KEYWORD);
+		REGEX_TOKEN_TYPES.put(RENAMES_KEYWORD_REGEX     , RENAMES_KEYWORD);
+		REGEX_TOKEN_TYPES.put(REQUEUE_KEYWORD_REGEX     , REQUEUE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(RETURN_KEYWORD_REGEX      , RETURN_KEYWORD);
+		REGEX_TOKEN_TYPES.put(REVERSE_KEYWORD_REGEX     , REVERSE_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(SELECT_KEYWORD_REGEX      , AdaTokenTypes.SELECT_KEYWORD);
-		REGEX_TOKEN_TYPES.put(SEPARATE_KEYWORD_REGEX    , AdaTokenTypes.SEPARATE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(SOME_KEYWORD_REGEX        , AdaTokenTypes.SOME_KEYWORD);
-		REGEX_TOKEN_TYPES.put(SUBTYPE_KEYWORD_REGEX     , AdaTokenTypes.SUBTYPE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(SYNCHRONIZED_KEYWORD_REGEX, AdaTokenTypes.SYNCHRONIZED_KEYWORD);
+		REGEX_TOKEN_TYPES.put(SELECT_KEYWORD_REGEX      , SELECT_KEYWORD);
+		REGEX_TOKEN_TYPES.put(SEPARATE_KEYWORD_REGEX    , SEPARATE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(SOME_KEYWORD_REGEX        , SOME_KEYWORD);
+		REGEX_TOKEN_TYPES.put(SUBTYPE_KEYWORD_REGEX     , SUBTYPE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(SYNCHRONIZED_KEYWORD_REGEX, SYNCHRONIZED_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(TAGGED_KEYWORD_REGEX      , AdaTokenTypes.TAGGED_KEYWORD);
-		REGEX_TOKEN_TYPES.put(TASK_KEYWORD_REGEX        , AdaTokenTypes.TASK_KEYWORD);
-		REGEX_TOKEN_TYPES.put(TERMINATE_KEYWORD_REGEX   , AdaTokenTypes.TERMINATE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(THEN_KEYWORD_REGEX        , AdaTokenTypes.THEN_KEYWORD);
-		REGEX_TOKEN_TYPES.put(TYPE_KEYWORD_REGEX        , AdaTokenTypes.TYPE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(TAGGED_KEYWORD_REGEX      , TAGGED_KEYWORD);
+		REGEX_TOKEN_TYPES.put(TASK_KEYWORD_REGEX        , TASK_KEYWORD);
+		REGEX_TOKEN_TYPES.put(TERMINATE_KEYWORD_REGEX   , TERMINATE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(THEN_KEYWORD_REGEX        , THEN_KEYWORD);
+		REGEX_TOKEN_TYPES.put(TYPE_KEYWORD_REGEX        , TYPE_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(UNTIL_KEYWORD_REGEX       , AdaTokenTypes.UNTIL_KEYWORD);
-		REGEX_TOKEN_TYPES.put(USE_KEYWORD_REGEX         , AdaTokenTypes.USE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(UNTIL_KEYWORD_REGEX       , UNTIL_KEYWORD);
+		REGEX_TOKEN_TYPES.put(USE_KEYWORD_REGEX         , USE_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(WHEN_KEYWORD_REGEX        , AdaTokenTypes.WHEN_KEYWORD);
-		REGEX_TOKEN_TYPES.put(WHILE_KEYWORD_REGEX       , AdaTokenTypes.WHILE_KEYWORD);
-		REGEX_TOKEN_TYPES.put(WITH_KEYWORD_REGEX        , AdaTokenTypes.WITH_KEYWORD);
+		REGEX_TOKEN_TYPES.put(WHEN_KEYWORD_REGEX        , WHEN_KEYWORD);
+		REGEX_TOKEN_TYPES.put(WHILE_KEYWORD_REGEX       , WHILE_KEYWORD);
+		REGEX_TOKEN_TYPES.put(WITH_KEYWORD_REGEX        , WITH_KEYWORD);
 		
-		REGEX_TOKEN_TYPES.put(XOR_KEYWORD_REGEX         , AdaTokenTypes.XOR_KEYWORD);
+		REGEX_TOKEN_TYPES.put(XOR_KEYWORD_REGEX         , XOR_KEYWORD);
 		
 		// Set the root regexes set from the regex -> token-type map's keyset
 		
@@ -835,11 +837,11 @@ public final class AdaLexer extends LexerBase {
 		// was an identifier, then immediately mark this token as an
 		// apostrophe token and return
 		
-		if (nextCharacter == '\'' && tokenType == AdaTokenTypes.IDENTIFIER) {
+		if (nextCharacter == '\'' && tokenType == IDENTIFIER) {
 			
 			lexingOffset = tokenEnd = tokenStart + 1;
 			
-			tokenType = AdaTokenTypes.APOSTROPHE;
+			tokenType = APOSTROPHE;
 			
 			return;
 		
@@ -962,7 +964,7 @@ public final class AdaLexer extends LexerBase {
 				
 				else {
 					
-					tokenType = AdaTokenTypes.BAD_CHARACTER;
+					tokenType = BAD_CHARACTER;
 					
 					// If this is a single-character, then the lexing offset
 					// needs to be advanced manually to avoid infinite calls
