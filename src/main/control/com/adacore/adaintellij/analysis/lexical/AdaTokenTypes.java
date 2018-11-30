@@ -10,19 +10,23 @@ import com.intellij.psi.tree.TokenSet;
 public final class AdaTokenTypes {
 	
 	/**
-	 * Private default constructor to prevent instantiation.
+	 * Ada line comment prefix.
 	 */
-	private AdaTokenTypes() {}
+	public static final String COMMENT_PREFIX = "--";
+	
+	/*
+		Tokens
+	*/
 	
 	/**
 	 * Ada token representing a contiguous whitespace sequence.
 	 */
-	static final IElementType WHITESPACES          = TokenType.WHITE_SPACE;
+	static final IElementType WHITESPACES               = TokenType.WHITE_SPACE;
 	
 	/**
 	 * Ada token representing a syntactically invalid character.
 	 */
-	static final IElementType BAD_CHARACTER        = TokenType.BAD_CHARACTER;
+	static final IElementType BAD_CHARACTER             = TokenType.BAD_CHARACTER;
 	
 	/**
 	 * Ada tokens representing single-character delimiters.
@@ -167,6 +171,10 @@ public final class AdaTokenTypes {
 	
 	static final AdaFixedTokenType XOR_KEYWORD          = new AdaFixedTokenType("XOR_KEYWORD"         , "xor");
 	
+	/*
+		Token Sets
+	*/
+	
 	/**
 	 * Token set representing Ada whitespaces.
 	 */
@@ -253,5 +261,10 @@ public final class AdaTokenTypes {
 		XOR_KEYWORD
 		
 	);
+	
+	/**
+	 * Private default constructor to prevent instantiation.
+	 */
+	private AdaTokenTypes() {}
 	
 }
