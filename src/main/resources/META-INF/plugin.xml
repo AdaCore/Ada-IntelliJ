@@ -102,6 +102,9 @@
 		<!-- Ada completion contributor -->
 		<completion.contributor language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.completion.AdaCompletionContributor"/>
 		
+		<!-- Ada code commenter -->
+		<lang.commenter language="Ada" implementationClass="com.adacore.adaintellij.misc.AdaCommenter"/>
+		
 		<!-- GPRbuild run configuration type -->
 		<configurationType implementation="com.adacore.adaintellij.build.GPRbuildConfigurationType"/>
 		<!-- GPRbuild configuration tool window -->

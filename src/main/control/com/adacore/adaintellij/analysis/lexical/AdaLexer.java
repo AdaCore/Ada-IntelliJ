@@ -400,7 +400,7 @@ public final class AdaLexer extends LexerBase {
 	 */
 	private static final LexerRegex COMMENT_REGEX =
 		ConcatenationRegex.fromRegexes(
-			new UnitRegex("--"),
+			new UnitRegex(COMMENT_PREFIX),
 			new ZeroOrMoreRegex(NON_END_OF_LINE_CHARACTER_REGEX)
 		);
 	
