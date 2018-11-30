@@ -9,6 +9,7 @@ Features currently supported:
 * Basic gprbuild support
 * Basic references/usages features (goto definition, usage highlighting, find references)
 * Basic code completion
+* Quick line commenting
 
 The plugin is currently under development and most supported features are still experimental. If you encounter problems/bugs, please [submit an issue](https://github.com/AdaCore/Ada-IntelliJ/issues/new) to this repository.
 
