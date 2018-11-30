@@ -507,7 +507,7 @@ public final class AdaLSPServer {
 			return Collections.emptyList();
 		}
 		
-		CompletionParams params = new CompletionParams();
+		final CompletionParams params = new CompletionParams();
 		
 		params.setTextDocument(new TextDocumentIdentifier(documentUri));
 		params.setPosition(position);
@@ -535,7 +535,7 @@ public final class AdaLSPServer {
 			return null;
 		}
 		
-		TextDocumentPositionParams params = new TextDocumentPositionParams(
+		final TextDocumentPositionParams params = new TextDocumentPositionParams(
 			new TextDocumentIdentifier(documentUri), position);
 		
 		List<? extends Location> locations =
@@ -563,7 +563,7 @@ public final class AdaLSPServer {
 			return Collections.emptyList();
 		}
 		
-		ReferenceParams params = new ReferenceParams();
+		final ReferenceParams params = new ReferenceParams();
 		
 		params.setTextDocument(new TextDocumentIdentifier(documentUri));
 		params.setPosition(position);
@@ -578,6 +578,60 @@ public final class AdaLSPServer {
 		return locations
 			.stream()
 			.map(location -> (Location)location)
+			.collect(Collectors.toList());
+		
+	}
+	
+	/**
+	 * @see org.eclipse.lsp4j.services.TextDocumentService#documentSymbol(DocumentSymbolParams)
+	 */
+	public List<DocumentSymbol> documentSymbol(@NotNull String documentUri) {
+		
+		if (!driver.initialized() || !capabilities.getDocumentSymbolProvider()) {
+			return Collections.emptyList();
+		}
+		
+		final DocumentSymbolParams params = new DocumentSymbolParams(
+			new TextDocumentIdentifier(documentUri));
+		
+		List<Either<SymbolInformation, DocumentSymbol>> symbols =
+			documentRequest("textDocument/documentSymbol", documentUri,
+				() -> server.getTextDocumentService().documentSymbol(params));
+	
+		if (symbols == null) { return Collections.emptyList(); }
+		
+		return symbols
+			.stream()
+			.map(either -> {
+				
+				// If it is a `DocumentSymbol`, return it directly
+				
+				if (either.isRight()) {
+					return either.getRight();
+				}
+				
+				// Else if it is not a `SymbolInformation` return null
+				
+				else if (!either.isLeft()) {
+					return null;
+				}
+				
+				// Else, translate the `SymbolInformation` to a `DocumentSymbol`
+				
+				SymbolInformation information = either.getLeft();
+				DocumentSymbol    symbol      = new DocumentSymbol();
+				
+				Range symbolRange = information.getLocation().getRange();
+				
+				symbol.setName(information.getName());
+				symbol.setKind(information.getKind());
+				symbol.setRange(symbolRange);
+				symbol.setSelectionRange(symbolRange);
+				
+				return symbol;
+				
+			})
+			.filter(Objects::nonNull)
 			.collect(Collectors.toList());
 		
 	}
