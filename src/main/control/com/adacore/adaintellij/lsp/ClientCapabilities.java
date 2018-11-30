@@ -3,6 +3,8 @@ package com.adacore.adaintellij.lsp;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.lsp4j.FailureHandlingKind;
+
 /**
  * Capability settings for Ada-IntelliJ's integrated LSP client.
  *
@@ -28,9 +30,9 @@ final class ClientCapabilities {
 			
 			static final boolean DOCUMENT_CHANGES = false;
 			
-			// RESOURCE_OPERATIONS
+			static final List<String> RESOURCE_OPERATIONS = Collections.emptyList();
 			
-			// FAILURE_HANDLING
+			static final String FAILURE_HANDLING = FailureHandlingKind.Abort;
 			
 		}
 		
@@ -298,7 +300,7 @@ final class ClientCapabilities {
 			
 			static final boolean DYNAMIC_REGISTRATION = false;
 			
-			// PREPARE_SUPPORT
+			static final boolean PREPARE_SUPPORT = false;
 			
 		}
 		
