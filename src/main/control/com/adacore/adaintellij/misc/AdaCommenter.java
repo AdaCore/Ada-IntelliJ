@@ -12,11 +12,14 @@ public class AdaCommenter implements Commenter {
 	
 	/**
 	 * @see com.intellij.lang.Commenter#getLineCommentPrefix()
+	 *
+	 * Note: Two spaces are added after the comment prefix to
+	 *       conform to the standard GNAT coding style.
 	 */
 	@Nullable
 	@Override
 	public String getLineCommentPrefix() {
-		return AdaTokenTypes.COMMENT_PREFIX;
+		return AdaTokenTypes.COMMENT_PREFIX + "  ";
 	}
 	
 	/**
