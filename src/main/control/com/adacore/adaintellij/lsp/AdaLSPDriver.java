@@ -34,6 +34,9 @@ import static com.adacore.adaintellij.lsp.LSPUtils.pathToUri;
 /**
  * Driver handling the LSP session between Ada-IntelliJ's
  * integrated client and the Ada Language Server (ALS).
+ *
+ * The Ada-IntelliJ LSP integration is up-to-date with
+ * protocol version 3.13.0.
  */
 public final class AdaLSPDriver implements ProjectComponent {
 	
@@ -460,9 +463,12 @@ public final class AdaLSPDriver implements ProjectComponent {
 		// WorkspaceEditCapabilities
 		
 		WorkspaceEditCapabilities workspaceEditCapabilities = new WorkspaceEditCapabilities();
-		workspaceEditCapabilities.setDocumentChanges(ClientCapabilities.Workspace.WorkspaceEdit.DOCUMENT_CHANGES);
-		// resourceOperations?: ResourceOperationKind[]; // since 3.13.0 (Not yet supported in LSP4J)
-		// failureHandling?: FailureHandlingKind;        // since 3.13.0 (Not yet supported in LSP4J)
+		workspaceEditCapabilities.setDocumentChanges(
+			ClientCapabilities.Workspace.WorkspaceEdit.DOCUMENT_CHANGES);
+		workspaceEditCapabilities.setResourceOperations(
+			ClientCapabilities.Workspace.WorkspaceEdit.RESOURCE_OPERATIONS);
+		workspaceEditCapabilities.setFailureHandling(
+			ClientCapabilities.Workspace.WorkspaceEdit.FAILURE_HANDLING);
 		
 		// DidChangeConfigurationCapabilities
 		
@@ -489,7 +495,8 @@ public final class AdaLSPDriver implements ProjectComponent {
 		// ExecuteCommandCapabilities
 		
 		ExecuteCommandCapabilities executeCommandCapabilities =
-			new ExecuteCommandCapabilities(ClientCapabilities.Workspace.ExecuteCommand.DYNAMIC_REGISTRATION);
+			new ExecuteCommandCapabilities(
+				ClientCapabilities.Workspace.ExecuteCommand.DYNAMIC_REGISTRATION);
 		
 		// Set the capabilities
 		
@@ -549,10 +556,12 @@ public final class AdaLSPDriver implements ProjectComponent {
 			ClientCapabilities.TextDocument.Completion.CompletionItemKind.VALUE_SET);
 		
 		CompletionCapabilities completionCapabilities = new CompletionCapabilities();
-		completionCapabilities.setDynamicRegistration(ClientCapabilities.TextDocument.Completion.DYNAMIC_REGISTRATION);
+		completionCapabilities.setDynamicRegistration(
+			ClientCapabilities.TextDocument.Completion.DYNAMIC_REGISTRATION);
 		completionCapabilities.setCompletionItem(completionItemCapabilities);
 		completionCapabilities.setCompletionItemKind(completionItemKindCapabilities);
-		completionCapabilities.setContextSupport(ClientCapabilities.TextDocument.Completion.CONTEXT_SUPPORT);
+		completionCapabilities.setContextSupport(
+			ClientCapabilities.TextDocument.Completion.CONTEXT_SUPPORT);
 		
 		// HoverCapabilities
 		
@@ -579,7 +588,8 @@ public final class AdaLSPDriver implements ProjectComponent {
 		// DocumentHighlightCapabilities
 		
 		DocumentHighlightCapabilities documentHighlightCapabilities =
-			new DocumentHighlightCapabilities(ClientCapabilities.TextDocument.DocumentHighlight.DYNAMIC_REGISTRATION);
+			new DocumentHighlightCapabilities(
+				ClientCapabilities.TextDocument.DocumentHighlight.DYNAMIC_REGISTRATION);
 		
 		// DocumentSymbolCapabilities
 		
@@ -653,8 +663,10 @@ public final class AdaLSPDriver implements ProjectComponent {
 		// RenameCapabilities
 		
 		RenameCapabilities renameCapabilities = new RenameCapabilities();
-		renameCapabilities.setDynamicRegistration(ClientCapabilities.TextDocument.Rename.DYNAMIC_REGISTRATION);
-		// prepareSupport?: boolean; // since 3.12.0 (Not yet supported in LSP4J)
+		renameCapabilities.setDynamicRegistration(
+			ClientCapabilities.TextDocument.Rename.DYNAMIC_REGISTRATION);
+		renameCapabilities.setPrepareSupport(
+			ClientCapabilities.TextDocument.Rename.PREPARE_SUPPORT);
 		
 		// PublishDiagnosticsCapabilities
 		
