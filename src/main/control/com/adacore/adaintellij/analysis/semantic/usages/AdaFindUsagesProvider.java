@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adacore.adaintellij.analysis.lexical.AdaLexer;
 import com.adacore.adaintellij.analysis.lexical.AdaTokenTypes;
+import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
 import com.adacore.adaintellij.analysis.semantic.AdaPsiReference;
 
 /**
@@ -17,7 +18,7 @@ import com.adacore.adaintellij.analysis.semantic.AdaPsiReference;
 public final class AdaFindUsagesProvider implements FindUsagesProvider {
 	
 	/**
-	 * com.intellij.lang.findUsages.FindUsagesProvider#getWordsScanner()
+	 * @see com.intellij.lang.findUsages.FindUsagesProvider#getWordsScanner()
 	 */
 	@NotNull
 	@Override
@@ -31,23 +32,22 @@ public final class AdaFindUsagesProvider implements FindUsagesProvider {
 	}
 	
 	/**
-	 * com.intellij.lang.findUsages.FindUsagesProvider#canFindUsagesFor(PsiElement)
+	 * @see com.intellij.lang.findUsages.FindUsagesProvider#canFindUsagesFor(PsiElement)
 	 */
 	@Override
 	public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
-		return psiElement instanceof AdaPsiReference ||
-			psiElement.getParent() instanceof AdaPsiReference;
+		return AdaPsiElement.getFrom(psiElement) instanceof AdaPsiReference;
 	}
 	
 	/**
-	 * com.intellij.lang.findUsages.FindUsagesProvider#getHelpId(PsiElement)
+	 * @see com.intellij.lang.findUsages.FindUsagesProvider#getHelpId(PsiElement)
 	 */
 	@Nullable
 	@Override
 	public String getHelpId(@NotNull PsiElement psiElement) { return null; }
 	
 	/**
-	 * com.intellij.lang.findUsages.FindUsagesProvider#getType(PsiElement)
+	 * @see com.intellij.lang.findUsages.FindUsagesProvider#getType(PsiElement)
 	 */
 	@NotNull
 	@Override
@@ -57,7 +57,7 @@ public final class AdaFindUsagesProvider implements FindUsagesProvider {
 	}
 	
 	/**
-	 * com.intellij.lang.findUsages.FindUsagesProvider#getDescriptiveName(PsiElement)
+	 * @see com.intellij.lang.findUsages.FindUsagesProvider#getDescriptiveName(PsiElement)
 	 */
 	@NotNull
 	@Override
@@ -66,7 +66,7 @@ public final class AdaFindUsagesProvider implements FindUsagesProvider {
 	}
 	
 	/**
-	 * com.intellij.lang.findUsages.FindUsagesProvider#getNodeText(PsiElement, boolean)
+	 * @see com.intellij.lang.findUsages.FindUsagesProvider#getNodeText(PsiElement, boolean)
 	 */
 	@NotNull
 	@Override

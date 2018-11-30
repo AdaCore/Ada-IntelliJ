@@ -76,8 +76,7 @@ public final class AdaFindUsagesHandler extends FindUsagesHandler {
 	/**
 	 * Finds references of the given target element in the given search
 	 * scope, specifically for highlighting those references in the open
-	 * document editor, and returns them in a collection. Currently, the
-	 * search scope is ignored when finding references.
+	 * document editor, and returns them in a collection.
 	 * 
 	 * @param target The target to which to find references.
 	 * @param searchScope The scope in which to find references.
@@ -90,7 +89,8 @@ public final class AdaFindUsagesHandler extends FindUsagesHandler {
 		@NotNull SearchScope searchScope
 	) {
 		return findReferences(target, true)
-			.filter(reference -> AdaPsiElement.areInSameFile(reference.getElement(), target))
+			.filter(reference -> searchScope.contains(
+				reference.getElement().getContainingFile().getVirtualFile()))
 			.collect(Collectors.toSet());
 	}
 	
