@@ -21,27 +21,54 @@ import com.adacore.adaintellij.lsp.LSPUtils;
 import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
 import com.adacore.adaintellij.Utils;
 
+/**
+ * Element in the structure view of an Ada file.
+ */
 public class AdaStructureViewElement implements StructureViewTreeElement, SortableTreeElement {
 	
+	/**
+	 * The PSI element that this structure view element represents.
+	 */
 	private NavigatablePsiElement element;
 	
+	/**
+	 * Constructs a new AdaStructureViewElement given a PSI
+	 * element.
+	 *
+	 * @param element The PSI element represented by the
+	 *                constructed structure view element.
+	 */
 	AdaStructureViewElement(@NotNull NavigatablePsiElement element) {
 		this.element = element;
 	}
 	
+	/**
+	 * @see com.intellij.ide.structureView.StructureViewTreeElement#getValue()
+	 */
 	@Override
 	public Object getValue() { return element; }
 	
+	/**
+	 * Returns a string representing this element when sorting.
+	 *
+	 * @return This element's sorting key.
+	 */
 	@NotNull
 	@Override
 	public String getAlphaSortKey() { return element.getText(); }
 	
+	/**
+	 * @see com.intellij.ide.util.treeView.smartTree.TreeElement#getPresentation()
+	 */
 	@NotNull
 	@Override
 	public ItemPresentation getPresentation() {
 		return new AdaStructureItemPresentation(element);
 	}
 	
+	/**
+	 * @see com.intellij.ide.util.treeView.smartTree.TreeElement#getChildren()
+	 */
 	@NotNull
 	@Override
 	public TreeElement[] getChildren() {
@@ -79,12 +106,21 @@ public class AdaStructureViewElement implements StructureViewTreeElement, Sortab
 		
 	}
 	
+	/**
+	 * @see com.intellij.pom.Navigatable#navigate(boolean)
+	 */
 	@Override
 	public void navigate(boolean requestFocus) { element.navigate(requestFocus); }
 	
+	/**
+	 * @see com.intellij.pom.Navigatable#canNavigate()
+	 */
 	@Override
 	public boolean canNavigate() { return element.canNavigate(); }
 	
+	/**
+	 * @see com.intellij.pom.Navigatable#canNavigateToSource()
+	 */
 	@Override
 	public boolean canNavigateToSource() { return element.canNavigateToSource(); }
 	

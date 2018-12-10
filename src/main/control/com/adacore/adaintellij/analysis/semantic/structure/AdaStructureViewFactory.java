@@ -9,6 +9,9 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Structure view factory for Ada files.
+ */
 public class AdaStructureViewFactory implements PsiStructureViewFactory {
 	
 	/**
