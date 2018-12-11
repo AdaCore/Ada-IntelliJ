@@ -222,4 +222,15 @@ public final class Utils {
 		return PsiManager.getInstance(project).findFile(file);
 	}
 	
+	/**
+	 * Returns the virtual file corresponding to the given PSI file.
+	 *
+	 * @param file The PSI file for which to get the virtual file.
+	 * @return The file's corresponding virtual file.
+	 */
+	@Nullable
+	public static VirtualFile getPsiFileVirtualFile(@NotNull PsiFile file) {
+		return file.getVirtualFile();
+	}
+	
 }
