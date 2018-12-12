@@ -67,6 +67,11 @@ public final class AdaLSPDriver implements ProjectComponent {
 	private GPRFileManager gprFileManager;
 	
 	/**
+	 * The LSP driver's client.
+	 */
+	private AdaLSPClient client;
+	
+	/**
 	 * The LSP driver's server interface.
 	 */
 	private AdaLSPServer server;
@@ -163,8 +168,10 @@ public final class AdaLSPDriver implements ProjectComponent {
 		
 		// Connect to the server process' input/output
 		
+		client = new AdaLSPClient(this, project);
+		
 		Launcher<LanguageServer> serverLauncher = LSPLauncher.createClientLauncher(
-			new AdaLSPClient(this, project), process.getInputStream(), process.getOutputStream());
+			client, process.getInputStream(), process.getOutputStream());
 		
 		server = new AdaLSPServer(this, serverLauncher.getRemoteProxy());
 		
@@ -227,6 +234,17 @@ public final class AdaLSPDriver implements ProjectComponent {
 	@NotNull
 	@Override
 	public String getComponentName() { return "com.adacore.adaintellij.lsp.AdaLSPDriver"; }
+	
+	/**
+	 * Returns the given project's LSP client.
+	 *
+	 * @param project The project for which to get the client.
+	 * @return The given project's client.
+	 */
+	@NotNull
+	public static AdaLSPClient getClient(@NotNull Project project) {
+		return project.getComponent(AdaLSPDriver.class).client;
+	}
 	
 	/**
 	 * Returns the given project's ALS interface object.

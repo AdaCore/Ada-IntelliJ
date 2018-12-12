@@ -103,6 +103,8 @@
 		<completion.contributor language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.completion.AdaCompletionContributor"/>
 		<!-- Ada structure view factory -->
 		<lang.psiStructureViewFactory language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.structure.AdaStructureViewFactory"/>
+		<!-- Ada code annotator -->
+		<annotator language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.diagnostics.AdaAnnotator"/>
 		
 		<!-- Ada code commenter -->
 		<lang.commenter language="Ada" implementationClass="com.adacore.adaintellij.misc.AdaCommenter"/>
