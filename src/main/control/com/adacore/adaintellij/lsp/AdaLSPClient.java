@@ -42,7 +42,7 @@ public final class AdaLSPClient implements LanguageClient {
 	private Project project;
 	
 	/**
-	 * Diagnostics received by the server, grouped by document.
+	 * Diagnostics received by the server, grouped by document URI.
 	 */
 	private Map<String, List<Diagnostic>> documentDiagnostics = new HashMap<>();
 	
