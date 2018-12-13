@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.eclipse.lsp4j.CompletionItem;
 
 import com.adacore.adaintellij.lsp.AdaLSPDriver;
+import com.adacore.adaintellij.lsp.AdaLSPServer;
 
 import static com.adacore.adaintellij.Utils.getPsiFileDocument;
 import static com.adacore.adaintellij.lsp.LSPUtils.offsetToPosition;
@@ -48,8 +49,12 @@ public final class AdaCompletionContributor extends CompletionContributor {
 		
 		// Make the request and wait for the result
 		
-		List<CompletionItem> completionItems = AdaLSPDriver.getServer(project).completion(
-			documentUri, offsetToPosition(document, parameters.getOffset()));
+		AdaLSPServer lspServer = AdaLSPDriver.getServer(project);
+		
+		if (lspServer == null) { return; }
+		
+		List<CompletionItem> completionItems =
+			lspServer.completion(documentUri, offsetToPosition(document, parameters.getOffset()));
 		
 		// Map completion items to instances of `LookupElement`
 		// and add them all to the given `CompletionResult`
