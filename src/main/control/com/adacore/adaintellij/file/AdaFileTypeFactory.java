@@ -16,9 +16,14 @@ public final class AdaFileTypeFactory extends FileTypeFactory {
 	 */
 	@Override
 	public void createFileTypes(@NotNull FileTypeConsumer fileTypeConsumer) {
+		
+		// Ada source file types
 		fileTypeConsumer.consume(AdaSpecFileType.INSTANCE);
 		fileTypeConsumer.consume(AdaBodyFileType.INSTANCE);
+		
+		// GPR file type
 		fileTypeConsumer.consume(GPRFileType.INSTANCE);
+		
 	}
 	
 }
