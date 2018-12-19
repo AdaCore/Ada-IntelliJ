@@ -62,7 +62,32 @@ public final class AdaPsiReference extends AdaPsiElement implements PsiReference
 	 */
 	@Override
 	public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
-		return this;
+		
+		PsiFile     psiFile     = getContainingFile();
+		VirtualFile virtualFile = psiFile.getVirtualFile();
+		Document    document    = getVirtualFileDocument(virtualFile);
+		
+		if (document == null) { return this; }
+		
+		// Get this reference's start offset
+		
+		int startOffset = getStartOffset();
+		
+		// Use this element's start/end offsets to replace its
+		// corresponding text in the document with that of the
+		// given name
+		
+		document.replaceString(startOffset, startOffset + getTextLength(), name);
+		
+		// Commit the document change for the file to be reparsed
+		
+		PsiDocumentManager.getInstance(getProject()).commitDocument(document);
+		
+		// Find the new element at the same start offset in the
+		// modified file and return it
+		
+		return psiFile.findElementAt(startOffset);
+		
 	}
 	
 	/**
@@ -168,7 +193,7 @@ public final class AdaPsiReference extends AdaPsiElement implements PsiReference
 	 */
 	@Override
 	public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-		throw new IncorrectOperationException("Rename not yet supported");
+		return setName(newElementName);
 	}
 	
 	/**

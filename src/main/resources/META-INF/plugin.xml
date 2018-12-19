@@ -106,6 +106,13 @@
 		<!-- Ada code annotator -->
 		<annotator language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.diagnostics.AdaAnnotator"/>
 		
+		<!-- Ada names validator -->
+		<lang.namesValidator language="Ada" implementationClass="com.adacore.adaintellij.analysis.lexical.AdaNamesValidator"/>
+		<!-- Ada PSI element rename processor -->
+		<renamePsiElementProcessor implementation="com.adacore.adaintellij.analysis.semantic.usages.AdaRenamePsiElementProcessor"/>
+		<!-- Ada refactoring support provider -->
+		<lang.refactoringSupport language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.usages.AdaRefactoringSupportProvider"/>
+		
 		<!-- Ada code commenter -->
 		<lang.commenter language="Ada" implementationClass="com.adacore.adaintellij.misc.AdaCommenter"/>
 		
