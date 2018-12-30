@@ -334,7 +334,11 @@ abstract class Lexer extends LexerBase {
 	 *
 	 * @return The next character to be analysed.
 	 */
-	protected char nextCharacter() { return text.charAt(lexingOffset); }
+	@Nullable
+	protected Character nextCharacter() {
+		return lexingOffset < 0 || lexingOffset >= lexingEndOffset ?
+			null : text.charAt(lexingOffset);
+	}
 	
 	/**
 	 * @see com.intellij.lexer.Lexer#start(CharSequence, int, int, int)
@@ -453,14 +457,14 @@ abstract class Lexer extends LexerBase {
 		final Map<LexerRegex, LexerRegex> regexLineages = new HashMap<>();
 		
 		// The next character to be analysed
-		char nextCharacter = nextCharacter();
+		Character nextCharacter = nextCharacter();
 		
 		// While the next token has not been determined...
 		
 		characterLoop: // label only used for reference in comments
 		while (tokenEnd == tokenStart) {
 			
-			final char character = nextCharacter;
+			final Character character = nextCharacter;
 			
 			// The set of regexes that will have advanced successfully
 			// at the end of this iteration of characterLoop
@@ -469,64 +473,46 @@ abstract class Lexer extends LexerBase {
 			// For each regex that successfully advanced by all
 			// characters so far...
 			
-			regexes.forEach(regex -> {
+			if (character != null) {
 				
-				// Try to advance the regex
-				
-				LexerRegex advancedRegex = regex.advanced(character);
-				
-				// If the regex advanced successfully, store it for the next
-				// iteration of characterLoop, and keep track of the root
-				// regex that is the ancestor of the advanced regex
-				
-				if (advancedRegex != null) {
+				regexes.forEach(regex -> {
 					
-					advancedRegexes.add(advancedRegex);
+					// Try to advance the regex
 					
-					LexerRegex ancestor = regexLineages.get(regex);
+					LexerRegex advancedRegex = regex.advanced(character);
 					
-					if (advancedRegex.nullable() || !regex.nullable()) {
-						regexLineages.remove(regex);
+					// If the regex advanced successfully, store it for the next
+					// iteration of characterLoop, and keep track of the root
+					// regex that is the ancestor of the advanced regex
+					
+					if (advancedRegex != null) {
+						
+						advancedRegexes.add(advancedRegex);
+						
+						LexerRegex ancestor = regexLineages.get(regex);
+						
+						if (advancedRegex.nullable() || !regex.nullable()) {
+							regexLineages.remove(regex);
+						}
+						
+						regexLineages.put(advancedRegex, ancestor == null ? regex : ancestor);
+						
 					}
 					
-					regexLineages.put(advancedRegex, ancestor == null ? regex : ancestor);
-					
-				}
+				});
 				
-			});
+			}
 			
 			// Set the regex set to be the advanced regex set
 			
 			regexes = advancedRegexes;
 			
-			int remainingRegexCount = regexes.size();
+			// If no remaining matching regexes exist, then choose a regex
+			// from those that last matched and had at least one nullable
+			// regex (or the empty set if either that was never the case, or
+			// this is the first iteration of characterLoop)
 			
-			// If no remaining matching regexes exist, or the last character
-			// of the text is reached...
-			
-			if (remainingRegexCount == 0 || lexingOffset == lexingEndOffset - 1) {
-				
-				Iterator<LexerRegex> matchingRegexIterator;
-				
-				// If no remaining matching regexes exist, then choose a regex
-				// from those that last matched and had at least one nullable
-				// regex (or the empty set if either that was never the case, or
-				// this is the first iteration of characterLoop)
-				
-				if (remainingRegexCount == 0) {
-					matchingRegexIterator = matchingRegexes.iterator();
-				}
-				
-				// If there are still matching regexes but the last character
-				// was reached, then choose a regex from those that matched
-				// during this iteration of characterLoop
-				
-				else {
-					matchingRegexIterator = regexes.iterator();
-					lexingOffset = lexingEndOffset;
-				}
-				
-				LexerRegex highestPriorityRegex = null;
+			if (regexes.size() == 0) {
 				
 				// Find the matching regex with the highest priority
 				// The chosen regex still has to be nullable, which prevents for
@@ -537,9 +523,9 @@ abstract class Lexer extends LexerBase {
 				// as its advanced regex at that point is not nullable, in other
 				// words it still requires the sequence "edure" to "fully match")
 				
-				while (matchingRegexIterator.hasNext()) {
-					
-					LexerRegex regex = matchingRegexIterator.next();
+				LexerRegex highestPriorityRegex = null;
+				
+				for (LexerRegex regex : matchingRegexes) {
 					
 					if (
 						regex.nullable() &&
@@ -554,9 +540,9 @@ abstract class Lexer extends LexerBase {
 				}
 				
 				// If a non nullable regex (with highest priority) was found,
-				// then get the root regex from which this regex originates
-				// then get the token type corresponding to that root regex
-				// then set the lexer token type to that type
+				// then get the root regex from which this regex originates,
+				// get the token type corresponding to that root regex and set
+				// the lexer token type to that type
 				
 				if (highestPriorityRegex != null) {
 					
@@ -625,7 +611,10 @@ abstract class Lexer extends LexerBase {
 				
 				// Advance the lexer to the next character
 				
-				nextCharacter = text.charAt(++lexingOffset);
+				lexingOffset++;
+				
+				nextCharacter = lexingOffset == lexingEndOffset ?
+					null : text.charAt(lexingOffset);
 				
 			}
 			

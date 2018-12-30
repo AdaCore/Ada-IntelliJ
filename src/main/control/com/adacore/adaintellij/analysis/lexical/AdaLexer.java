@@ -468,13 +468,13 @@ public final class AdaLexer extends Lexer {
 		}
 		
 		// The next character to be analysed
-		char nextCharacter = nextCharacter();
+		Character nextCharacter = nextCharacter();
 		
 		// If the next character is an apostrophe and the last token
 		// was an identifier, then immediately mark this token as an
 		// apostrophe token and return
 		
-		if (nextCharacter == '\'' && getTokenType() == IDENTIFIER) {
+		if (nextCharacter != null && nextCharacter == '\'' && getTokenType() == IDENTIFIER) {
 			
 			tokenStart = tokenEnd;
 			
