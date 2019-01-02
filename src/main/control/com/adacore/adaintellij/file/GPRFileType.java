@@ -2,24 +2,26 @@ package com.adacore.adaintellij.file;
 
 import javax.swing.*;
 
+import com.intellij.openapi.fileTypes.LanguageFileType;
 import org.jetbrains.annotations.*;
 
+import com.adacore.adaintellij.GPRLanguage;
 import com.adacore.adaintellij.Icons;
 
 /**
  * Internal representation of the GNAT project file/GPR file type.
  */
-public final class GPRFileType extends AdaFileType {
+public final class GPRFileType extends LanguageFileType {
 	
 	/**
 	 * Unique instance representing the GPR file type.
 	 */
-	public static final AdaFileType INSTANCE = new GPRFileType();
+	public static final GPRFileType INSTANCE = new GPRFileType();
 	
 	/**
 	 * Constructs a new instance of the GPR file type.
 	 */
-	private GPRFileType() { super(); }
+	private GPRFileType() { super(GPRLanguage.INSTANCE); }
 	
 	/**
 	 * @see com.intellij.openapi.fileTypes.FileType#getName()

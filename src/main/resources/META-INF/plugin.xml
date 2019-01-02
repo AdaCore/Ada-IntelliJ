@@ -90,6 +90,8 @@
 		
 		<!-- Ada syntax highligher factory -->
 		<lang.syntaxHighlighterFactory language="Ada" implementationClass="com.adacore.adaintellij.analysis.lexical.AdaSyntaxHighlighterFactory"/>
+		<!-- GPR file syntax highligher factory -->
+		<lang.syntaxHighlighterFactory language="GPR File" implementationClass="com.adacore.adaintellij.analysis.lexical.GPRFileSyntaxHighlighterFactory"/>
 		
 		<!-- Ada parser definition -->
 		<lang.parserDefinition language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.AdaParserDefinition"/>
