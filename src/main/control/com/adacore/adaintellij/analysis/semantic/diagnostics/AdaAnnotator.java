@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.Range;
 
+import com.adacore.adaintellij.lsp.AdaLSPClient;
 import com.adacore.adaintellij.lsp.AdaLSPDriver;
 import com.adacore.adaintellij.lsp.LSPUtils;
 import com.adacore.adaintellij.Utils;
@@ -46,8 +47,11 @@ public class AdaAnnotator implements Annotator {
 		
 		// Get the LSP diagnostics for the document
 		
-		List<Diagnostic> diagnostics =
-			AdaLSPDriver.getClient(element.getProject()).getDiagnostics(document);
+		AdaLSPClient lspClient = AdaLSPDriver.getClient(element.getProject());
+		
+		if (lspClient == null) { return; }
+		
+		List<Diagnostic> diagnostics = lspClient.getDiagnostics(document);
 		
 		// Element start/end offsets
 		int elementStartOffset = element.getTextOffset();

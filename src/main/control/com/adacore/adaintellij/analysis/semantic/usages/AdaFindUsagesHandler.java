@@ -20,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 import org.eclipse.lsp4j.Location;
 
-import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
 import com.adacore.adaintellij.lsp.AdaLSPDriver;
+import com.adacore.adaintellij.lsp.AdaLSPServer;
 
 import static com.adacore.adaintellij.Utils.*;
 import static com.adacore.adaintellij.lsp.LSPUtils.offsetToPosition;
@@ -106,7 +106,11 @@ public final class AdaFindUsagesHandler extends FindUsagesHandler {
 	 *                          element itself with the returned
 	 *                          references.
 	 */
-	private Stream<PsiReference> findReferences(PsiElement target, boolean includeDefinition) {
+	@NotNull
+	private Stream<PsiReference> findReferences(
+		@NotNull PsiElement target,
+		         boolean    includeDefinition
+	) {
 		
 		PsiFile  file        = target.getContainingFile();
 		Document document    = getPsiFileDocument(file);
@@ -116,7 +120,11 @@ public final class AdaFindUsagesHandler extends FindUsagesHandler {
 		
 		// Make the request and wait for the result
 		
-		List<Location> referenceLocations = AdaLSPDriver.getServer(project).references(
+		AdaLSPServer lspServer = AdaLSPDriver.getServer(project);
+		
+		if (lspServer == null) { return Stream.empty(); }
+		
+		List<Location> referenceLocations = lspServer.references(
 			documentUri, offsetToPosition(document, target.getTextOffset()), includeDefinition);
 		
 		// Map the returned locations to PSI references and

@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import org.eclipse.lsp4j.Location;
 
 import com.adacore.adaintellij.lsp.AdaLSPDriver;
+import com.adacore.adaintellij.lsp.AdaLSPServer;
 
 import static com.adacore.adaintellij.Utils.*;
 import static com.adacore.adaintellij.lsp.LSPUtils.positionToOffset;
@@ -118,8 +119,12 @@ public final class AdaPsiReference extends AdaPsiElement implements PsiReference
 		
 		// Make the request and wait for the result
 		
-		Location definitionLocation = AdaLSPDriver.getServer(getProject()).definition(
-			documentUri, offsetToPosition(document, getStartOffset()));
+		AdaLSPServer lspServer = AdaLSPDriver.getServer(getProject());
+		
+		if (lspServer == null) { return null; }
+		
+		Location definitionLocation =
+			lspServer.definition(documentUri, offsetToPosition(document, getStartOffset()));
 		
 		// If no valid result was returned, return null
 		

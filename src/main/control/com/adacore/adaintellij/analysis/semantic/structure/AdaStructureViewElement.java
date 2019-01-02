@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.eclipse.lsp4j.DocumentSymbol;
 
 import com.adacore.adaintellij.lsp.AdaLSPDriver;
+import com.adacore.adaintellij.lsp.AdaLSPServer;
 import com.adacore.adaintellij.lsp.LSPUtils;
 import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
 import com.adacore.adaintellij.Utils;
@@ -68,10 +69,16 @@ public class AdaStructureViewElement implements StructureViewTreeElement, Sortab
 	
 	/**
 	 * @see com.intellij.ide.util.treeView.smartTree.TreeElement#getChildren()
+	 *
+	 * Makes a `textDocument/documentSymbol` request to the ALS to get
+	 * the list of symbols in the given document, and returns them.
 	 */
 	@NotNull
 	@Override
 	public TreeElement[] getChildren() {
+		
+		// If this element is not the root element representing
+		// the file itself, then return no children
 		
 		if (!(element instanceof PsiFile)) { return TreeElement.EMPTY_ARRAY; }
 		
@@ -83,8 +90,16 @@ public class AdaStructureViewElement implements StructureViewTreeElement, Sortab
 		
 		String documentUri = virtualFile.getUrl();
 		
-		List<DocumentSymbol> symbols =
-			AdaLSPDriver.getServer(element.getProject()).documentSymbol(documentUri);
+		// Make the request and wait for the result
+		
+		AdaLSPServer lspServer = AdaLSPDriver.getServer(element.getProject());
+		
+		if (lspServer == null) { return TreeElement.EMPTY_ARRAY; }
+		
+		List<DocumentSymbol> symbols = lspServer.documentSymbol(documentUri);
+		
+		// Map the returned symbols to structure view
+		// elements and return them as an array
 		
 		return symbols.stream()
 			.map(symbol -> {

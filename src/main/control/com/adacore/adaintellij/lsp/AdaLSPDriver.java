@@ -14,9 +14,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.messages.MessageBus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
@@ -241,7 +239,7 @@ public final class AdaLSPDriver implements ProjectComponent {
 	 * @param project The project for which to get the client.
 	 * @return The given project's client.
 	 */
-	@NotNull
+	@Nullable
 	public static AdaLSPClient getClient(@NotNull Project project) {
 		return project.getComponent(AdaLSPDriver.class).client;
 	}
@@ -252,7 +250,7 @@ public final class AdaLSPDriver implements ProjectComponent {
 	 * @param project The project for which to get the server.
 	 * @return The given project's server.
 	 */
-	@NotNull
+	@Nullable
 	public static AdaLSPServer getServer(@NotNull Project project) {
 		return project.getComponent(AdaLSPDriver.class).server;
 	}
