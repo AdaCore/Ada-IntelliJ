@@ -44,6 +44,13 @@ public final class AdaLSPDriver implements ProjectComponent {
 	static final int FAILURE_COUNT_THRESHOLD = 3;
 	
 	/**
+	 * The interval duration, in milliseconds, before checking if the operation
+	 * within the IntelliJ platform that resulted in a certain request to the ALS
+	 * was canceled.
+	 */
+	static final int CHECK_CANCELED_INTERVAL = 250;
+	
+	/**
 	 * Unique key for registering the driver's GPR file change listener.
 	 */
 	private static final String GPR_FILE_CHANGE_LISTENER_KEY =

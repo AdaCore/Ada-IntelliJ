@@ -2,7 +2,8 @@ package com.adacore.adaintellij.lsp;
 
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import com.intellij.notification.NotificationType;
@@ -10,7 +11,8 @@ import com.intellij.notification.Notifications;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.util.ThrowableComputable;
+import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
@@ -151,55 +153,93 @@ public final class AdaLSPServer {
 	 * operations on every request, such as logging and keeping track of failed
 	 * requests.
 	 * Waits for the response to the given request, and returns its result.
-	 * The given `ThrowableComputable` should be a simple wrapper around a
-	 * server request, for example (using a Java lambda for the anonymous
-	 * class):
+	 * The given supplier should be a simple wrapper around a server request,
+	 * for example (using a Java lambda for the Supplier anonymous class):
 	 *
 	 * () -> server.getTextDocumentService().definition(params)
 	 *
 	 * @param method The name of the request's method.
-	 * @param requestComputable A computable representing the request to be made.
+	 * @param requestSupplier A supplier representing the request to be made.
 	 * @param <T> The type of the request's response result.
 	 * @return The result of the response to the request.
 	 */
 	@Nullable
 	private <T> T request(
 		@NotNull String method,
-		@NotNull ThrowableComputable<CompletableFuture<T>, Exception> requestComputable
+		@NotNull Supplier<CompletableFuture<T>> requestSupplier
 	) {
 		
 		T result = null;
 		
-		try {
+		// Get the request future
+		
+		CompletableFuture<T> requestFuture = requestSupplier.get();
+		
+		// Get the timeout for the given method
+		
+		int requestTimeout = Timeouts.getMethodTimeout(method);
+		
+		// Keep looping to get the request's result
+		// while the method timeout is not reached
+		
+		while (requestTimeout > 0) {
 			
-			// Try to make the request and wait for the result
-			
-			result = requestComputable.compute().get();
-			
-		} catch (Exception exception) {
-			
-			// Log the failed request
-			
-			LOGGER.error("Request '" + method + "' to ALS failed", exception);
-			
-			// Increment the number of failed requests
-			
-			failureCount++;
-			
-			// If the number of failed requests reaches the threshold defined in
-			// the driver, then notify the user and shut down the server
-			
-			if (failureCount == AdaLSPDriver.FAILURE_COUNT_THRESHOLD) {
+			try {
 				
-				Notifications.Bus.notify(new AdaIJNotification(
-					"Connection to Ada Language Server unreliable",
-					"The ALS has been shut down due to multiple failed requests, " +
-						"which will disable smart features such as find-usages and " +
-						"go-to definition.\nReload the current project to try again.",
-					NotificationType.ERROR
-				));
+				// Try to make the request and get the result before
+				// the end of the next check-cancel interval
 				
-				driver.shutDownServer();
+				result = requestFuture.get(AdaLSPDriver.CHECK_CANCELED_INTERVAL, TimeUnit.MILLISECONDS);
+				
+				// The request resolved before the end of the next
+				// check-cancel interval, so break immediately
+				
+				break;
+				
+			} catch (TimeoutException timeoutException) {
+				
+				// The check-cancel interval is over, so decrease the
+				// request timeout then check if the operation was
+				// canceled, and if it was then break
+				
+				requestTimeout -= AdaLSPDriver.CHECK_CANCELED_INTERVAL;
+				
+				try {
+					ProgressManager.checkCanceled();
+				} catch (ProcessCanceledException canceledException) {
+					break;
+				}
+				
+			} catch (Exception exception) {
+				
+				// Log the failed request
+				
+				LOGGER.error("Request '" + method + "' to ALS failed", exception);
+				
+				// Increment the number of failed requests
+				
+				failureCount++;
+				
+				// If the number of failed requests reaches the threshold defined in
+				// the driver, then notify the user and shut down the server
+				
+				if (failureCount == AdaLSPDriver.FAILURE_COUNT_THRESHOLD) {
+					
+					Notifications.Bus.notify(new AdaIJNotification(
+						"Connection to Ada Language Server unreliable",
+						"The ALS has been shut down due to multiple failed requests, " +
+							"which will disable smart features such as find-usages and " +
+							"go-to definition.\nReload the current project to try again.",
+						NotificationType.ERROR
+					));
+					
+					driver.shutDownServer();
+					
+				}
+				
+				// Break out of the loop
+				
+				break;
 				
 			}
 			
@@ -227,7 +267,7 @@ public final class AdaLSPServer {
 	 *
 	 * @param method The name of the request's method.
 	 * @param documentUri The URI of the document referenced by the given request.
-	 * @param requestComputable A computable representing the request to be made.
+	 * @param requestSupplier A supplier representing the request to be made.
 	 * @param <T> The type of the request's response result.
 	 * @return The result of the response to the request.
 	 */
@@ -235,7 +275,7 @@ public final class AdaLSPServer {
 	private <T> T documentRequest(
 		@NotNull String method,
 		@NotNull String documentUri,
-		@NotNull ThrowableComputable<CompletableFuture<T>, Exception> requestComputable
+		@NotNull Supplier<CompletableFuture<T>> requestSupplier
 	) {
 	
 		boolean openOnlyForRequest = !openFiles.contains(documentUri);
@@ -249,7 +289,7 @@ public final class AdaLSPServer {
 		
 		// Make the request and store the result
 		
-		T result = request(method, requestComputable);
+		T result = request(method, requestSupplier);
 		
 		// If the file was not already open, send a `textDocument/didClose`
 		// notification to tell the server that the file is closed
