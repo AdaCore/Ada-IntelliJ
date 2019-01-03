@@ -4,10 +4,10 @@ import javax.swing.*;
 
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.ui.components.JBTextField;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 import com.adacore.adaintellij.AdaIntelliJUI;
+import com.adacore.adaintellij.UIUtils;
 
 /**
  * Configuration editor UI for GPRbuild configurations.
@@ -50,7 +50,8 @@ public final class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 		
 		scenarioSettingsView = new ScenarioSettingsView(this);
 		
-		scenarioScrollPane.getVerticalScrollBar().setUnitIncrement(15);
+		UIUtils.adjustScrollSpeed(scenarioScrollPane);
+		
 		scenarioScrollPane.getViewport().add(scenarioSettingsView.getUIRoot());
 		
 	}
