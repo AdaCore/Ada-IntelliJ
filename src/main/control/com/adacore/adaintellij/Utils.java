@@ -18,18 +18,29 @@ import org.jetbrains.annotations.*;
  */
 public final class Utils {
 	
+	/**
+	 * Various system-dependent separators.
+	 */
 	public static final String FILE_PATH_SEPARATOR        = System.getProperty("file.separator");
 	public static final String ENVIRONMENT_PATH_SEPARATOR = System.getProperty("path.separator");
+	public static final String LINE_SEPARATOR             = System.getProperty("line.separator");
+	
+	public static final String UNIX_LINE_SEPARATOR        = "\n";
 	
 	/**
 	 * Class-wide logger for the Utils class.
 	 */
-	private static Logger LOGGER = Logger.getInstance(Utils.class);
+	private static final Logger LOGGER = Logger.getInstance(Utils.class);
 	
 	/**
 	 * File/document manager for retrieving `VirtualFile` and `Document` instances.
 	 */
 	private static FileDocumentManager fileDocumentManager = FileDocumentManager.getInstance();
+	
+	/**
+	 * Private default constructor to prevent instantiation.
+	 */
+	private Utils() {}
 	
 	/**
 	 * Performs a checked conversion from a URL string to a URL object:
@@ -43,9 +54,9 @@ public final class Utils {
 	 */
 	@Nullable
 	public static URL urlStringToUrl(@NotNull String urlString) {
-	
+		
 		URL url = null;
-	
+		
 		try {
 			url = new URL(urlString);
 		} catch (MalformedURLException exception) {
@@ -218,9 +229,10 @@ public final class Utils {
 	 * @return The file's corresponding PSI file.
 	 */
 	@Nullable
-	public static PsiFile getVirtualFilePsiFile(@NotNull Project project, @NotNull VirtualFile file) {
-		return PsiManager.getInstance(project).findFile(file);
-	}
+	public static PsiFile getVirtualFilePsiFile(
+		@NotNull Project     project,
+		@NotNull VirtualFile file
+	) { return PsiManager.getInstance(project).findFile(file); }
 	
 	/**
 	 * Returns the virtual file corresponding to the given PSI file.
@@ -231,6 +243,39 @@ public final class Utils {
 	@Nullable
 	public static VirtualFile getPsiFileVirtualFile(@NotNull PsiFile file) {
 		return file.getVirtualFile();
+	}
+	
+	/**
+	 * Returns the text content of the given file as a string, or
+	 * null if the given file is in binary format.
+	 *
+	 * @param file The file to read.
+	 * @return The file content as a string.
+	 */
+	@Nullable
+	public static String getFileText(@NotNull VirtualFile file) {
+		
+		Document resourceDocument = getVirtualFileDocument(file);
+		
+		return resourceDocument == null ? null : resourceDocument.getText();
+		
+	}
+	
+	/**
+	 * Returns the text content of the given file as an array of
+	 * strings, one for each line of text, or null if the given
+	 * file is in binary format.
+	 *
+	 * @param file The file to read.
+	 * @return The file lines as an array of strings.
+	 */
+	@Nullable
+	public static String[] getFileLines(@NotNull VirtualFile file) {
+		
+		String fileText = getFileText(file);
+		
+		return fileText == null ? null : fileText.split(UNIX_LINE_SEPARATOR);
+		
 	}
 	
 }
