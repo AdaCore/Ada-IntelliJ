@@ -64,7 +64,8 @@ public final class ResourceManager {
 	@Nullable
 	public static VirtualFile getResourceDirectory(@NotNull String path) {
 		
-		VirtualFile resource = getResourceFileOrDirectory(path);
+		VirtualFile resource = getResourceFileOrDirectory(
+			path.endsWith("/") ? path : path + '/');
 		
 		return resource == null || !resource.isDirectory() ? null : resource;
 		
