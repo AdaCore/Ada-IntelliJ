@@ -99,6 +99,7 @@ public final class ListChooserDialog<T> extends DialogWrapper {
 		
 		// Set up the option list
 		
+		UIUtils.addLineBorder(optionListScrollPane);
 		UIUtils.adjustScrollSpeed(optionListScrollPane);
 		
 		// TODO: Set maximum width on option list to avoid very

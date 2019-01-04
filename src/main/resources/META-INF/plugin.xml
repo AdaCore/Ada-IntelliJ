@@ -88,6 +88,11 @@
 		<!-- Ada file type factory -->
 		<fileTypeFactory implementation="com.adacore.adaintellij.file.AdaFileTypeFactory"/>
 		
+		<!-- Ada module builder -->
+		<moduleBuilder builderClass="com.adacore.adaintellij.project.module.AdaModuleBuilder" id="ADA_MODULE_BUILDER" order="first"/>
+		<!-- Ada module type -->
+		<moduleType implementationClass="com.adacore.adaintellij.project.module.AdaModuleType" id="ADA_MODULE_TYPE"/>
+		
 		<!-- Ada syntax highligher factory -->
 		<lang.syntaxHighlighterFactory language="Ada" implementationClass="com.adacore.adaintellij.analysis.lexical.AdaSyntaxHighlighterFactory"/>
 		<!-- GPR file syntax highligher factory -->

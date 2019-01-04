@@ -8,9 +8,9 @@ import org.jetbrains.annotations.*;
 
 /**
  * Ada-IntelliJ plugin-wide resource manager.
- * This class makes use of IntelliJ's virtual file system API, and provides
- * facilities for checked access to resource files and directories, as well
- * as reading text resource files.
+ * This class makes use of IntelliJ's virtual file system API,
+ * and provides facilities for checked access to resource files
+ * and directories, as well as reading text resource files.
  */
 public final class ResourceManager {
 	

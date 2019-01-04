@@ -20,7 +20,15 @@ public final class Icons {
 	/**
 	 * Icons for run configuration types.
 	 */
-	public static final Icon GPRBUILD_RUN_CONFIGURATION = AllIcons.General.Information;
+	public static final Icon GPRBUILD_RUN_CONFIGURATION = AllIcons.Actions.Compile;
+	public static final Icon MAIN_RUN_CONFIGURATION     = AllIcons.Actions.Execute;
+	
+	/**
+	 * Icons for project-related UI.
+	 */
+	public static final Icon PROJECT_TEMPLATE_CATEGORY  = AllIcons.Nodes.Folder;
+	public static final Icon PROJECT_TEMPLATE           = AllIcons.General.ProjectStructure;
+	public static final Icon ADA_MODULE                 = AllIcons.Nodes.Module;
 	
 	/**
 	 * Private default constructor to prevent instantiation.

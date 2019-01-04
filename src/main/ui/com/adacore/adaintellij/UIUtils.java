@@ -34,6 +34,15 @@ public final class UIUtils {
 		new FileChooserDescriptor(true, false, false, false, false, false);
 	
 	/**
+	 * Adds a simple line border to the given component.
+	 *
+	 * @param component The component to which to add a border.
+	 */
+	public static void addLineBorder(@NotNull JComponent component) {
+		component.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
+	}
+	
+	/**
 	 * Adds a titled border to the given component.
 	 * The component must have a border that inherits from `TitledBorder`
 	 * and a set title (usually in the UI's .form file).
@@ -41,10 +50,18 @@ public final class UIUtils {
 	 * @param component The titled component to which to add a border.
 	 */
 	public static void addTitledBorder(@NotNull JComponent component) {
+		addTitledBorder(component, ((TitledBorder)component.getBorder()).getTitle());
+	}
+	
+	/**
+	 * Adds a titled border with the given title to the given component.
+	 *
+	 * @param component The component to which to add a border.
+	 * @param title The title to give to the border.
+	 */
+	public static void addTitledBorder(@NotNull JComponent component, @NotNull String title) {
 		component.setBorder(new TitledBorder(
-			BorderFactory.createLineBorder(BORDER_COLOR),
-			((TitledBorder)component.getBorder()).getTitle()
-		));
+			BorderFactory.createLineBorder(BORDER_COLOR), title));
 	}
 	
 	/**
@@ -71,18 +88,19 @@ public final class UIUtils {
 	
 	/**
 	 * Recursively traverses the UI descendants of the given container,
-	 * calling the given handler for each component of the given class.
+	 * calling the given handler for each component of the given class or
+	 * interface.
 	 * @see UIUtils#traverse(Container, Class, Function)
 	 *
 	 * The given handler must return true to stop the traversal or false
 	 * to continue.
 	 *
 	 * @param container The root container to traverse.
-	 * @param classToHandle The component class to handle.
+	 * @param classToHandle The component class/interface to handle.
 	 * @param handler The component handler.
 	 * @param <T> The type represented by the component class to handle.
 	 */
-	public static <T extends Component> void traverseUIDescendantsOfClass(
+	public static <T> void traverseUIDescendantsOfClass(
 		@NotNull Container            container,
 		@NotNull Class<T>             classToHandle,
 		@NotNull Function<T, Boolean> handler
@@ -121,12 +139,12 @@ public final class UIUtils {
 	 * to indicate whether or not traversal should be stopped.
 	 *
 	 * @param container The root container to traverse.
-	 * @param classToHandle The component class to handle.
+	 * @param classToHandle The component class/interface to handle.
 	 * @param handler The component handler.
 	 * @param <T> The type represented by the component class to handle.
 	 * @return true to stop the traversal, false otherwise.
 	 */
-	private static <T extends Component> boolean traverse(
+	private static <T> boolean traverse(
 		@NotNull Container            container,
 		@NotNull Class<T>             classToHandle,
 		@NotNull Function<T, Boolean> handler
