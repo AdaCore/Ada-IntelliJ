@@ -88,8 +88,8 @@ public final class AdaLexer extends Lexer {
 		ConcatenationRegex.fromRegexes(
 			new UnitRegex("e"),
 			UnionRegex.fromRegexes(
-				new UnitRegex("-"),
-				new ZeroOrOneRegex(new UnitRegex("+"))
+				HYPHEN_MINUS_REGEX,
+				new ZeroOrOneRegex(PLUS_SIGN_REGEX)
 			),
 			NUMERAL_REGEX
 		);
@@ -106,7 +106,7 @@ public final class AdaLexer extends Lexer {
 			NUMERAL_REGEX,
 			new ZeroOrOneRegex(
 				new ConcatenationRegex(
-					new UnitRegex("."),
+					FULL_STOP_REGEX,
 					NUMERAL_REGEX
 				)
 			),
@@ -168,7 +168,7 @@ public final class AdaLexer extends Lexer {
 			BASED_NUMERAL_REGEX,
 			new ZeroOrOneRegex(
 				new ConcatenationRegex(
-					new UnitRegex("."),
+					FULL_STOP_REGEX,
 					BASED_NUMERAL_REGEX
 				)
 			),
@@ -185,9 +185,9 @@ public final class AdaLexer extends Lexer {
 	 */
 	private static final LexerRegex CHARACTER_LITERAL_REGEX =
 		ConcatenationRegex.fromRegexes(
-			new UnitRegex("'"),
+			APOSTROPHE_REGEX,
 			GRAPHIC_CHARACTER_REGEX,
-			new UnitRegex("'")
+			APOSTROPHE_REGEX
 		);
 	
 	// Keywords
