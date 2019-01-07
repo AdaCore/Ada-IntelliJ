@@ -8,7 +8,7 @@ import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.openapi.vfs.VfsUtil;
 import org.jetbrains.annotations.*;
 
 import com.adacore.adaintellij.dialogs.ListChooserDialog;
@@ -148,7 +148,7 @@ public class GPRFileManager implements ProjectComponent {
 		
 		final List<String> gprFilePaths = new ArrayList<>();
 		
-		VfsUtilCore.iterateChildrenRecursively(
+		VfsUtil.iterateChildrenRecursively(
 			project.getBaseDir(),
 			null,
 			fileOrDir -> {

@@ -3,18 +3,14 @@ package com.adacore.adaintellij.settings;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.TextBrowseFolderListener;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.ui.*;
+import com.intellij.ui.DocumentAdapter;
 import org.jetbrains.annotations.*;
 
-import com.adacore.adaintellij.listeners.BaseDocumentListener;
-import com.adacore.adaintellij.listeners.BaseMouseListener;
 import com.adacore.adaintellij.project.GPRFileManager;
 import com.adacore.adaintellij.UIUtils;
 import com.adacore.adaintellij.Utils;
@@ -107,10 +103,12 @@ public final class AdaProjectSettings extends DialogWrapper implements Validatab
 		
 		resetLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
-		resetLabel.addMouseListener(new BaseMouseListener() {
+		resetLabel.addMouseListener(new MouseAdapter() {
 			
 			/**
-			 * @see BaseMouseListener#mouseClicked(MouseEvent)
+			 * Called when the mouse is clicked.
+			 *
+			 * @param mouseEvent The mouse event.
 			 */
 			@Override
 			public void mouseClicked(MouseEvent mouseEvent) { reset(); }
@@ -122,21 +120,15 @@ public final class AdaProjectSettings extends DialogWrapper implements Validatab
 		ActionListener actionListener =
 			actionEvent -> okAction.actionPerformed(actionEvent);
 		
-		DocumentListener documentListener = new BaseDocumentListener() {
+		DocumentListener documentListener = new DocumentAdapter() {
 			
 			/**
-			 * @see com.adacore.adaintellij.listeners.BaseDocumentListener#insertUpdate(DocumentEvent)
+			 * Called when text is changed.
+			 *
+			 * @param documentEvent The document event.
 			 */
 			@Override
-			public void insertUpdate(DocumentEvent documentEvent) {
-				updateCanApplyState();
-			}
-			
-			/**
-			 * @see com.adacore.adaintellij.listeners.BaseDocumentListener#removeUpdate(DocumentEvent)
-			 */
-			@Override
-			public void removeUpdate(DocumentEvent documentEvent) {
+			protected void textChanged(DocumentEvent documentEvent) {
 				updateCanApplyState();
 			}
 			

@@ -1,14 +1,16 @@
 package com.adacore.adaintellij.dialogs;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
+import javax.swing.*;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.ui.components.JBList;
+import org.jetbrains.annotations.*;
+
+import com.adacore.adaintellij.misc.BasicListCellRenderer;
+import com.adacore.adaintellij.UIUtils;
 
 /**
  * A simple dialog allowing the user to select an item from a list:
@@ -34,10 +36,11 @@ public final class ListChooserDialog<T> extends DialogWrapper {
 	/**
 	 * UI components.
 	 */
-	private JPanel    contentPane;
-	private JTextPane mainTextPane;
-	private JList<T>  optionList;
-	private JTextPane footnoteTextPane;
+	private JPanel      contentPane;
+	private JTextPane   mainTextPane;
+	private JScrollPane optionListScrollPane;
+	private JBList<T>   optionList;
+	private JTextPane   footnoteTextPane;
 	
 	/**
 	 * Constructs a new ListChooserDialog given some parameters,
@@ -96,6 +99,9 @@ public final class ListChooserDialog<T> extends DialogWrapper {
 		
 		// Set up the option list
 		
+		UIUtils.addLineBorder(optionListScrollPane);
+		UIUtils.adjustScrollSpeed(optionListScrollPane);
+		
 		// TODO: Set maximum width on option list to avoid very
 		//       wide dialogs when there are gpr file paths that
 		//       are too long
@@ -107,30 +113,15 @@ public final class ListChooserDialog<T> extends DialogWrapper {
 		
 		optionList.setSelectedIndex(0);
 		optionList.setVisibleRowCount(Math.min(options.size() + 2, 10));
-		optionList.setCellRenderer(new DefaultListCellRenderer() {
-			
-			@Override
-			public Component getListCellRendererComponent(
-				JList<?> list,
-				Object value,
-				int index,
-				boolean isSelected,
-				boolean cellHasFocus
-			) {
-				
-				JLabel component = (JLabel)super.getListCellRendererComponent(
-					list, value, index, isSelected, cellHasFocus);
-				
-				component.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-				
-				return component;
-				
-			}
-			
-		});
+		optionList.setCellRenderer(new BasicListCellRenderer());
 		
 		optionList.addMouseListener(new MouseAdapter() {
 			
+			/**
+			 * Called when the mouse is clicked.
+			 *
+			 * @param mouseEvent The mouse event.
+			 */
 			@Override
 			public void mouseClicked(MouseEvent mouseEvent) {
 				

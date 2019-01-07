@@ -2,7 +2,7 @@ package com.adacore.adaintellij.project;
 
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.openapi.vfs.VfsUtil;
 import org.jetbrains.annotations.NotNull;
 
 import com.adacore.adaintellij.file.GPRFileType;
@@ -57,7 +57,7 @@ public final class AdaProject implements ProjectComponent {
 		
 		final String gprFileExtension = GPRFileType.INSTANCE.getDefaultExtension();
 		
-		VfsUtilCore.iterateChildrenRecursively(
+		VfsUtil.iterateChildrenRecursively(
 			project.getBaseDir(),
 			null,
 			fileOrDir -> {
