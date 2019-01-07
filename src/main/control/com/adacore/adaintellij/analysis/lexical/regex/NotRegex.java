@@ -10,17 +10,12 @@ import org.jetbrains.annotations.*;
  * check that the regex it receives matches a single character,
  * and throws an exception otherwise.
  */
-public final class NotRegex implements LexerRegex {
+public final class NotRegex extends LexerRegex {
 	
 	/**
 	 * The negated subregex.
 	 */
 	final LexerRegex REGEX;
-	
-	/**
-	 * The priority of this regex.
-	 */
-	private final int PRIORITY;
 	
 	/**
 	 * Constructs a new not regex given a subregex.
@@ -39,6 +34,8 @@ public final class NotRegex implements LexerRegex {
 	 */
 	public NotRegex(@NotNull LexerRegex regex, int priority) {
 		
+		super(priority);
+		
 		int regexCharacters = regex.charactersMatched();
 		
 		if (regexCharacters != 1) {
@@ -47,8 +44,7 @@ public final class NotRegex implements LexerRegex {
 					regexCharacters + " characters received.");
 		}
 		
-		REGEX    = regex;
-		PRIORITY = priority;
+		REGEX = regex;
 		
 	}
 	
@@ -63,12 +59,6 @@ public final class NotRegex implements LexerRegex {
 	 */
 	@Override
 	public int charactersMatched() { return 1; }
-	
-	/**
-	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#getPriority()
-	 */
-	@Override
-	public int getPriority() { return PRIORITY; }
 	
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#advanced(char)

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.*;
 /**
  * Regex matching the union of two subregexes.
  */
-public final class UnionRegex implements LexerRegex {
+public final class UnionRegex extends LexerRegex {
 	
 	/**
 	 * The union subregexes.
@@ -16,19 +16,15 @@ public final class UnionRegex implements LexerRegex {
 	final LexerRegex SECOND_REGEX;
 	
 	/**
-	 * The priority of this regex.
-	 */
-	private final int PRIORITY;
-	
-	/**
 	 * Constructs a new union regex given two subregexes.
 	 *
 	 * @param firstRegex The first subregex.
 	 * @param secondRegex The second subregex.
 	 */
-	public UnionRegex(@NotNull LexerRegex firstRegex, @NotNull LexerRegex secondRegex) {
-		this(firstRegex, secondRegex, 0);
-	}
+	public UnionRegex(
+		@NotNull LexerRegex firstRegex,
+		@NotNull LexerRegex secondRegex
+	) { this(firstRegex, secondRegex, 0); }
 	
 	/**
 	 * Constructs a new union regex given two subregexes and
@@ -38,10 +34,14 @@ public final class UnionRegex implements LexerRegex {
 	 * @param secondRegex The second subregex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public UnionRegex(@NotNull LexerRegex firstRegex, @NotNull LexerRegex secondRegex, int priority) {
+	public UnionRegex(
+		@NotNull LexerRegex firstRegex,
+		@NotNull LexerRegex secondRegex,
+		         int        priority
+	) {
+		super(priority);
 		FIRST_REGEX  = firstRegex;
 		SECOND_REGEX = secondRegex;
-		PRIORITY     = priority;
 	}
 	
 	/**
@@ -77,13 +77,13 @@ public final class UnionRegex implements LexerRegex {
 		
 		LexerRegex regex = regexIterator.previous();
 		
-		int maxPriority = regex.getPriority();
+		int maxPriority = regex.PRIORITY;
 		
 		while (regexIterator.hasPrevious()) {
 			
 			LexerRegex nextRegex = regexIterator.previous();
 			
-			int nextRegexPriority = nextRegex.getPriority();
+			int nextRegexPriority = nextRegex.PRIORITY;
 			
 			if (nextRegexPriority > maxPriority) {
 				maxPriority = nextRegexPriority;
@@ -137,7 +137,8 @@ public final class UnionRegex implements LexerRegex {
 	public static LexerRegex fromRange(char fromChar, char toChar, int priority) {
 		
 		if (fromChar > toChar) {
-			throw new IllegalArgumentException("Invalid bounds: fromChar must be smaller or equal to toChar");
+			throw new IllegalArgumentException("Invalid bounds: " +
+				"fromChar must be smaller or equal to toChar");
 		}
 		
 		char character = toChar;
@@ -160,7 +161,9 @@ public final class UnionRegex implements LexerRegex {
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#nullable()
 	 */
 	@Override
-	public boolean nullable() { return FIRST_REGEX.nullable() || SECOND_REGEX.nullable(); }
+	public boolean nullable() {
+		return FIRST_REGEX.nullable() || SECOND_REGEX.nullable();
+	}
 	
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#charactersMatched()
@@ -171,15 +174,10 @@ public final class UnionRegex implements LexerRegex {
 		int firstRegexCharacters  = FIRST_REGEX.charactersMatched();
 		int secondRegexCharacters = SECOND_REGEX.charactersMatched();
 		
-		return firstRegexCharacters != secondRegexCharacters ? -1 : firstRegexCharacters;
+		return firstRegexCharacters != secondRegexCharacters ?
+			-1 : firstRegexCharacters;
 		
 	}
-	
-	/**
-	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#getPriority()
-	 */
-	@Override
-	public int getPriority() { return PRIORITY; }
 	
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#advanced(char)

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.*;
 /**
  * Regex matching the concatenation of two subregexes.
  */
-public final class ConcatenationRegex implements LexerRegex {
+public final class ConcatenationRegex extends LexerRegex {
 	
 	/**
 	 * The concatenation subregexes.
@@ -16,19 +16,15 @@ public final class ConcatenationRegex implements LexerRegex {
 	final LexerRegex SECOND_REGEX;
 	
 	/**
-	 * The priority of this regex.
-	 */
-	private final int PRIORITY;
-	
-	/**
 	 * Constructs a new concatenation regex given two subregexes.
 	 *
 	 * @param firstRegex The first subregex.
 	 * @param secondRegex The second subregex.
 	 */
-	public ConcatenationRegex(@NotNull LexerRegex firstRegex, @NotNull LexerRegex secondRegex) {
-		this(firstRegex, secondRegex, 0);
-	}
+	public ConcatenationRegex(
+		@NotNull LexerRegex firstRegex,
+		@NotNull LexerRegex secondRegex
+	) { this(firstRegex, secondRegex, 0); }
 	
 	/**
 	 * Constructs a new concatenation regex given two subregexes and
@@ -38,10 +34,14 @@ public final class ConcatenationRegex implements LexerRegex {
 	 * @param secondRegex The second subregex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public ConcatenationRegex(@NotNull LexerRegex firstRegex, @NotNull LexerRegex secondRegex, int priority) {
+	public ConcatenationRegex(
+		@NotNull LexerRegex firstRegex,
+		@NotNull LexerRegex secondRegex,
+		         int        priority
+	) {
+		super(priority);
 		FIRST_REGEX  = firstRegex;
 		SECOND_REGEX = secondRegex;
-		PRIORITY     = priority;
 	}
 	
 	/**
@@ -78,13 +78,13 @@ public final class ConcatenationRegex implements LexerRegex {
 		
 		LexerRegex regex = regexIterator.previous();
 		
-		int maxPriority = regex.getPriority();
+		int maxPriority = regex.PRIORITY;
 		
 		while (regexIterator.hasPrevious()) {
 			
 			LexerRegex nextRegex = regexIterator.previous();
 			
-			int nextRegexPriority = nextRegex.getPriority();
+			int nextRegexPriority = nextRegex.PRIORITY;
 			
 			if (nextRegexPriority > maxPriority) {
 				maxPriority = nextRegexPriority;
@@ -113,7 +113,9 @@ public final class ConcatenationRegex implements LexerRegex {
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#nullable()
 	 */
 	@Override
-	public boolean nullable() { return FIRST_REGEX.nullable() && SECOND_REGEX.nullable(); }
+	public boolean nullable() {
+		return FIRST_REGEX.nullable() && SECOND_REGEX.nullable();
+	}
 	
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#charactersMatched()
@@ -128,12 +130,6 @@ public final class ConcatenationRegex implements LexerRegex {
 			firstRegexCharacters + secondRegexCharacters;
 		
 	}
-	
-	/**
-	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#getPriority()
-	 */
-	@Override
-	public int getPriority() { return PRIORITY; }
 	
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#advanced(char)

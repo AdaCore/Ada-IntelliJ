@@ -8,7 +8,7 @@ import org.jetbrains.annotations.*;
  * only if the two intersection subregexes can both advance by that
  * character.
  */
-public final class IntersectionRegex implements LexerRegex {
+public final class IntersectionRegex extends LexerRegex {
 	
 	/**
 	 * The intersection subregexes.
@@ -17,19 +17,15 @@ public final class IntersectionRegex implements LexerRegex {
 	final LexerRegex SECOND_REGEX;
 	
 	/**
-	 * The priority of this regex.
-	 */
-	private final int PRIORITY;
-	
-	/**
 	 * Constructs a new intersection regex given two subregexes.
 	 *
 	 * @param firstRegex The first subregex.
 	 * @param secondRegex The second subregex.
 	 */
-	public IntersectionRegex(@NotNull LexerRegex firstRegex, @NotNull LexerRegex secondRegex) {
-		this(firstRegex, secondRegex, 0);
-	}
+	public IntersectionRegex(
+		@NotNull LexerRegex firstRegex,
+		@NotNull LexerRegex secondRegex
+	) { this(firstRegex, secondRegex, 0); }
 	
 	/**
 	 * Constructs a new intersection regex given two subregexes and
@@ -39,17 +35,23 @@ public final class IntersectionRegex implements LexerRegex {
 	 * @param secondRegex The second subregex.
 	 * @param priority The priority to assign to the constructed regex.
 	 */
-	public IntersectionRegex(@NotNull LexerRegex firstRegex, @NotNull LexerRegex secondRegex, int priority) {
+	public IntersectionRegex(
+		@NotNull LexerRegex firstRegex,
+		@NotNull LexerRegex secondRegex,
+		         int        priority
+	) {
+		super(priority);
 		FIRST_REGEX  = firstRegex;
 		SECOND_REGEX = secondRegex;
-		PRIORITY     = priority;
 	}
 	
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#nullable()
 	 */
 	@Override
-	public boolean nullable() { return FIRST_REGEX.nullable() && SECOND_REGEX.nullable(); }
+	public boolean nullable() {
+		return FIRST_REGEX.nullable() && SECOND_REGEX.nullable();
+	}
 	
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#charactersMatched()
@@ -63,12 +65,6 @@ public final class IntersectionRegex implements LexerRegex {
 		return firstRegexCharacters != secondRegexCharacters ? -1 : firstRegexCharacters;
 		
 	}
-	
-	/**
-	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#getPriority()
-	 */
-	@Override
-	public int getPriority() { return PRIORITY; }
 	
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#advanced(char)

@@ -7,17 +7,12 @@ import org.jetbrains.annotations.*;
  * unlike other types of regexes that are defined recursively
  * using other regexes.
  */
-public final class UnitRegex implements LexerRegex {
+public final class UnitRegex extends LexerRegex {
 	
 	/**
 	 * The sequence of characters matched by this regex.
 	 */
 	final String SEQUENCE;
-	
-	/**
-	 * The priority of this regex.
-	 */
-	private final int PRIORITY;
 	
 	/**
 	 * Constructs a new unit regex given a sequence of characters.
@@ -34,8 +29,8 @@ public final class UnitRegex implements LexerRegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public UnitRegex(@NotNull String sequence, int priority) {
+		super(priority);
 		SEQUENCE = sequence;
-		PRIORITY = priority;
 	}
 	
 	/**
@@ -49,12 +44,6 @@ public final class UnitRegex implements LexerRegex {
 	 */
 	@Override
 	public int charactersMatched() { return SEQUENCE.length(); }
-	
-	/**
-	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#getPriority()
-	 */
-	@Override
-	public int getPriority() { return PRIORITY; }
 	
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#advanced(char)
