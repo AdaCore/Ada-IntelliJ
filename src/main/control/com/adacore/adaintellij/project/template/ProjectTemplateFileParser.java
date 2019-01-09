@@ -14,9 +14,21 @@ import static com.adacore.adaintellij.project.template.ProjectTemplateDescriptor
 final class ProjectTemplateFileParser {
 	
 	/**
-	 * The various sections of a project template descriptor file.
+	 * Represents the various sections of a project template
+	 * descriptor file. Possible values are:
+	 *
+	 * HEADER      => The section of the template descriptor file
+	 *                containing information about the template
+	 *                such as the template name and category.
+	 *
+	 * VARIABLES   => The section of the template descriptor file
+	 *                containing template variable names along with
+	 *                their default values and descriptions.
+	 *
+	 * DESCRIPTION => The section of the template descriptor file
+	 *                containing a description of the template.
 	 */
-	private enum ParsingSection { Header , Variables , Description }
+	private enum ParsingSection { HEADER , VARIABLES , DESCRIPTION }
 	
 	/**
 	 * Reads and parses the template descriptor file in the given
@@ -106,7 +118,7 @@ final class ProjectTemplateFileParser {
 		
 		// Loop over the file lines to complete the builder
 		
-		ParsingSection parsingSection   = ParsingSection.Header;
+		ParsingSection parsingSection   = ParsingSection.HEADER;
 		boolean        descriptionEmpty = true;
 		
 		for (String line : fileLines) {
@@ -124,9 +136,9 @@ final class ProjectTemplateFileParser {
 			if (line.startsWith("#")) {
 				
 				switch (line.toLowerCase()) {
-					case "# header":      parsingSection = ParsingSection.Header;      break;
-					case "# variables":   parsingSection = ParsingSection.Variables;   break;
-					case "# description": parsingSection = ParsingSection.Description; break;
+					case "# header":      parsingSection = ParsingSection.HEADER;      break;
+					case "# variables":   parsingSection = ParsingSection.VARIABLES;   break;
+					case "# description": parsingSection = ParsingSection.DESCRIPTION; break;
 				}
 				
 				continue;
@@ -137,7 +149,7 @@ final class ProjectTemplateFileParser {
 			
 			switch (parsingSection) {
 				
-				case Header: {
+				case HEADER: {
 					
 					// Parse the line as a header line
 					
@@ -164,7 +176,7 @@ final class ProjectTemplateFileParser {
 					
 				}
 				
-				case Variables: {
+				case VARIABLES: {
 					
 					// Parse the line as a template variable line
 					
@@ -201,7 +213,7 @@ final class ProjectTemplateFileParser {
 					
 				}
 				
-				case Description: {
+				case DESCRIPTION: {
 				
 					// Ignore the "[Description]" line
 				
