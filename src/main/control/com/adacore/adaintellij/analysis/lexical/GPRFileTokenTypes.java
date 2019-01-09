@@ -21,16 +21,26 @@ public final class GPRFileTokenTypes {
 	static final IElementType BAD_CHARACTER                     = TokenType.BAD_CHARACTER;
 	
 	/**
-	 * GPR file tokens representing delimiters.
+	 * GPR file tokens representing single-character delimiters.
 	 */
 	static final GPRFileFixedTokenType AMPERSAND                = new GPRFileFixedTokenType("AMPERSAND"        , "&");
+	static final GPRFileFixedTokenType APOSTROPHE               = new GPRFileFixedTokenType("APOSTROPHE"       , "'");
 	static final GPRFileFixedTokenType LEFT_PARENTHESIS         = new GPRFileFixedTokenType("LEFT_PARENTHESIS" , "(");
 	static final GPRFileFixedTokenType RIGHT_PARENTHESIS        = new GPRFileFixedTokenType("RIGHT_PARENTHESIS", ")");
 	static final GPRFileFixedTokenType COMMA                    = new GPRFileFixedTokenType("COMMA"            , ",");
+	static final GPRFileFixedTokenType FULL_STOP                = new GPRFileFixedTokenType("FULL_STOP"        , ".");
+	static final GPRFileFixedTokenType COLON                    = new GPRFileFixedTokenType("COLON"            , ":");
 	static final GPRFileFixedTokenType SEMICOLON                = new GPRFileFixedTokenType("SEMICOLON"        , ";");
+	static final GPRFileFixedTokenType VERTICAL_LINE            = new GPRFileFixedTokenType("VERTICAL_LINE"    , "|");
 	
 	/**
-	 * Ada tokens representing identifiers and literals.
+	 * GPR file tokens representing compound delimiters.
+	 */
+	static final GPRFileFixedTokenType ARROW                    = new GPRFileFixedTokenType("ARROW"            , "=>");
+	static final GPRFileFixedTokenType ASSIGNMENT               = new GPRFileFixedTokenType("ASSIGNMENT"       , ":=");
+	
+	/**
+	 * GPR file tokens representing identifiers and literals.
 	 */
 	static final GPRFileTokenType      IDENTIFIER               = new GPRFileTokenType("IDENTIFIER");     // My_Project
 	static final GPRFileTokenType      STRING_LITERAL           = new GPRFileTokenType("STRING_LITERAL"); // "main.adb"
@@ -92,10 +102,15 @@ public final class GPRFileTokenTypes {
 	public static final TokenSet WHITESPACE_TOKEN_SET = TokenSet.create(WHITESPACES);
 	
 	/**
-	 * Token set representing Ada delimiters.
+	 * Token set representing GPR file delimiters.
 	 */
 	public static final TokenSet DELIMITER_TOKEN_SET = TokenSet.create(
-		AMPERSAND, LEFT_PARENTHESIS, RIGHT_PARENTHESIS, COMMA, SEMICOLON
+		
+		AMPERSAND, APOSTROPHE, LEFT_PARENTHESIS, RIGHT_PARENTHESIS,
+		COMMA, FULL_STOP, COLON, SEMICOLON, VERTICAL_LINE,
+		
+		ARROW, ASSIGNMENT
+		
 	);
 	
 	/**

@@ -17,13 +17,23 @@ public final class GPRFileLexer extends Lexer {
 	// Delimiters
 	
 	/**
-	 * Unit regexes for matching GPR file delimiters.
+	 * Unit regexes for matching GPR file single delimiters.
 	 */
 	private static final LexerRegex AMPERSAND_REGEX         = new UnitRegex(AMPERSAND.TOKEN_TEXT);
+	private static final LexerRegex APOSTROPHE_REGEX        = new UnitRegex(APOSTROPHE.TOKEN_TEXT);
 	private static final LexerRegex LEFT_PARENTHESIS_REGEX  = new UnitRegex(LEFT_PARENTHESIS.TOKEN_TEXT);
 	private static final LexerRegex RIGHT_PARENTHESIS_REGEX = new UnitRegex(RIGHT_PARENTHESIS.TOKEN_TEXT);
 	private static final LexerRegex COMMA_REGEX             = new UnitRegex(COMMA.TOKEN_TEXT);
+	private static final LexerRegex FULL_STOP_REGEX         = new UnitRegex(FULL_STOP.TOKEN_TEXT);
+	private static final LexerRegex COLON_REGEX             = new UnitRegex(COLON.TOKEN_TEXT);
 	private static final LexerRegex SEMICOLON_REGEX         = new UnitRegex(SEMICOLON.TOKEN_TEXT);
+	private static final LexerRegex VERTICAL_LINE_REGEX     = new UnitRegex(VERTICAL_LINE.TOKEN_TEXT);
+	
+	/**
+	 * Unit regexes for matching GPR file compound delimiters.
+	 */
+	private static final LexerRegex ARROW_REGEX             = new UnitRegex(ARROW.TOKEN_TEXT);
+	private static final LexerRegex ASSIGNMENT_REGEX        = new UnitRegex(ASSIGNMENT.TOKEN_TEXT);
 	
 	// Keywords
 	
@@ -90,10 +100,17 @@ public final class GPRFileLexer extends Lexer {
 		regexTokenTypes.put(WHITESPACES_REGEX             , WHITESPACES);
 		
 		regexTokenTypes.put(AMPERSAND_REGEX               , AMPERSAND);
+		regexTokenTypes.put(APOSTROPHE_REGEX              , APOSTROPHE);
 		regexTokenTypes.put(LEFT_PARENTHESIS_REGEX        , LEFT_PARENTHESIS);
 		regexTokenTypes.put(RIGHT_PARENTHESIS_REGEX       , RIGHT_PARENTHESIS);
 		regexTokenTypes.put(COMMA_REGEX                   , COMMA);
+		regexTokenTypes.put(FULL_STOP_REGEX               , FULL_STOP);
+		regexTokenTypes.put(COLON_REGEX                   , COLON);
 		regexTokenTypes.put(SEMICOLON_REGEX               , SEMICOLON);
+		regexTokenTypes.put(VERTICAL_LINE_REGEX           , VERTICAL_LINE);
+		
+		regexTokenTypes.put(ARROW_REGEX                   , ARROW);
+		regexTokenTypes.put(ASSIGNMENT_REGEX              , ASSIGNMENT);
 		
 		regexTokenTypes.put(IDENTIFIER_REGEX              , IDENTIFIER);
 		regexTokenTypes.put(STRING_LITERAL_REGEX          , STRING_LITERAL);
