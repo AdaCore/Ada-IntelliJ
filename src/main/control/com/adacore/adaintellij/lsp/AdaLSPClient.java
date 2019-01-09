@@ -47,6 +47,11 @@ public final class AdaLSPClient implements LanguageClient {
 	private Map<String, List<Diagnostic>> documentDiagnostics = new HashMap<>();
 	
 	/**
+	 * An empty list of diagnostics.
+	 */
+	public static final List<Diagnostic> EMPTY_DIAGNOSTIC_LIST = Collections.emptyList();
+	
+	/**
 	 * Constructs a new AdaLSPClient given its driver and a project.
 	 *
 	 * @param driver The driver to attach to this client.
@@ -69,10 +74,10 @@ public final class AdaLSPClient implements LanguageClient {
 		
 		VirtualFile file = Utils.getDocumentVirtualFile(document);
 		
-		if (file == null) { return Collections.emptyList(); }
+		if (file == null) { return EMPTY_DIAGNOSTIC_LIST; }
 		
 		return Collections.unmodifiableList(
-			documentDiagnostics.getOrDefault(file.getUrl(), Collections.emptyList()));
+			documentDiagnostics.getOrDefault(file.getUrl(), EMPTY_DIAGNOSTIC_LIST));
 		
 	}
 	

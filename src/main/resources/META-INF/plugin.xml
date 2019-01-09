@@ -111,7 +111,7 @@
 		<!-- Ada structure view factory -->
 		<lang.psiStructureViewFactory language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.structure.AdaStructureViewFactory"/>
 		<!-- Ada code annotator -->
-		<annotator language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.diagnostics.AdaAnnotator"/>
+		<externalAnnotator language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.diagnostics.AdaAnnotator"/>
 		
 		<!-- Ada names validator -->
 		<lang.namesValidator language="Ada" implementationClass="com.adacore.adaintellij.analysis.lexical.AdaNamesValidator"/>

@@ -27,7 +27,6 @@ import com.adacore.adaintellij.notifications.AdaIJNotification;
 import com.adacore.adaintellij.project.AdaProject;
 
 import static com.adacore.adaintellij.Utils.*;
-import static com.adacore.adaintellij.lsp.LSPUtils.pathToUri;
 
 /**
  * Driver handling the LSP session between Ada-IntelliJ's
@@ -445,12 +444,8 @@ public final class AdaLSPDriver implements ProjectComponent {
 		int pid = Integer.parseInt(
 			java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
 		
-		String projectBasePath = project.getBasePath();
-		
-		assert projectBasePath != null;
-		
 		params.setProcessId(pid);
-		params.setRootUri(pathToUri(projectBasePath));
+		params.setRootUri(project.getBaseDir().getUrl());
 		params.setInitializationOptions(null);
 		
 		params.setCapabilities(new org.eclipse.lsp4j.ClientCapabilities(

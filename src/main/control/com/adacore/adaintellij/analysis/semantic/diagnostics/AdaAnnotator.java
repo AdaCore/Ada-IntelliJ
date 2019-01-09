@@ -2,89 +2,130 @@ package com.adacore.adaintellij.analysis.semantic.diagnostics;
 
 import java.util.List;
 
-import com.intellij.lang.annotation.AnnotationHolder;
-import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.editor.Document;
-import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.lang.annotation.*;
+import com.intellij.openapi.editor.*;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiFile;
+import org.jetbrains.annotations.*;
 
-import org.eclipse.lsp4j.Diagnostic;
+import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.Range;
 
-import com.adacore.adaintellij.lsp.AdaLSPClient;
-import com.adacore.adaintellij.lsp.AdaLSPDriver;
-import com.adacore.adaintellij.lsp.LSPUtils;
+import com.adacore.adaintellij.lsp.*;
 import com.adacore.adaintellij.Utils;
+
+import static com.adacore.adaintellij.lsp.LSPUtils.diagnosticSeverityToHighlightSeverity;
 
 /**
  * Annotator for Ada source code, powered by the
  * Ada Language Server (ALS).
  */
-public class AdaAnnotator implements Annotator {
+public class AdaAnnotator extends ExternalAnnotator<List<Diagnostic>, List<Diagnostic>> {
 	
 	/**
-	 * @see com.intellij.lang.annotation.Annotator#annotate(PsiElement, AnnotationHolder)
+	 * @see com.intellij.lang.annotation.ExternalAnnotator#collectInformation(PsiFile)
 	 *
-	 * This method simply fetches the list of diagnostics available
-	 * for the given element's document from the LSP client and looks
-	 * for diagnostics with the same range as the given element to
-	 * create annotations out of them.
-	 *
-	 * TODO: Improve the performance of the annotation process
-	 * TODO: Set the annotation type based on the diagnostic severity
-	 * TODO: Find a way to keep track of which diagnostics were
-	 *       already "transformed" into annotations, and create
-	 *       range-based annotations for the remaining diagnostics
+	 * Fetches and returns the list of diagnostics from the LSP client.
+	 */
+	@Nullable
+	@Override
+	public List<Diagnostic> collectInformation(@NotNull PsiFile file) {
+		
+		// Get the file's document
+		
+		Document document = Utils.getPsiFileDocument(file);
+		
+		if (document == null) {
+			return AdaLSPClient.EMPTY_DIAGNOSTIC_LIST;
+		}
+		
+		// Get the project's LSP client
+		
+		AdaLSPClient lspClient = AdaLSPDriver.getClient(file.getProject());
+		
+		if (lspClient == null) {
+			return AdaLSPClient.EMPTY_DIAGNOSTIC_LIST;
+		}
+		
+		// Return the document's diagnostics
+		
+		return lspClient.getDiagnostics(document);
+		
+	}
+	
+	/**
+	 * @see com.intellij.lang.annotation.ExternalAnnotator#collectInformation(PsiFile, Editor, boolean)
+	 */
+	@Nullable
+	@Override
+	public List<Diagnostic> collectInformation(
+		@NotNull PsiFile file,
+		@NotNull Editor  editor,
+		         boolean hasErrors
+	) { return collectInformation(file); }
+	
+	/**
+	 * @see com.intellij.lang.annotation.ExternalAnnotator#doAnnotate(Object)
+	 */
+	@Nullable
+	@Override
+	public List<Diagnostic> doAnnotate(List<Diagnostic> collectedInfo) {
+		return collectedInfo;
+	}
+	
+	/**
+	 * @see com.intellij.lang.annotation.ExternalAnnotator#apply(PsiFile, Object, AnnotationHolder)
 	 */
 	@Override
-	public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
+	public void apply(
+		@NotNull  PsiFile          file,
+		@Nullable List<Diagnostic> annotationResult,
+		@NotNull  AnnotationHolder holder
+	) {
 		
-		// Get the document containing element
+		// Check that there are diagnostics to process
+		// before continuing
 		
-		Document document = Utils.getPsiFileDocument(element.getContainingFile());
+		if (annotationResult == null || annotationResult.size() == 0) {
+			return;
+		}
+		
+		// Get the file's document
+		
+		Document document = Utils.getPsiFileDocument(file);
 		
 		if (document == null) { return; }
 		
-		// Get the LSP diagnostics for the document
+		// For each diagnostic...
 		
-		AdaLSPClient lspClient = AdaLSPDriver.getClient(element.getProject());
-		
-		if (lspClient == null) { return; }
-		
-		List<Diagnostic> diagnostics = lspClient.getDiagnostics(document);
-		
-		// Element start/end offsets
-		int elementStartOffset = element.getTextOffset();
-		int elementEndOffset   = elementStartOffset + element.getTextLength();
-		
-		// For each of the document's diagnostics...
-		
-		for (Diagnostic diagnostic : diagnostics) {
-		
+		for (Diagnostic diagnostic : annotationResult) {
+			
 			// Compute the start and end offsets given the
 			// range of the diagnostic
 			
 			Range diagnosticRange = diagnostic.getRange();
 			
-			int diagnosticStartOffset = LSPUtils.positionToOffset(document, diagnosticRange.getStart());
-			int diagnosticEndOffset   = LSPUtils.positionToOffset(document, diagnosticRange.getEnd());
+			int startOffset = LSPUtils.positionToOffset(document, diagnosticRange.getStart());
+			int endOffset   = LSPUtils.positionToOffset(document, diagnosticRange.getEnd());
 			
-			// Check if the offsets match those of the element
+			// Get the diagnostic severity and message
+			// If the severity is not set, consider it an error
 			
-			if (
-				elementStartOffset != diagnosticStartOffset ||
-				elementEndOffset   != diagnosticEndOffset
-			) { continue; }
+			DiagnosticSeverity severity = diagnostic.getSeverity();
 			
-			// Get the diagnostic message and create an error annotation
+			if (severity == null) {
+				severity = DiagnosticSeverity.Error;
+			}
 			
 			String message = diagnostic.getMessage();
 			
-			if (message == null) {
-				message = "Error";
-			}
+			// Create an annotation based on the diagnostic data
 			
-			holder.createErrorAnnotation(element, message);
+			holder.createAnnotation(
+				diagnosticSeverityToHighlightSeverity(severity),
+				new TextRange(startOffset, endOffset),
+				message == null ? severity.name() : message
+			);
 			
 		}
 		
