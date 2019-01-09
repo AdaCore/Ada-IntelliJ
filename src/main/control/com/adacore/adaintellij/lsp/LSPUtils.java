@@ -1,11 +1,11 @@
 package com.adacore.adaintellij.lsp;
 
+import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.editor.Document;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.*;
 
-import org.eclipse.lsp4j.MessageType;
-import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.*;
 
 /**
  * LSP-specific utilities.
@@ -23,27 +23,60 @@ public final class LSPUtils {
 	static final String ALS_NAME = "ada_language_server";
 	
 	/**
-	 * Returns an IntelliJ notification type corresponding to the given
-	 * LSP message type.
-	 *
-	 * @param type The message type to translate to a notification type.
-	 * @return The corresponding IntelliJ notification type.
+	 * Private default constructor to prevent instantiation.
 	 */
-	static NotificationType messageTypeToNotificationType(MessageType type) {
-		return
-			type == MessageType.Error   ? NotificationType.ERROR :
-			type == MessageType.Warning ? NotificationType.WARNING :
-				NotificationType.INFORMATION;
+	private LSPUtils() {}
+	
+	/**
+	 * Translates the given message type, defined in the LSP standard,
+	 * to the notification type used in the IntelliJ platform.
+	 *
+	 * @param type The message type to translate.
+	 * @return The corresponding notification type.
+	 */
+	public static NotificationType messageTypeToNotificationType(@NotNull MessageType type) {
+		
+		switch (type) {
+			
+			case Error:   return NotificationType.ERROR;
+			
+			case Warning: return NotificationType.WARNING;
+			
+			case Info:
+			case Log:
+			default:      return NotificationType.INFORMATION;
+			
+		}
+		
 	}
 	
 	/**
-	 * Returns a URL string corresponding to the given file path.
+	 * Translates the given diagnostic severity, defined in the LSP
+	 * standard, to the severity type used by the IntelliJ platform's
+	 * annotation holders.
 	 *
-	 * @param filePath The file path to translate to a URL string.
-	 * @return The corresponding URL string.
+	 * @param severity The diagnostic severity to translate.
+	 * @return The corresponding annotation severity.
 	 */
-	static String pathToUri(@NotNull String filePath) {
-		return "file:" + (filePath.startsWith("/") ? "//" : "") + filePath;
+	@Contract(pure = true)
+	@NotNull
+	public static HighlightSeverity diagnosticSeverityToHighlightSeverity(
+		@NotNull DiagnosticSeverity severity
+	) {
+		
+		switch (severity) {
+			
+			case Warning:     return HighlightSeverity.WARNING;
+			
+			case Information: return HighlightSeverity.INFORMATION;
+			
+			case Hint:        return HighlightSeverity.WEAK_WARNING;
+			
+			case Error:
+			default:          return HighlightSeverity.ERROR;
+			
+		}
+		
 	}
 	
 	/**
