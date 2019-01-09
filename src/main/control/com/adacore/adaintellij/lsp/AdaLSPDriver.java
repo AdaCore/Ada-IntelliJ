@@ -92,11 +92,24 @@ public final class AdaLSPDriver implements ProjectComponent {
 	private boolean initialized = false;
 	
 	/**
-	 * Document open/change/close event listeners that make the corresponding requests
-	 * to the ALS. Each listener is identified in the map by the URI of the document
-	 * to which it listens.
+	 * Document change event listener that makes a `textDocument/didChange` request to
+	 * the ALS. This instance of `DocumentListener` is used for all documents, and must
+	 * therefore remain purely functional and never hold any state tied to a specific
+	 * document.
 	 */
-	private Map<String, DocumentListener> documentListeners = new HashMap<>();
+	private DocumentListener DOCUMENT_CHANGE_LISTENER = new DocumentListener() {
+		
+		/**
+		 * @see com.intellij.openapi.editor.event.DocumentListener#documentChanged(DocumentEvent)
+		 *
+		 * Sends a `textDocument/didChange` notification to the ALS when a file is changed.
+		 */
+		@Override
+		public void documentChanged(DocumentEvent event) {
+			server.didChange(event);
+		}
+		
+	};
 	
 	/**
 	 * Constructs a new AdaLSPDriver given a project and other project components.
@@ -380,23 +393,7 @@ public final class AdaLSPDriver implements ProjectComponent {
 				
 				if (document == null) { return; }
 				
-				DocumentListener changeListener = new DocumentListener() {
-					
-					/**
-					 * @see com.intellij.openapi.editor.event.DocumentListener#documentChanged(DocumentEvent)
-					 *
-					 * Sends a `textDocument/didChange` notification to the ALS when a file is changed.
-					 */
-					@Override
-					public void documentChanged(DocumentEvent event) {
-						server.didChange(event);
-					}
-					
-				};
-				
-				documentListeners.put(file.getUrl(), changeListener);
-				
-				document.addDocumentListener(changeListener);
+				document.addDocumentListener(DOCUMENT_CHANGE_LISTENER);
 				
 				server.didOpen(file);
 				
@@ -412,16 +409,10 @@ public final class AdaLSPDriver implements ProjectComponent {
 				
 				if (!AdaFileType.isAdaFile(file)) { return; }
 				
-				DocumentListener changeListener = documentListeners.remove(file.getUrl());
+				Document document = getVirtualFileDocument(file);
 				
-				if (changeListener != null) {
-					
-					Document document = getVirtualFileDocument(file);
-					
-					if (document != null) {
-						document.removeDocumentListener(changeListener);
-					}
-				
+				if (document != null) {
+					document.removeDocumentListener(DOCUMENT_CHANGE_LISTENER);
 				}
 				
 				server.didClose(file);
