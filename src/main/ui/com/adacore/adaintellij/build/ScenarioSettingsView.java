@@ -1,13 +1,12 @@
 package com.adacore.adaintellij.build;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.*;
 
 import com.intellij.util.ui.JBUI;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 import com.adacore.adaintellij.AdaIntelliJUI;
 
@@ -83,9 +82,47 @@ public final class ScenarioSettingsView extends AdaIntelliJUI {
 		
 		removeButton.addActionListener(removeActionEvent -> {
 			
-			variablesPanel.remove(variableField);
-			variablesPanel.remove(valueField);
-			variablesPanel.remove(removeButton);
+			Component[] components = variablesPanel.getComponents();
+			
+			assert components.length > 0 && components.length % 3 == 0;
+			
+			boolean copyNextRow = false;
+			
+			// For every row (three components)...
+			
+			for (int i = 0 ; i < components.length ; i += 3) {
+				
+				JTextField rowVariableField     = (JTextField)components[i];
+				JTextField rowValueField        = (JTextField)components[i + 1];
+				JButton    rowRemoveButton      = (JButton)components[i + 2];
+				
+				// If this is the last row, then remove it
+				
+				if (i == components.length - 3) {
+					variablesPanel.remove(rowVariableField);
+					variablesPanel.remove(rowValueField);
+					variablesPanel.remove(rowRemoveButton);
+					break;
+				}
+				
+				// If the current row is the one to remove,
+				// then set the row-copying boolean to true
+				
+				if (!copyNextRow && variableField.equals(rowVariableField)) {
+					copyNextRow = true;
+				}
+				
+				// If the row-copying boolean is true, then
+				// copy the next row into this one
+				
+				if (copyNextRow) {
+					rowVariableField.setText(((JTextField)components[i + 3]).getText());
+					rowValueField.setText(((JTextField)components[i + 4]).getText());
+				}
+				
+			}
+			
+			// Decrement the row count and update the UI
 			
 			rowCount--;
 			
@@ -94,44 +131,26 @@ public final class ScenarioSettingsView extends AdaIntelliJUI {
 		});
 		
 		// Add the row components
+
+		GridBagConstraints gridConstraints = new GridBagConstraints();
+		
+		gridConstraints.weightx = 1.0;
+		gridConstraints.gridy   = rowCount;
+		gridConstraints.ipadx   = 2;
+		gridConstraints.ipady   = 2;
+		gridConstraints.fill    = GridBagConstraints.HORIZONTAL;
+		gridConstraints.insets  = JBUI.insets(2, 3);
+		
+		variablesPanel.add(variableField, gridConstraints);
+		variablesPanel.add(valueField, gridConstraints);
+		
+		gridConstraints.weightx = 0.1;
+		
+		variablesPanel.add(removeButton, gridConstraints);
+		
+		// Increment the row count and update the UI
 		
 		rowCount++;
-		
-		GridBagConstraints variableFieldConstraints = new GridBagConstraints();
-		
-		variableFieldConstraints.weightx = 1.0;
-		variableFieldConstraints.gridx   = 0;
-		variableFieldConstraints.gridy   = rowCount;
-		variableFieldConstraints.ipadx   = 2;
-		variableFieldConstraints.ipady   = 2;
-		variableFieldConstraints.fill    = GridBagConstraints.HORIZONTAL;
-		variableFieldConstraints.insets  = JBUI.insets(2, 3);
-		
-		variablesPanel.add(variableField, variableFieldConstraints);
-		
-		GridBagConstraints valueFieldConstraints = new GridBagConstraints();
-		
-		valueFieldConstraints.weightx = 1.0;
-		valueFieldConstraints.gridy   = rowCount;
-		valueFieldConstraints.ipadx   = 2;
-		valueFieldConstraints.ipady   = 2;
-		valueFieldConstraints.fill    = GridBagConstraints.HORIZONTAL;
-		valueFieldConstraints.insets  = JBUI.insets(2, 3);
-		
-		variablesPanel.add(valueField, valueFieldConstraints);
-		
-		GridBagConstraints removeButtonConstraints = new GridBagConstraints();
-		
-		removeButtonConstraints.weightx = 0.1;
-		removeButtonConstraints.gridy   = rowCount;
-		removeButtonConstraints.ipadx   = 2;
-		removeButtonConstraints.ipady   = 2;
-		removeButtonConstraints.fill    = GridBagConstraints.HORIZONTAL;
-		removeButtonConstraints.insets  = JBUI.insets(2, 3);
-		
-		variablesPanel.add(removeButton, removeButtonConstraints);
-		
-		// Update the UI
 		
 		updateUI();
 		
@@ -145,13 +164,21 @@ public final class ScenarioSettingsView extends AdaIntelliJUI {
 	 */
 	void setScenarioVariables(@NotNull Map<String, String> scenarioVariables) {
 		
+		// Remove all children
+		
 		for (Component child : variablesPanel.getComponents()) {
 			variablesPanel.remove(child);
 		}
 		
 		rowCount = 0;
 		
+		// Add given variable settings
+		
 		scenarioVariables.forEach(this::addScenarioVariable);
+		
+		// Update the UI
+		
+		updateUI();
 		
 	}
 	
