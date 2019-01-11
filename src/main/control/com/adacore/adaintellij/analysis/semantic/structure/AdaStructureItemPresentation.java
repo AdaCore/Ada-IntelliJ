@@ -8,6 +8,8 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
+
 /**
  * The presentation of an item in the structure view of an Ada file.
  */
@@ -44,16 +46,19 @@ public class AdaStructureItemPresentation implements ItemPresentation {
 	 */
 	@Nullable
 	@Override
-	public String getLocationString() {
-		return element instanceof PsiFile ?
-			"" : element.getContainingFile().getName();
-	}
+	public String getLocationString() { return null; }
 	
 	/**
 	 * @see com.intellij.navigation.ItemPresentation#getIcon(boolean)
 	 */
 	@Nullable
 	@Override
-	public Icon getIcon(boolean unused) { return null; }
+	public Icon getIcon(boolean unused) {
+		
+		AdaPsiElement adaPsiElement = AdaPsiElement.getFrom(element);
+		
+		return adaPsiElement == null ? null : adaPsiElement.getIcon();
+		
+	}
 	
 }

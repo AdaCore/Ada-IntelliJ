@@ -31,6 +31,15 @@ public final class Icons {
 	public static final Icon ADA_MODULE                 = AllIcons.Nodes.Module;
 	
 	/**
+	 * Icons for program structure elements.
+	 */
+	public static final Icon ADA_TYPE                   = IconLoader.getIcon("/icons/type-icon.png");
+	public static final Icon ADA_CONSTANT               = IconLoader.getIcon("/icons/constant-icon.png");
+	public static final Icon ADA_VARIABLE               = IconLoader.getIcon("/icons/variable-icon.png");
+	public static final Icon ADA_PROCEDURE              = IconLoader.getIcon("/icons/procedure-icon.png");
+	public static final Icon ADA_FUNCTION               = IconLoader.getIcon("/icons/function-icon.png");
+	
+	/**
 	 * Private default constructor to prevent instantiation.
 	 */
 	private Icons() {}

@@ -1,10 +1,14 @@
 package com.adacore.adaintellij.analysis.semantic;
 
+import javax.swing.*;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.*;
+
+import com.adacore.adaintellij.Icons;
 
 /**
  * Ada AST node that is not a root node.
@@ -21,9 +25,46 @@ import org.jetbrains.annotations.*;
 public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiElement {
 	
 	/**
+	 * Represents the various types of elements that an `AdaPsiElement`
+	 * can represent.
+	 *
+	 * @see com.adacore.adaintellij.analysis.semantic.AdaPsiStructureManager
+	 *
+	 * Possible values are:
+	 *
+	 * PACKAGE_SPEC_IDENTIFIER => The identifier representing a package spec.
+	 * PACKAGE_BODY_IDENTIFIER => The identifier representing a package body.
+	 *
+	 * TYPE_IDENTIFIER         => The identifier in a type declaration.
+	 * CONSTANT_IDENTIFIER     => The identifier in a constant declaration.
+	 * VARIABLE_IDENTIFIER     => The identifier in a variable declaration.
+	 *
+	 * PROCEDURE_IDENTIFIER    => The identifier representing a procedure.
+	 * FUNCTION_IDENTIFIER     => The identifier representing a function.
+	 *
+	 * OTHER                   => Any other type of Ada element.
+	 */
+	public enum AdaElementType {
+		
+		PACKAGE_SPEC_IDENTIFIER, PACKAGE_BODY_IDENTIFIER,
+		
+		TYPE_IDENTIFIER, CONSTANT_IDENTIFIER, VARIABLE_IDENTIFIER,
+		
+		PROCEDURE_IDENTIFIER, FUNCTION_IDENTIFIER,
+		
+		OTHER
+		
+	}
+	
+	/**
 	 * The underlying tree node.
 	 */
 	private ASTNode node;
+	
+	/**
+	 * The type of this Ada element. Set to `OTHER` by default.
+	 */
+	private AdaElementType adaElementType = AdaElementType.OTHER;
 	
 	/**
 	 * Constructs a new AdaPsiElement given a tree node.
@@ -139,6 +180,64 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	 */
 	@Override
 	public int getStartOffset() { return node.getStartOffset(); }
+	
+	/**
+	 * Returns an icon representing this `AdaPsiElement` given
+	 * some flags packed in an integer. This implementation
+	 * ignores the given flags and always returns the same icon
+	 * given the type of this Ada element. It is therefore
+	 * preferred to simply use `getIcon()`.
+	 *
+	 * @param flags The flags to use to determine the icon.
+	 * @return An icon representing this element.
+	 */
+	@Nullable
+	@Override
+	public Icon getIcon(int flags) {
+		
+		switch (adaElementType) {
+			
+			case PACKAGE_SPEC_IDENTIFIER: return Icons.ADA_SPEC_SOURCE_FILE;
+			case PACKAGE_BODY_IDENTIFIER: return Icons.ADA_BODY_SOURCE_FILE;
+			
+			case TYPE_IDENTIFIER:         return Icons.ADA_TYPE;
+			case CONSTANT_IDENTIFIER:     return Icons.ADA_CONSTANT;
+			case VARIABLE_IDENTIFIER:     return Icons.ADA_VARIABLE;
+			
+			case PROCEDURE_IDENTIFIER:    return Icons.ADA_PROCEDURE;
+			case FUNCTION_IDENTIFIER:     return Icons.ADA_FUNCTION;
+			
+			case OTHER:
+			default:                      return null;
+			
+		}
+		
+	}
+	
+	/**
+	 * Returns the icon representing this `AdaPsiElement`.
+	 *
+	 * @return The icon representing this element.
+	 */
+	@Nullable
+	public Icon getIcon() { return getIcon(ICON_FLAG_VISIBILITY); }
+	
+	/**
+	 * Sets the type of this Ada element to the given element type.
+	 *
+	 * @param elementType The element type to set.
+	 */
+	void setAdaElementType(@NotNull AdaElementType elementType) {
+		adaElementType = elementType;
+	}
+	
+	/**
+	 * Returns the Ada element type of this element.
+	 *
+	 * @return The Ada element type of this element.
+	 */
+	@NotNull
+	public AdaElementType getAdaElementType() { return adaElementType; }
 	
 	/**
 	 * Returns the `AdaPsiElement` corresponding to the given element,

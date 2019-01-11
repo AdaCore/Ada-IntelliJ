@@ -1,26 +1,17 @@
 package com.adacore.adaintellij.analysis.semantic.structure;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.stream.Stream;
 
 import com.intellij.ide.structureView.StructureViewTreeElement;
-import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
-import com.intellij.ide.util.treeView.smartTree.TreeElement;
+import com.intellij.ide.util.treeView.smartTree.*;
 import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.NavigatablePsiElement;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
-import org.eclipse.lsp4j.DocumentSymbol;
+import com.adacore.adaintellij.analysis.semantic.*;
 
-import com.adacore.adaintellij.lsp.AdaLSPDriver;
-import com.adacore.adaintellij.lsp.AdaLSPServer;
-import com.adacore.adaintellij.lsp.LSPUtils;
-import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
-import com.adacore.adaintellij.Utils;
+import static com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElementType;
 
 /**
  * Element in the structure view of an Ada file.
@@ -82,41 +73,29 @@ public class AdaStructureViewElement implements StructureViewTreeElement, Sortab
 		
 		if (!(element instanceof PsiFile)) { return TreeElement.EMPTY_ARRAY; }
 		
-		final PsiFile     psiFile     = element.getContainingFile();
-		final Document    document    = Utils.getPsiFileDocument(psiFile);
-		      VirtualFile virtualFile = Utils.getPsiFileVirtualFile(psiFile);
+		// Filter this element's children by Ada element type,
+		// map them to `AdaStructureViewElement` and return them
 		
-		if (document == null || virtualFile == null) { return TreeElement.EMPTY_ARRAY; }
-		
-		String documentUri = virtualFile.getUrl();
-		
-		// Make the request and wait for the result
-		
-		AdaLSPServer lspServer = AdaLSPDriver.getServer(element.getProject());
-		
-		if (lspServer == null) { return TreeElement.EMPTY_ARRAY; }
-		
-		List<DocumentSymbol> symbols = lspServer.documentSymbol(documentUri);
-		
-		// Map the returned symbols to structure view
-		// elements and return them as an array
-		
-		return symbols.stream()
-			.map(symbol -> {
-			
-				PsiElement element = psiFile.findElementAt(
-					LSPUtils.positionToOffset(document, symbol.getSelectionRange().getStart()));
-				
-				if (element == null) { return null; }
+		return Stream.of(element.getChildren())
+			.filter(element -> {
 				
 				AdaPsiElement adaPsiElement = AdaPsiElement.getFrom(element);
 				
-				if (adaPsiElement == null) { return null; }
+				if (!(adaPsiElement instanceof AdaPsiReference)) { return false; }
 				
-				return new AdaStructureViewElement(adaPsiElement);
+				AdaElementType elementType = adaPsiElement.getAdaElementType();
+				
+				return
+					elementType == AdaElementType.PACKAGE_SPEC_IDENTIFIER ||
+					elementType == AdaElementType.PACKAGE_BODY_IDENTIFIER ||
+					elementType == AdaElementType.TYPE_IDENTIFIER         ||
+					elementType == AdaElementType.CONSTANT_IDENTIFIER     ||
+					elementType == AdaElementType.VARIABLE_IDENTIFIER     ||
+					elementType == AdaElementType.PROCEDURE_IDENTIFIER    ||
+					elementType == AdaElementType.FUNCTION_IDENTIFIER;
 				
 			})
-			.filter(Objects::nonNull)
+			.map(element -> new AdaStructureViewElement((AdaPsiReference)element))
 			.toArray(TreeElement[]::new);
 		
 	}
