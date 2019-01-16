@@ -5,6 +5,8 @@ import com.intellij.lang.PsiStructureViewFactory;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.*;
 
+import com.adacore.adaintellij.analysis.semantic.AdaPsiFile;
+
 /**
  * Structure view factory for Ada files.
  */
@@ -19,7 +21,17 @@ public class AdaStructureViewFactory implements PsiStructureViewFactory {
 	@NotNull
 	@Override
 	public StructureViewBuilder getStructureViewBuilder(@NotNull PsiFile psiFile) {
-		return new AdaTreeBasedStructureViewBuilder(psiFile);
+		
+		// Check that the PSI file is an Ada PSI file
+		
+		assert psiFile instanceof AdaPsiFile :
+			"Attempt to get an Ada structure view builder for a non-Ada PSI file";
+		
+		// Return a new Ada structure view builder for
+		// the given Ada PSI file
+		
+		return new AdaTreeBasedStructureViewBuilder((AdaPsiFile)psiFile);
+		
 	}
 	
 }

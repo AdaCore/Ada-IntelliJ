@@ -2,9 +2,9 @@ package com.adacore.adaintellij.analysis.semantic.structure;
 
 import com.intellij.ide.structureView.*;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.*;
 
+import com.adacore.adaintellij.analysis.semantic.AdaPsiFile;
 import com.adacore.adaintellij.analysis.semantic.AdaPsiStructureManager;
 
 /**
@@ -16,7 +16,7 @@ public class AdaTreeBasedStructureViewBuilder extends TreeBasedStructureViewBuil
 	 * The PSI file represented by the structure views built
 	 * by this builder.
 	 */
-	private PsiFile file;
+	private AdaPsiFile file;
 	
 	/**
 	 * Constructs a new AdaTreeBasedStructureViewBuilder given
@@ -25,7 +25,7 @@ public class AdaTreeBasedStructureViewBuilder extends TreeBasedStructureViewBuil
 	 * @param file The PSI file to attach to the constructed
 	 *             structure view builder.
 	 */
-	AdaTreeBasedStructureViewBuilder(@NotNull PsiFile file) { this.file = file; }
+	AdaTreeBasedStructureViewBuilder(@NotNull AdaPsiFile file) { this.file = file; }
 	
 	/**
 	 * @see com.intellij.ide.structureView.TreeBasedStructureViewBuilder#createStructureViewModel(Editor)

@@ -3,14 +3,14 @@ package com.adacore.adaintellij.analysis.semantic;
 import java.util.List;
 
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
 import org.eclipse.lsp4j.DocumentSymbol;
 
 import com.adacore.adaintellij.lsp.*;
+import com.adacore.adaintellij.misc.cache.Marker;
 import com.adacore.adaintellij.Utils;
 
 import static com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElementType;
@@ -19,13 +19,16 @@ import static com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElement
  * Ada program structure manager.
  *
  * Due to the way Ada source code is parsed by the Ada-IntelliJ
- * plugin, additional semantic information can only be added to
- * the PSI tree elements after the tree has been constructed.
+ * plugin, additional semantic information can only be added to the
+ * PSI tree elements after the tree has been constructed.
  *
- * This class provides an API that can be used to query
- * additional semantic information about a given PSI file from
- * the ALS (Ada Language Server) and patch the underlying PSI
- * tree with the collected information.
+ * This class provides an API that can be used to query additional
+ * semantic information about a given PSI file from the ALS (Ada
+ * Language Server) and patch the underlying PSI tree with the
+ * collected information.
+ * Any component that requires specific structure information for a
+ * certain file must therefore first call the corresponding patcher
+ * from this class before reading that information from that file.
  *
  * @see com.adacore.adaintellij.analysis.semantic.AdaParser
  * @see com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElementType
@@ -41,19 +44,14 @@ public class AdaPsiStructureManager {
 	 * invalidating all patches previously applied to a file.
 	 * Each patch must have its own marker.
 	 */
-	private static final Key<Object> SYMBOLS_PATCH_MARKER = new Key<>("SYMBOLS_PATCH_MARKER");
-	
-	/**
-	 * A non null object value used with patch markers.
-	 */
-	private static final Object NON_NULL_VALUE = new Object();
+	private static final Marker SYMBOLS_PATCH_MARKER = Marker.getNewMarker();
 	
 	/**
 	 * Applies all possible patches to the given PSI file.
 	 *
 	 * @param psiFile The PSI file to patch.
 	 */
-	public static void patchPsiFile(@NotNull PsiFile psiFile) {
+	public static void patchPsiFile(@NotNull AdaPsiFile psiFile) {
 		patchPsiFileElementTypes(psiFile);
 	}
 	
@@ -64,7 +62,7 @@ public class AdaPsiStructureManager {
 	 *
 	 * @param psiFile The PSI file to patch.
 	 */
-	public static void patchPsiFileElementTypes(@NotNull PsiFile psiFile) {
+	public static void patchPsiFileElementTypes(@NotNull AdaPsiFile psiFile) {
 		
 		patchPsiFileIfMarked(
 			psiFile,
@@ -129,14 +127,14 @@ public class AdaPsiStructureManager {
 	 * @param patch The patch to apply if the file is marked.
 	 */
 	private static void patchPsiFileIfMarked(
-		@NotNull PsiFile     psiFile,
-		@NotNull Key<Object> marker,
-		@NotNull Runnable    patch
+		@NotNull AdaPsiFile psiFile,
+		@NotNull Marker     marker,
+		@NotNull Runnable   patch
 	) {
 		
 		// If the file is marked with the marker, then abort
 		
-		if (psiFile.getUserData(marker) != null) { return; }
+		if (psiFile.isMarked(marker)) { return; }
 		
 		// Apply the patch
 		
@@ -144,7 +142,7 @@ public class AdaPsiStructureManager {
 		
 		// Mark the file with the marker
 		
-		psiFile.putUserData(marker, NON_NULL_VALUE);
+		psiFile.mark(marker);
 		
 	}
 	

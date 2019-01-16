@@ -7,6 +7,7 @@ import com.intellij.psi.FileViewProvider;
 import com.intellij.util.FileContentUtil;
 import org.jetbrains.annotations.NotNull;
 
+import com.adacore.adaintellij.misc.cache.Markable;
 import com.adacore.adaintellij.AdaLanguage;
 
 /**
@@ -17,7 +18,7 @@ import com.adacore.adaintellij.AdaLanguage;
  * Ada-IntelliJ Ada parser:
  * @see com.adacore.adaintellij.analysis.semantic.AdaParser
  */
-public final class AdaPsiFile extends PsiFileBase {
+public final class AdaPsiFile extends PsiFileBase implements Markable {
 	
 	/**
 	 * The file view provider corresponding to this Ada file.
