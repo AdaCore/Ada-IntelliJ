@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Immutable data class representing wrapped cache data.
- * @see Cacher
+ * @see com.adacore.adaintellij.misc.cache.Cacher
  *
  * @param <T> The type of data that an instance of this
  *            class represents.

@@ -4,7 +4,7 @@ import org.jetbrains.annotations.*;
 
 /**
  * Marker used to mark markables.
- * @see Markable
+ * @see com.adacore.adaintellij.misc.cache.Markable
  */
 public final class Marker extends CacheKey<Object> {
 	
