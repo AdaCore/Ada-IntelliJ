@@ -13,7 +13,7 @@ import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
 /**
  * The presentation of an item in the structure view of an Ada file.
  */
-public class AdaStructureItemPresentation implements ItemPresentation {
+public final class AdaStructureItemPresentation implements ItemPresentation {
 	
 	/**
 	 * The PSI element that this item presentation represents.

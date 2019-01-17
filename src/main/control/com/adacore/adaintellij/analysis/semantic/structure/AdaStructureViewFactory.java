@@ -10,7 +10,7 @@ import com.adacore.adaintellij.analysis.semantic.AdaPsiFile;
 /**
  * Structure view factory for Ada files.
  */
-public class AdaStructureViewFactory implements PsiStructureViewFactory {
+public final class AdaStructureViewFactory implements PsiStructureViewFactory {
 	
 	/**
 	 * Returns a new structure view builder for the given file.

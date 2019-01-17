@@ -16,7 +16,7 @@ import static com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElement
 /**
  * Element in the structure view of an Ada file.
  */
-public class AdaStructureViewElement implements StructureViewTreeElement, SortableTreeElement {
+public final class AdaStructureViewElement implements StructureViewTreeElement, SortableTreeElement {
 	
 	/**
 	 * The PSI element that this structure view element represents.

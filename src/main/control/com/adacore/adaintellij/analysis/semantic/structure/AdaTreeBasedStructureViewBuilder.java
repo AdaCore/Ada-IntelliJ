@@ -10,7 +10,7 @@ import com.adacore.adaintellij.analysis.semantic.AdaPsiStructureManager;
 /**
  * Structure view builder for Ada files.
  */
-public class AdaTreeBasedStructureViewBuilder extends TreeBasedStructureViewBuilder {
+public final class AdaTreeBasedStructureViewBuilder extends TreeBasedStructureViewBuilder {
 	
 	/**
 	 * The PSI file represented by the structure views built
