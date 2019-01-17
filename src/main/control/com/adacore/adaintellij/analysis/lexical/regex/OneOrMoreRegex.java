@@ -6,17 +6,12 @@ import org.jetbrains.annotations.*;
  * Regex matching one or more occurrences of a sequence
  * of characters matched by a subregex.
  */
-public final class OneOrMoreRegex implements LexerRegex {
+public final class OneOrMoreRegex extends LexerRegex {
 	
 	/**
 	 * The subregex to be matched one or more times.
 	 */
 	final LexerRegex REGEX;
-	
-	/**
-	 * The priority of this regex.
-	 */
-	private final int PRIORITY;
 	
 	/**
 	 * Constructs a new one or more regex given a subregex.
@@ -33,8 +28,8 @@ public final class OneOrMoreRegex implements LexerRegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public OneOrMoreRegex(@NotNull LexerRegex regex, int priority) {
-		REGEX    = regex;
-		PRIORITY = priority;
+		super(priority);
+		REGEX = regex;
 	}
 	
 	/**
@@ -48,12 +43,6 @@ public final class OneOrMoreRegex implements LexerRegex {
 	 */
 	@Override
 	public int charactersMatched() { return -1; }
-	
-	/**
-	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#getPriority()
-	 */
-	@Override
-	public int getPriority() { return PRIORITY; }
 	
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#advanced(char)

@@ -6,17 +6,12 @@ import org.jetbrains.annotations.*;
  * Regex matching zero or more occurrences of a sequence
  * of characters matched by a subregex.
  */
-public final class ZeroOrMoreRegex implements LexerRegex {
+public final class ZeroOrMoreRegex extends LexerRegex {
 	
 	/**
 	 * The subregex to be matched zero or more times.
 	 */
 	final LexerRegex REGEX;
-	
-	/**
-	 * The priority of this regex.
-	 */
-	private final int PRIORITY;
 	
 	/**
 	 * Constructs a new zero or more regex given a subregex.
@@ -33,8 +28,8 @@ public final class ZeroOrMoreRegex implements LexerRegex {
 	 * @param priority The priority to assign to the constructed regex.
 	 */
 	public ZeroOrMoreRegex(@NotNull LexerRegex regex, int priority) {
-		REGEX    = regex;
-		PRIORITY = priority;
+		super(priority);
+		REGEX = regex;
 	}
 	
 	/**
@@ -48,12 +43,6 @@ public final class ZeroOrMoreRegex implements LexerRegex {
 	 */
 	@Override
 	public int charactersMatched() { return -1; }
-	
-	/**
-	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#getPriority()
-	 */
-	@Override
-	public int getPriority() { return PRIORITY; }
 	
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#advanced(char)

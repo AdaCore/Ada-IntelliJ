@@ -531,7 +531,7 @@ abstract class Lexer extends LexerBase {
 						regex.nullable() &&
 							(
 								highestPriorityRegex == null ||
-									regex.getPriority() > highestPriorityRegex.getPriority()
+									regex.PRIORITY > highestPriorityRegex.PRIORITY
 							)
 					) {
 						highestPriorityRegex = regex;
