@@ -9,6 +9,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.*;
 
 import com.adacore.adaintellij.Icons;
+import com.adacore.adaintellij.Utils;
 
 /**
  * Ada AST node that is not a root node.
@@ -307,8 +308,8 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	 * @return Whether or not the given elements are in the same file.
 	 */
 	public static boolean areInSameFile(@NotNull PsiElement element1, @NotNull PsiElement element2) {
-		return element1.getContainingFile().getVirtualFile()
-			.equals(element2.getContainingFile().getVirtualFile());
+		return Utils.psiFilesRepresentSameFile(
+			element1.getContainingFile(), element2.getContainingFile());
 	}
 	
 	/**

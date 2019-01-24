@@ -246,6 +246,46 @@ public final class Utils {
 	}
 	
 	/**
+	 * Returns whether or not the given PSI files represent the
+	 * same underlying file.
+	 *
+	 * @param file1 The first PSI file to test.
+	 * @param file2 The second PSI file to test.
+	 * @return Whether or not the given PSI files are equivalent.
+	 */
+	public static boolean psiFilesRepresentSameFile(
+		@NotNull PsiFile file1,
+		@NotNull PsiFile file2
+	) {
+		
+		VirtualFile virtualFile1 = getPsiFileVirtualFile(file1);
+		
+		return virtualFile1 != null &&
+			virtualFile1.equals(getPsiFileVirtualFile(file2));
+		
+	}
+	
+	/**
+	 * Returns whether or not the given documents represent the
+	 * same underlying file.
+	 *
+	 * @param document1 The first document to test.
+	 * @param document2 The second document to test.
+	 * @return Whether or not the given documents are equivalent.
+	 */
+	public static boolean documentsRepresentSameFile(
+		@NotNull Document document1,
+		@NotNull Document document2
+	) {
+		
+		VirtualFile virtualFile1 = getDocumentVirtualFile(document1);
+		
+		return virtualFile1 != null &&
+			virtualFile1.equals(getDocumentVirtualFile(document2));
+		
+	}
+	
+	/**
 	 * Returns the text content of the given file as a string, or
 	 * null if the given file is in binary format.
 	 *
