@@ -1,18 +1,16 @@
 package com.adacore.adaintellij.analysis.semantic.structure;
 
-import com.intellij.ide.structureView.StructureViewBuilder;
-import com.intellij.ide.structureView.StructureViewModel;
-import com.intellij.ide.structureView.TreeBasedStructureViewBuilder;
+import com.intellij.ide.structureView.*;
 import com.intellij.lang.PsiStructureViewFactory;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
+
+import com.adacore.adaintellij.analysis.semantic.AdaPsiFile;
 
 /**
  * Structure view factory for Ada files.
  */
-public class AdaStructureViewFactory implements PsiStructureViewFactory {
+public final class AdaStructureViewFactory implements PsiStructureViewFactory {
 	
 	/**
 	 * Returns a new structure view builder for the given file.
@@ -24,18 +22,15 @@ public class AdaStructureViewFactory implements PsiStructureViewFactory {
 	@Override
 	public StructureViewBuilder getStructureViewBuilder(@NotNull PsiFile psiFile) {
 		
-		return new TreeBasedStructureViewBuilder() {
-			
-			/**
-			 * @see com.intellij.ide.structureView.TreeBasedStructureViewBuilder#createStructureViewModel(Editor)
-			 */
-			@NotNull
-			@Override
-			public StructureViewModel createStructureViewModel(@Nullable Editor editor) {
-				return new AdaStructureViewModel(psiFile);
-			}
-			
-		};
+		// Check that the PSI file is an Ada PSI file
+		
+		assert psiFile instanceof AdaPsiFile :
+			"Attempt to get an Ada structure view builder for a non-Ada PSI file";
+		
+		// Return a new Ada structure view builder for
+		// the given Ada PSI file
+		
+		return new AdaTreeBasedStructureViewBuilder((AdaPsiFile)psiFile);
 		
 	}
 	

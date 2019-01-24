@@ -7,6 +7,8 @@ import org.jetbrains.annotations.*;
 
 import org.eclipse.lsp4j.*;
 
+import static com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElementType;
+
 /**
  * LSP-specific utilities.
  */
@@ -34,6 +36,7 @@ public final class LSPUtils {
 	 * @param type The message type to translate.
 	 * @return The corresponding notification type.
 	 */
+	@NotNull
 	public static NotificationType messageTypeToNotificationType(@NotNull MessageType type) {
 		
 		switch (type) {
@@ -58,7 +61,6 @@ public final class LSPUtils {
 	 * @param severity The diagnostic severity to translate.
 	 * @return The corresponding annotation severity.
 	 */
-	@Contract(pure = true)
 	@NotNull
 	public static HighlightSeverity diagnosticSeverityToHighlightSeverity(
 		@NotNull DiagnosticSeverity severity
@@ -74,6 +76,53 @@ public final class LSPUtils {
 			
 			case Error:
 			default:          return HighlightSeverity.ERROR;
+			
+		}
+		
+	}
+	
+	/**
+	 * Translates the symbol kind of the given symbol, defined in the
+	 * LSP standard, to the Ada element type defined for Ada PSI
+	 * elements.
+	 * @see LSPUtils#symbolKindToAdaElementType(SymbolKind)
+	 *
+	 * @param symbol The symbol whose kind to translate.
+	 * @return The corresponding Ada element type.
+	 */
+	@Nullable
+	public static AdaElementType symbolKindToAdaElementType(@NotNull DocumentSymbol symbol) {
+		
+		SymbolKind symbolKind = symbol.getKind();
+		
+		return symbolKind == null ? null :
+			symbolKindToAdaElementType(symbolKind);
+		
+	}
+	
+	/**
+	 * Translates the given symbol kind, defined in the LSP standard,
+	 * to the Ada element type defined for Ada PSI elements.
+	 * @see com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElementType
+	 *
+	 * @param kind The symbol kind to translate.
+	 * @return The corresponding Ada element type.
+	 */
+	@Nullable
+	public static AdaElementType symbolKindToAdaElementType(@NotNull SymbolKind kind) {
+		
+		switch (kind) {
+			
+			case Package:  return AdaElementType.PACKAGE_SPEC_IDENTIFIER;
+			case Module:   return AdaElementType.PACKAGE_BODY_IDENTIFIER;
+			
+			case Class:    return AdaElementType.TYPE_IDENTIFIER;
+			case Constant: return AdaElementType.CONSTANT_IDENTIFIER;
+			case Variable: return AdaElementType.VARIABLE_IDENTIFIER;
+			
+			case Function: return AdaElementType.FUNCTION_IDENTIFIER;
+			
+			default:       return null;
 			
 		}
 		

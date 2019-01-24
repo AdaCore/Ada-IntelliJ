@@ -11,7 +11,7 @@ import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
 /**
  * Structure view model of an Ada file.
  */
-public class AdaStructureViewModel extends StructureViewModelBase
+public final class AdaStructureViewModel extends StructureViewModelBase
 	implements StructureViewModel.ElementInfoProvider
 {
 	
