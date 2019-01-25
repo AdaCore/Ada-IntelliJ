@@ -3,22 +3,19 @@ package com.adacore.adaintellij.lsp;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import java.util.function.*;
+import java.util.stream.*;
 
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
+import com.intellij.notification.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.progress.*;
+import com.intellij.openapi.vfs.*;
+import org.jetbrains.annotations.*;
 
 import org.eclipse.lsp4j.*;
+import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageServer;
 
@@ -27,7 +24,6 @@ import com.adacore.adaintellij.lsp.objects.AdaSettingsObject;
 import com.adacore.adaintellij.notifications.AdaIJNotification;
 
 import static com.adacore.adaintellij.Utils.*;
-import static com.adacore.adaintellij.lsp.LSPUtils.offsetToPosition;
 
 /**
  * Public API of the Ada Language Server (ALS) within the
@@ -229,7 +225,7 @@ public final class AdaLSPServer {
 						"Connection to Ada Language Server unreliable",
 						"The ALS has been shut down due to multiple failed requests, " +
 							"which will disable smart features such as find-usages and " +
-							"go-to definition.\nReload the current project to try again.",
+							"code completion.\nReload the current project to try again.",
 						NotificationType.ERROR
 					));
 					
@@ -278,7 +274,9 @@ public final class AdaLSPServer {
 		@NotNull Supplier<CompletableFuture<T>> requestSupplier
 	) {
 	
-		boolean openOnlyForRequest = !openFiles.contains(documentUri);
+		boolean openOnlyForRequest =
+			serverSyncPolicy.getOpenClose() &&
+			!openFiles.contains(documentUri);
 		
 		// If the file is not already open, send a `textDocument/didOpen`
 		// notification to tell the server that the file is open
@@ -412,43 +410,74 @@ public final class AdaLSPServer {
 	/**
 	 * @see org.eclipse.lsp4j.services.TextDocumentService#didChange(DidChangeTextDocumentParams)
 	 */
-	void didChange(@NotNull DocumentEvent event) {
+	void didChange(@NotNull List<DocumentEvent> events) {
 		
 		TextDocumentSyncKind changePolicy = serverSyncPolicy.getChange();
 		
-		if (changePolicy == TextDocumentSyncKind.None) { return; }
+		// If the server's change sync policy is "None",
+		// then return
 		
-		Document    changedDocument = event.getDocument();
-		VirtualFile changedFile     = getDocumentVirtualFile(changedDocument);
+		if (
+			changePolicy == TextDocumentSyncKind.None ||
+			events.size() == 0
+		) { return; }
+		
+		// Get the changed document from the first event and
+		// check that all events are for the same document
+		
+		final Document changedDocument = events.get(0).getDocument();
+		
+		if (events.stream()
+			.map(DocumentEvent::getDocument)
+			.anyMatch(document -> !documentsRepresentSameFile(document, changedDocument)))
+		{
+			LOGGER.error("Trying to send a `textDocument/didChange` notification " +
+				"with change events from different documents");
+		}
+		
+		// Get the changed document's corresponding file
+		// and check that it is an Ada file
+		
+		VirtualFile changedFile = getDocumentVirtualFile(changedDocument);
 		
 		if (changedFile == null || !AdaFileType.isAdaFile(changedFile)) { return; }
 		
-		TextDocumentContentChangeEvent changeEvent = new TextDocumentContentChangeEvent();
+		List<TextDocumentContentChangeEvent> changeEvents;
 		
-		String text = "";
+		// If the server's sync change policy is "Incremental",
+		// then map the given document events to LSP change events
 		
 		if (changePolicy == TextDocumentSyncKind.Incremental) {
 			
-			int offset    = event.getOffset();
-			int oldLength = event.getOldLength();
-			
-			changeEvent.setRange(new Range(
-				offsetToPosition(changedDocument, offset),
-				offsetToPosition(changedDocument, offset + oldLength)
-			));
-			changeEvent.setRangeLength(oldLength);
-			
-			text = event.getNewFragment().toString();
-			
-		} else if (changePolicy == TextDocumentSyncKind.Full) {
-			
-			text = changedDocument.getText();
+			changeEvents = events.stream()
+				.map(LSPUtils::documentEventToContentChangeEvent)
+				.collect(Collectors.toList());
 			
 		}
 		
-		changeEvent.setText(text);
+		// Otherwise, if the server's sync change policy is "Full",
+		// then create a single LSP change event with the full text
+		// of the changed document
 		
-		didChange(changedFile.getUrl(), (int)changedFile.getModificationStamp(), changeEvent);
+		else if (changePolicy == TextDocumentSyncKind.Full) {
+			
+			changeEvents = Collections.singletonList(
+				new TextDocumentContentChangeEvent(changedDocument.getText()));
+			
+		}
+		
+		// Will never execute
+		else { return; }
+		
+		// Send the notification with the computed changes and
+		// and the changed document's virtual file modification
+		// stamp as document version
+		
+		didChange(
+			changedFile.getUrl(),
+			(int)changedFile.getModificationStamp(),
+			changeEvents
+		);
 		
 	}
 	
@@ -458,17 +487,25 @@ public final class AdaLSPServer {
 	private void didChange(
 		@NotNull String documentUri,
 		         int    version,
-		@NotNull TextDocumentContentChangeEvent... changeEvents) {
+		@NotNull List<TextDocumentContentChangeEvent> changeEvents
+	) {
 		
 		TextDocumentSyncKind changePolicy = serverSyncPolicy.getChange();
 		
+		// If the server's sync change policy is "None",
+		// then return
+		
 		if (changePolicy == TextDocumentSyncKind.None) { return; }
+		
+		// Create notification parameters
 		
 		DidChangeTextDocumentParams params = new DidChangeTextDocumentParams();
 		
 		params.setTextDocument(
 			new VersionedTextDocumentIdentifier(documentUri, version));
-		params.setContentChanges(Arrays.asList(changeEvents));
+		params.setContentChanges(changeEvents);
+		
+		// Send the notification
 		
 		server.getTextDocumentService().didChange(params);
 		
