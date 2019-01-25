@@ -286,6 +286,24 @@ public final class Utils {
 	}
 	
 	/**
+	 * Finds the file at the given URL string by transforming that
+	 * string to a URL and passing it to the virtual file system.
+	 * Returns the file or null if no file is found.
+	 *
+	 * @param urlString The URL string of the file to find.
+	 * @return The file at the given URL string or null if no file
+	 *         is found.
+	 */
+	@Nullable
+	public static VirtualFile findFileByUrlString(@NotNull String urlString) {
+		
+		URL url = urlStringToUrl(urlString);
+		
+		return url == null ? null : VfsUtil.findFileByURL(url);
+		
+	}
+	
+	/**
 	 * Returns the text content of the given file as a string, or
 	 * null if the given file is in binary format.
 	 *

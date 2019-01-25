@@ -1,11 +1,9 @@
 package com.adacore.adaintellij.analysis.semantic;
 
-import java.net.URL;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.*;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.*;
@@ -194,11 +192,8 @@ public final class AdaPsiReference extends AdaPsiElement
 		
 		// Get the definition's file
 		
-		URL definitionFileUrl = urlStringToUrl(definitionLocation.getUri());
-		
-		if (definitionFileUrl == null) { return null; }
-		
-		VirtualFile definitionVirtualFile = VfsUtil.findFileByURL(definitionFileUrl);
+		VirtualFile definitionVirtualFile =
+			findFileByUrlString(definitionLocation.getUri());
 		
 		if (definitionVirtualFile == null) { return null; }
 		

@@ -1,16 +1,12 @@
 package com.adacore.adaintellij.analysis.semantic.usages;
 
-import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
-import com.intellij.find.findUsages.FindUsagesHandler;
-import com.intellij.find.findUsages.FindUsagesOptions;
+import com.intellij.find.findUsages.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.SearchScope;
@@ -20,12 +16,10 @@ import org.jetbrains.annotations.NotNull;
 
 import org.eclipse.lsp4j.Location;
 
-import com.adacore.adaintellij.lsp.AdaLSPDriver;
-import com.adacore.adaintellij.lsp.AdaLSPServer;
+import com.adacore.adaintellij.lsp.*;
 
 import static com.adacore.adaintellij.Utils.*;
-import static com.adacore.adaintellij.lsp.LSPUtils.offsetToPosition;
-import static com.adacore.adaintellij.lsp.LSPUtils.positionToOffset;
+import static com.adacore.adaintellij.lsp.LSPUtils.*;
 
 /**
  * Find-usages handler for Ada, powered by the
@@ -134,11 +128,7 @@ public final class AdaFindUsagesHandler extends FindUsagesHandler {
 			.stream()
 			.map(location -> {
 				
-				URL locationUrl = urlStringToUrl(location.getUri());
-				
-				if (locationUrl == null) { return null; }
-				
-				VirtualFile locationFile = VfsUtil.findFileByURL(locationUrl);
+				VirtualFile locationFile = findFileByUrlString(location.getUri());
 				
 				if (locationFile == null) { return null; }
 				
