@@ -1,10 +1,11 @@
 package com.adacore.adaintellij.lsp;
 
 import java.io.IOException;
+import java.util.*;
 
+import com.intellij.execution.*;
 import com.intellij.notification.*;
 import com.intellij.openapi.components.ProjectComponent;
-import com.intellij.openapi.editor.event.*;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
@@ -17,6 +18,7 @@ import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageServer;
 
+import com.adacore.adaintellij.build.*;
 import com.adacore.adaintellij.editor.*;
 import com.adacore.adaintellij.file.AdaFileType;
 import com.adacore.adaintellij.notifications.AdaIJNotification;
@@ -67,6 +69,11 @@ public final class AdaLSPDriver implements ProjectComponent {
 	private GPRFileManager gprFileManager;
 	
 	/**
+	 * The project's GPRbuild configuration manager project component.
+	 */
+	private GPRbuildConfigurationManager gprbuildConfigurationManager;
+	
+	/**
 	 * The LSP driver's client.
 	 */
 	private AdaLSPClient client;
@@ -102,10 +109,16 @@ public final class AdaLSPDriver implements ProjectComponent {
 	 * @param adaProject The Ada project component to attach to the constructed driver.
 	 * @param gprFileManager The GPR file manager to attach to the constructed driver.
 	 */
-	public AdaLSPDriver(Project project, AdaProject adaProject, GPRFileManager gprFileManager) {
-		this.project        = project;
-		this.adaProject     = adaProject;
-		this.gprFileManager = gprFileManager;
+	public AdaLSPDriver(
+		Project                      project,
+		AdaProject                   adaProject,
+		GPRFileManager               gprFileManager,
+		GPRbuildConfigurationManager gprbuildConfigurationManager
+	) {
+		this.project                      = project;
+		this.adaProject                   = adaProject;
+		this.gprFileManager               = gprFileManager;
+		this.gprbuildConfigurationManager = gprbuildConfigurationManager;
 	}
 	
 	/*
@@ -199,19 +212,43 @@ public final class AdaLSPDriver implements ProjectComponent {
 		
 		server.initialized(new InitializedParams());
 		
-		// Try to set up the LSP server with the project's GPR file path.
+		// Try to set up the LSP server with the project's GPR file path
 		// This may not complete in case no GPR files exist in the project
 		// or in case multiple ones exist and the user has not chosen one,
 		// in which case the server will not be marked as initialized and
 		// no requests will be made to it until a GPR file path is set and
-		// successfully communicated to the server.
+		// successfully communicated to the server
 		
-		setGprFile();
+		setConfiguration();
 		
-		// Add a GPR file change listener in order to communicate GPR file
-		// changes to the server.
+		// Add a GPR file change listener and a GPRbuild configuration
+		// selection/change listener in order to send workspace
+		// configuration changes to the server
 		
-		gprFileManager.addGprFileChangeListener(GPR_FILE_CHANGE_LISTENER_KEY, this::setGprFile);
+		gprFileManager.addGprFileChangeListener(
+			GPR_FILE_CHANGE_LISTENER_KEY, this::setConfiguration);
+		
+		gprbuildConfigurationManager.addRunManagerListener(new RunManagerListener() {
+			
+			/**
+			 * Called when a configuration is changed.
+			 *
+			 * @param settings The changed configuration's settings.
+			 */
+			@Override
+			public void runConfigurationChanged(@NotNull RunnerAndConfigurationSettings settings) {
+				setConfiguration();
+			}
+			
+			/**
+			 * Called when a different configuration is selected.
+			 */
+			@Override
+			public void runConfigurationSelected() {
+				setConfiguration();
+			}
+			
+		});
 		
 	}
 	
@@ -291,22 +328,24 @@ public final class AdaLSPDriver implements ProjectComponent {
 	boolean initialized() { return initialized; }
 	
 	/**
-	 * Sets the project file after getting a project file path from the GPR
-	 * file manager.
-	 * @see AdaLSPDriver#setGprFile(String)
+	 * Sets the LSP workspace configuration, including project file and
+	 * scenario variables, by sending a `workspace/didChangeConfiguration`
+	 * notification to the server.
+	 * @see AdaLSPDriver#setConfiguration(String)
 	 */
-	private void setGprFile() { setGprFile(null); }
+	private void setConfiguration() { setConfiguration(null); }
 	
 	/**
-	 * Sets the project file path and sends a `workspace/didChangeConfiguration`
-	 * notification to the server to communicate the project file change. The
-	 * given path could be null to indicate that the project file needs to be
-	 * fetched from the GPR file manager.
+	 * Sets the LSP workspace configuration, including project file and
+	 * scenario variables, by sending a `workspace/didChangeConfiguration`
+	 * notification to the server. The project file is either set from
+	 * the given file path or, in case the path is null, from the GPR file
+	 * manager.
 	 *
 	 * @param gprFilePath The project file path to set, or null in case the
 	 *                    path needs to be fetched from the GPR file manager.
 	 */
-	private void setGprFile(@Nullable String gprFilePath) {
+	private void setConfiguration(@Nullable String gprFilePath) {
 		
 		String path = gprFilePath;
 		
@@ -323,10 +362,18 @@ public final class AdaLSPDriver implements ProjectComponent {
 			
 		}
 		
+		// Get the currently set scenario variables
+		
+		GPRbuildConfiguration configuration =
+			gprbuildConfigurationManager.getSelectedConfiguration();
+		
+		Map<String, String> scenarioVariables = configuration == null ?
+			Collections.emptyMap() : configuration.getScenarioVariables();
+		
 		// Send the `workspace/didChangeConfiguration`
 		// notification to set the project file
 		
-		server.didChangeConfiguration(path, null);
+		server.didChangeConfiguration(path, scenarioVariables);
 		
 		// Mark the server as initialized
 		
