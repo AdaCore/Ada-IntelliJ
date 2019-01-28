@@ -122,6 +122,8 @@ public final class GPRbuildConfigurationToolWindow extends AdaIntelliJUI {
 			
 			configurationEditor.applyEditorTo(configuration);
 			
+			updateUI();
+			
 		});
 		
 	}
