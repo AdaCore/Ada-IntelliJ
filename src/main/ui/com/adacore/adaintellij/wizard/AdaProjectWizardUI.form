@@ -19,9 +19,9 @@
       </grid>
       <scrollpane id="d32cb" binding="templateListScrollPane">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="0" anchor="1" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="300" height="-1"/>
-            <maximum-size width="300" height="-1"/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="300" height="450"/>
+            <maximum-size width="300" height="450"/>
           </grid>
         </constraints>
         <properties/>

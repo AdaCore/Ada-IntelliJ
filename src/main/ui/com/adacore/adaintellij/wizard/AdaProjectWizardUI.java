@@ -72,6 +72,15 @@ public final class AdaProjectWizardUI extends AdaIntelliJUI {
 			
 		});
 		
+		// Create grid constraints for the template list
+		// container components
+		
+		final GridBagConstraints gridConstraints = new GridBagConstraints();
+		
+		gridConstraints.gridx   = 0;
+		gridConstraints.fill    = GridBagConstraints.HORIZONTAL;
+		gridConstraints.weightx = 1.0;
+		
 		// Set up the template list of each category
 		
 		categoryTemplateDescriptors.forEach((category, descriptors) -> {
@@ -84,21 +93,9 @@ public final class AdaProjectWizardUI extends AdaIntelliJUI {
 			UIUtils.addIconWithGap(label, Icons.PROJECT_TEMPLATE_CATEGORY);
 			label.setBorder(JBUI.Borders.empty(2));
 			
-			// Create grid constraints for the category label
-			
-			GridBagConstraints labelConstraints = new GridBagConstraints();
-			
-			labelConstraints.gridx   = 0;
-			labelConstraints.weightx = 1.0;
-			labelConstraints.fill    = GridBagConstraints.HORIZONTAL;
-			
-			if (templateListContainer.getComponentCount() == 0) {
-				labelConstraints.gridy = 0;
-			}
-			
 			// Add the category label
 			
-			templateListContainer.add(label, labelConstraints);
+			templateListContainer.add(label, gridConstraints);
 			
 			// Create the template list
 			
@@ -110,19 +107,17 @@ public final class AdaProjectWizardUI extends AdaIntelliJUI {
 			templateList.setCellRenderer(new IndentedIconedListCellRenderer(1, Icons.PROJECT_TEMPLATE));
 			templateListSequence.add(templateList);
 			
-			// Create grid constraints for the template list
-			
-			GridBagConstraints templateListConstraints = new GridBagConstraints();
-			
-			templateListConstraints.gridx   = 0;
-			templateListConstraints.weightx = 1.0;
-			templateListConstraints.fill    = GridBagConstraints.HORIZONTAL;
-			
 			// Add the template list
 			
-			templateListContainer.add(templateList, templateListConstraints);
+			templateListContainer.add(templateList, gridConstraints);
 			
 		});
+		
+		// Add an empty panel to fill the rest of the space
+		
+		gridConstraints.weighty = 1.0;
+		
+		templateListContainer.add(new JPanel(), gridConstraints);
 		
 		// Add selection listener to the list sequence to update
 		// the settings UI whenever a template is selected

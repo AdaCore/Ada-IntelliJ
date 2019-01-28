@@ -1,3 +1,6 @@
+
+import org.apache.tools.ant.DirectoryScanner;
+
 plugins {
 	id 'java'
 	id 'org.jetbrains.intellij' version '0.3.9'
@@ -29,4 +32,18 @@ sourceSets {
 
 test {
 	useJUnitPlatform()
+}
+
+// Removes default `.gitignore` file exclusion rule for the `processResources`
+// task. This temporary solution is necessary since some of the plugin resource
+// files are `.gitignore` files, which would otherwise not be included in the
+// final plugin JAR. For more information, see:
+// https://intellij-support.jetbrains.com/hc/en-us/community/posts/360002399679-Hidden-files-not-included-in-JAR
+// https://github.com/gradle/gradle/issues/2986
+processResources {
+	
+	doFirst {
+		DirectoryScanner.removeDefaultExclude("**/.gitignore")
+	}
+	
 }
