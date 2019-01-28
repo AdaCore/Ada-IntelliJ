@@ -5,21 +5,17 @@ import java.net.URL;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.*;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 import org.eclipse.lsp4j.Location;
 
-import com.adacore.adaintellij.lsp.AdaLSPDriver;
-import com.adacore.adaintellij.lsp.AdaLSPServer;
+import com.adacore.adaintellij.misc.cache.*;
+import com.adacore.adaintellij.lsp.*;
 
 import static com.adacore.adaintellij.Utils.*;
-import static com.adacore.adaintellij.lsp.LSPUtils.positionToOffset;
-import static com.adacore.adaintellij.lsp.LSPUtils.offsetToPosition;
 
 /**
  * Ada AST node representing an element that can reference other elements.
@@ -32,7 +28,15 @@ import static com.adacore.adaintellij.lsp.LSPUtils.offsetToPosition;
  * Ada-IntelliJ Ada parser:
  * @see com.adacore.adaintellij.analysis.semantic.AdaParser
  */
-public final class AdaPsiReference extends AdaPsiElement implements PsiReference, PsiNameIdentifierOwner {
+public final class AdaPsiReference extends AdaPsiElement
+	implements PsiReference, PsiNameIdentifierOwner, Cacher
+{
+	
+	/**
+	 * Cash key for cashed resolved elements of Ada PSI references.
+	 */
+	private static final CacheKey<AdaPsiElement>
+		RESOLVED_ELEMENT_CASH_KEY = CacheKey.getNewKey();
 	
 	/**
 	 * The underlying tree node.
@@ -121,14 +125,43 @@ public final class AdaPsiReference extends AdaPsiElement implements PsiReference
 	/**
 	 * @see com.intellij.psi.PsiReference#resolve()
 	 *
+	 * The IntelliJ platform expects that this method return null if
+	 * this reference represents a declaration and does not resolve to
+	 * a different element than itself, hence the separation between
+	 * this method and `resolveAdaReference`.
+	 */
+	@Nullable
+	@Override
+	public AdaPsiElement resolve() {
+		
+		AdaPsiElement definition = resolveAdaReference();
+		
+		return AdaPsiElement.areEqual(definition, this) ? null : definition;
+		
+	}
+	
+	/**
+	 * Returns the element to which this reference resolves.
 	 * Instead of performing any sort of name resolution, this method
 	 * makes a `textDocument/definition` request to the ALS to get the
 	 * element referenced by this element and returns it, or null if no
 	 * such element was found or if something went wrong.
+	 *
+	 * @return The element to which this reference resolves, or null
+	 *         if no such element is found.
 	 */
 	@Nullable
-	@Override
-	public PsiElement resolve() {
+	public AdaPsiElement resolveAdaReference() {
+		
+		// Check if the resolved element is cached
+		// and if it is, then return it
+		
+		CacheResult<AdaPsiElement> cacheResult =
+			getCachedData(RESOLVED_ELEMENT_CASH_KEY);
+		
+		if (cacheResult.hit) { return cacheResult.data; }
+		
+		// Get the document of the containing file
 		
 		PsiFile  containingFile = getContainingFile();
 		Document document       = getPsiFileDocument(containingFile);
@@ -148,12 +181,16 @@ public final class AdaPsiReference extends AdaPsiElement implements PsiReference
 		
 		if (lspServer == null) { return null; }
 		
-		Location definitionLocation =
-			lspServer.definition(documentUri, offsetToPosition(document, getStartOffset()));
+		Location definitionLocation = lspServer.definition(
+			documentUri, LSPUtils.offsetToPosition(document, getStartOffset()));
 		
-		// If no valid result was returned, return null
+		// If no valid result was returned, cash the result
+		// (no resolved element) and return null
 		
-		if (definitionLocation == null) { return null; }
+		if (definitionLocation == null) {
+			cacheData(RESOLVED_ELEMENT_CASH_KEY, null);
+			return null;
+		}
 		
 		// Get the definition's file
 		
@@ -170,11 +207,27 @@ public final class AdaPsiReference extends AdaPsiElement implements PsiReference
 		
 		if (definitionPsiFile == null || definitionDocument == null) { return null; }
 		
-		// Find the element at the given position in the file and return
-		// it (will return null if the element is not found)
+		// Find the element at the given position in the file
 		
-		return definitionPsiFile.findElementAt(
-			positionToOffset(definitionDocument, definitionLocation.getRange().getStart()));
+		PsiElement definition = definitionPsiFile.findElementAt(
+			LSPUtils.positionToOffset(
+				definitionDocument,
+				definitionLocation.getRange().getStart()
+			)
+		);
+		
+		AdaPsiElement adaDefinition = definition == null ?
+			null : AdaPsiElement.getFrom(definition);
+		
+		// If the element was found, then cash it
+		
+		if (adaDefinition != null) {
+			cacheData(RESOLVED_ELEMENT_CASH_KEY, adaDefinition);
+		}
+		
+		// Return the element (or null if it was not found)
+		
+		return adaDefinition;
 		
 	}
 	
@@ -210,7 +263,7 @@ public final class AdaPsiReference extends AdaPsiElement implements PsiReference
 	@Override
 	public boolean isReferenceTo(@NotNull PsiElement element) {
 		return getText().toLowerCase().equals(element.getText().toLowerCase()) &&
-			AdaPsiElement.areEqual(resolve(), element);
+			AdaPsiElement.areEqual(resolveAdaReference(), element);
 	}
 	
 	/**
@@ -233,21 +286,12 @@ public final class AdaPsiReference extends AdaPsiElement implements PsiReference
 	public boolean canNavigate() { return true; }
 	
 	/**
-	 * Returns whether or not this element references it self, i.e.
-	 * if it is a declaration of any kind.
+	 * Returns whether or not this element references itself,
+	 * i.e. if it is a declaration of any kind.
 	 *
 	 * @return Whether or not this element is a declaration.
 	 */
-	public boolean isDeclaration() {
-		
-		// TODO: Reimplement this method
-		// A reference should actually be considered as a definition
-		// iff `isReferenceTo(this)` returns true, which requires that,
-		// for a declaration, `resolve` return the element itself
-		
-		return resolve() == null;
-		
-	}
+	public boolean isDeclaration() { return isReferenceTo(this); }
 	
 	/**
 	 * Returns a string representation of this PSI reference.

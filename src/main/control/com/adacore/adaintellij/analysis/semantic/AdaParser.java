@@ -53,8 +53,8 @@ import org.jetbrains.annotations.NotNull;
  *                        SEMICOLON    -------   AdaPsiElement---|
  *                           ...       -------             ...---|
  *
- * As this example demonstrates, the final abstract trees returned y this parser
- * are not ASTs in the proper, traditional sense of the word, namely:
+ * As this example demonstrates, the final abstract trees returned by this
+ * parser are not ASTs in the proper, traditional sense of the word, namely:
  *  - They maintain ALL elements of the source code, including whitespaces,
  *    comments, delimiters, etc.
  *  - They have absolutely no semantic dimension to them
