@@ -34,7 +34,7 @@ public final class AdaPsiReference extends AdaPsiElement
 	 * Cash key for cashed resolved elements of Ada PSI references.
 	 */
 	private static final CacheKey<AdaPsiElement>
-		RESOLVED_ELEMENT_CASH_KEY = CacheKey.getNewKey();
+		RESOLVED_ELEMENT_CACHE_KEY = CacheKey.getNewKey();
 	
 	/**
 	 * The underlying tree node.
@@ -155,7 +155,7 @@ public final class AdaPsiReference extends AdaPsiElement
 		// and if it is, then return it
 		
 		CacheResult<AdaPsiElement> cacheResult =
-			getCachedData(RESOLVED_ELEMENT_CASH_KEY);
+			getCachedData(RESOLVED_ELEMENT_CACHE_KEY);
 		
 		if (cacheResult.hit) { return cacheResult.data; }
 		
@@ -186,7 +186,7 @@ public final class AdaPsiReference extends AdaPsiElement
 		// (no resolved element) and return null
 		
 		if (definitionLocation == null) {
-			cacheData(RESOLVED_ELEMENT_CASH_KEY, null);
+			cacheData(RESOLVED_ELEMENT_CACHE_KEY, null);
 			return null;
 		}
 		
@@ -217,7 +217,7 @@ public final class AdaPsiReference extends AdaPsiElement
 		// If the element was found, then cash it
 		
 		if (adaDefinition != null) {
-			cacheData(RESOLVED_ELEMENT_CASH_KEY, adaDefinition);
+			cacheData(RESOLVED_ELEMENT_CACHE_KEY, adaDefinition);
 		}
 		
 		// Return the element (or null if it was not found)

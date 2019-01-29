@@ -191,6 +191,12 @@ public final class BusyEditorAwareScheduler implements ProjectComponent {
 		@NotNull Consumer<List<DocumentEvent>> consumer
 	) { return addAndReturn(new DocumentChangeConsumerOperation(this, consumer)); }
 	
+	/**
+	 * Removes the given operation from the set of currently active
+	 * operations.
+	 *
+	 * @param operation The operation to remove.
+	 */
 	void removeOperation(
 		@NotNull BusyEditorAwareOperation operation
 	) { operations.remove(operation); }

@@ -6,6 +6,8 @@ import java.util.*;
 import com.intellij.execution.*;
 import com.intellij.notification.*;
 import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.editor.*;
+import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
@@ -21,6 +23,7 @@ import org.eclipse.lsp4j.services.LanguageServer;
 import com.adacore.adaintellij.build.*;
 import com.adacore.adaintellij.editor.*;
 import com.adacore.adaintellij.file.AdaFileType;
+import com.adacore.adaintellij.misc.cache.Cacher;
 import com.adacore.adaintellij.notifications.AdaIJNotification;
 import com.adacore.adaintellij.project.*;
 
@@ -38,7 +41,7 @@ public final class AdaLSPDriver implements ProjectComponent {
 	/**
 	 * The number of tolerable failed requests before an LSP session is terminated.
 	 */
-	static final int FAILURE_COUNT_THRESHOLD = 3;
+	static final int FAILURE_COUNT_THRESHOLD = 7;
 	
 	/**
 	 * The interval duration, in milliseconds, before checking if the operation
@@ -425,6 +428,12 @@ public final class AdaLSPDriver implements ProjectComponent {
 				
 				if (!AdaFileType.isAdaFile(file)) { return; }
 				
+				Document document = getVirtualFileDocument(file);
+				
+				if (document != null) {
+					Cacher.cacheData(document, AdaLSPClient.DIAGNOSTICS_CACHE_KEY, null);
+				}
+				
 				server.didOpen(file);
 				
 			}
@@ -446,6 +455,21 @@ public final class AdaLSPDriver implements ProjectComponent {
 		};
 		
 		messageBus.connect().subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, listener);
+		
+		// Set document change listener to clear
+		// document diagnostics
+		
+		EditorFactory.getInstance().getEventMulticaster().addDocumentListener(new AdaDocumentListener() {
+			
+			/**
+			 * @see com.adacore.adaintellij.editor.AdaDocumentListener#beforeAdaDocumentChanged(DocumentEvent)
+			 */
+			@Override
+			public void beforeAdaDocumentChanged(@NotNull DocumentEvent event) {
+				Cacher.clearCachedData(event.getDocument(), AdaLSPClient.DIAGNOSTICS_CACHE_KEY);
+			}
+			
+		});
 		
 		// Initialize document change operation
 		
