@@ -3,9 +3,11 @@ package com.adacore.adaintellij.lsp;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.event.DocumentEvent;
 import org.jetbrains.annotations.*;
 
 import org.eclipse.lsp4j.*;
+import org.eclipse.lsp4j.Range;
 
 import static com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElementType;
 
@@ -125,6 +127,38 @@ public final class LSPUtils {
 			default:       return null;
 			
 		}
+		
+	}
+	
+	/**
+	 * Translates the given IntelliJ platform document event to a
+	 * text-document content change event, defined in the LSP
+	 * standard.
+	 *
+	 * @param event The document event to translate.
+	 * @return The corresponding text-document content change event.
+	 */
+	@NotNull
+	public static TextDocumentContentChangeEvent
+		documentEventToContentChangeEvent(@NotNull DocumentEvent event)
+	{
+		
+		Document changedDocument = event.getDocument();
+		
+		TextDocumentContentChangeEvent changeEvent =
+			new TextDocumentContentChangeEvent();
+		
+		int offset    = event.getOffset();
+		int oldLength = event.getOldLength();
+		
+		changeEvent.setRange(new Range(
+			offsetToPosition(changedDocument, offset),
+			offsetToPosition(changedDocument, offset + oldLength)
+		));
+		changeEvent.setRangeLength(oldLength);
+		changeEvent.setText(event.getNewFragment().toString());
+		
+		return changeEvent;
 		
 	}
 	

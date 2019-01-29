@@ -76,6 +76,11 @@
 			<implementation-class>com.adacore.adaintellij.lsp.AdaLSPDriver</implementation-class>
 		</component>
 		
+		<!-- Busy-editor-aware operation scheduler -->
+		<component>
+			<implementation-class>com.adacore.adaintellij.editor.BusyEditorAwareScheduler</implementation-class>
+		</component>
+		
 	</project-components>
 	
 	<!-- Platform extensions -->

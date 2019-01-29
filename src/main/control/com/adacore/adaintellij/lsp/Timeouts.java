@@ -12,7 +12,7 @@ public final class Timeouts {
 	/**
 	 * Default request timeout.
 	 */
-	public static final int DEFAULT_METHOD_TIMEOUT = 3000;
+	public static final int DEFAULT_METHOD_TIMEOUT = 4_000;
 	
 	/**
 	 * LSP-method -> timeout mapping.
@@ -25,9 +25,9 @@ public final class Timeouts {
 		
 		Map<String, Integer> methodTimeouts = new HashMap<>();
 		
-		methodTimeouts.put("textDocument/completion", 5000);
-		methodTimeouts.put("textDocument/definition", 2000);
-		methodTimeouts.put("textDocument/references", 5000);
+		methodTimeouts.put("textDocument/completion", 8_000);
+		methodTimeouts.put("textDocument/definition", 4_000);
+		methodTimeouts.put("textDocument/references", 8_000);
 		
 		METHOD_TIMEOUTS = Collections.unmodifiableMap(methodTimeouts);
 	

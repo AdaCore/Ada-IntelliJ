@@ -1,14 +1,10 @@
 package com.adacore.adaintellij.lsp;
 
 import java.io.IOException;
-import java.util.*;
 
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
+import com.intellij.notification.*;
 import com.intellij.openapi.components.ProjectComponent;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.editor.event.DocumentListener;
+import com.intellij.openapi.editor.event.*;
 import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
@@ -21,10 +17,10 @@ import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageServer;
 
+import com.adacore.adaintellij.editor.*;
 import com.adacore.adaintellij.file.AdaFileType;
-import com.adacore.adaintellij.project.GPRFileManager;
 import com.adacore.adaintellij.notifications.AdaIJNotification;
-import com.adacore.adaintellij.project.AdaProject;
+import com.adacore.adaintellij.project.*;
 
 import static com.adacore.adaintellij.Utils.*;
 
@@ -91,24 +87,10 @@ public final class AdaLSPDriver implements ProjectComponent {
 	private boolean initialized = false;
 	
 	/**
-	 * Document change event listener that makes a `textDocument/didChange` request to
-	 * the ALS. This instance of `DocumentListener` is used for all documents, and must
-	 * therefore remain purely functional and never hold any state tied to a specific
-	 * document.
+	 * Aggregate document change consumer operation that makes `textDocument/didChange`
+	 * requests to the ALS on document change events.
 	 */
-	private DocumentListener DOCUMENT_CHANGE_LISTENER = new DocumentListener() {
-		
-		/**
-		 * @see com.intellij.openapi.editor.event.DocumentListener#documentChanged(DocumentEvent)
-		 *
-		 * Sends a `textDocument/didChange` notification to the ALS when a file is changed.
-		 */
-		@Override
-		public void documentChanged(DocumentEvent event) {
-			server.didChange(event);
-		}
-		
-	};
+	private DocumentChangeConsumerOperation documentChangeOperation;
 	
 	/**
 	 * Constructs a new AdaLSPDriver given a project and other project components.
@@ -147,13 +129,14 @@ public final class AdaLSPDriver implements ProjectComponent {
 		
 		if (alsPath == null) {
 			
-			// TODO: Add download URL to notification message
 			Notifications.Bus.notify(new AdaIJNotification(
 				"Ada Language Server not found on PATH",
 				"In order to provide semantic features and smart assistance for Ada, the " +
 					"Ada-IntelliJ plugin relies heavily on the Ada Language Server (ALS). " +
 					"To enable these features, you need download and install the ALS, add " +
-					"it to your PATH, then reload open projects for the effect to take place.",
+					"it to your PATH, then reload open projects for the effect to take place.\n" +
+					"ALS binaries can be found here:\n" +
+					"https://bintray.com/beta/#/reznikmm/ada-language-server/ada-language-server?tab=files",
 				NotificationType.WARNING
 			));
 			
@@ -209,6 +192,7 @@ public final class AdaLSPDriver implements ProjectComponent {
 			));
 			
 			return;
+			
 		}
 		
 		server.setCapabilities(result.getCapabilities());
@@ -284,6 +268,10 @@ public final class AdaLSPDriver implements ProjectComponent {
 		// Mark the server as not initialized
 		
 		initialized = false;
+		
+		// Stop the document change operation
+		
+		documentChangeOperation.stop();
 		
 		// Send the shutdown request
 		
@@ -370,6 +358,8 @@ public final class AdaLSPDriver implements ProjectComponent {
 	 */
 	private void setFileListeners() {
 		
+		// Set file open/close listeners
+		
 		MessageBus messageBus = project.getMessageBus();
 		
 		FileEditorManagerListener listener = new FileEditorManagerListener() {
@@ -388,12 +378,6 @@ public final class AdaLSPDriver implements ProjectComponent {
 				
 				if (!AdaFileType.isAdaFile(file)) { return; }
 				
-				Document document = getVirtualFileDocument(file);
-				
-				if (document == null) { return; }
-				
-				document.addDocumentListener(DOCUMENT_CHANGE_LISTENER);
-				
 				server.didOpen(file);
 				
 			}
@@ -408,12 +392,6 @@ public final class AdaLSPDriver implements ProjectComponent {
 				
 				if (!AdaFileType.isAdaFile(file)) { return; }
 				
-				Document document = getVirtualFileDocument(file);
-				
-				if (document != null) {
-					document.removeDocumentListener(DOCUMENT_CHANGE_LISTENER);
-				}
-				
 				server.didClose(file);
 				
 			}
@@ -421,6 +399,11 @@ public final class AdaLSPDriver implements ProjectComponent {
 		};
 		
 		messageBus.connect().subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, listener);
+		
+		// Initialize document change operation
+		
+		documentChangeOperation = BusyEditorAwareScheduler.getInstance(project)
+			.createDocumentChangeOperation(server::didChange);
 		
 	}
 	
