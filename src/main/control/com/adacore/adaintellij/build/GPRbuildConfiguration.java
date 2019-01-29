@@ -8,11 +8,9 @@ import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.filters.*;
 import com.intellij.execution.process.*;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.runners.ProgramRunner;
+import com.intellij.execution.runners.*;
 import com.intellij.execution.ui.ConsoleView;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
+import com.intellij.notification.*;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
@@ -250,7 +248,7 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 	 */
 	@Contract(pure = true)
 	@NotNull
-	String getGprbuildArguments() { return gprbuildArguments; }
+	public String getGprbuildArguments() { return gprbuildArguments; }
 	
 	/**
 	 * Sets the gprbuild build arguments of this configuration.
@@ -268,7 +266,7 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 	 */
 	@Contract(pure = true)
 	@NotNull
-	Map<String, String> getScenarioVariables() {
+	public Map<String, String> getScenarioVariables() {
 		return Collections.unmodifiableMap(scenarioVariables);
 	}
 	

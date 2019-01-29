@@ -1,5 +1,6 @@
 package com.adacore.adaintellij.build;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,9 +23,10 @@ import com.adacore.adaintellij.project.AdaProject;
 public final class GPRbuildConfigurationManager implements ProjectComponent {
 	
 	/**
-	 * The project to which this component belongs.
+	 * The empty list of GPRbuild configurations.
 	 */
-	private Project project;
+	private static final List<GPRbuildConfiguration>
+		EMPTY_CONFIGURATION_LIST = Collections.emptyList();
 	
 	/**
 	 * The corresponding Ada project component.
@@ -44,7 +46,6 @@ public final class GPRbuildConfigurationManager implements ProjectComponent {
 	 *                   constructed manager.
 	 */
 	public GPRbuildConfigurationManager(Project project, AdaProject adaProject) {
-		this.project    = project;
 		this.adaProject = adaProject;
 		this.runManager = RunManagerImpl.getInstanceImpl(project);
 	}
@@ -115,7 +116,11 @@ public final class GPRbuildConfigurationManager implements ProjectComponent {
 	 * @param listener The listener to add.
 	 */
 	public void addRunManagerListener(@NotNull RunManagerListener listener) {
+		
+		if (!adaProject.isAdaProject()) { return; }
+		
 		runManager.addRunManagerListener(listener);
+		
 	}
 	
 	/**
@@ -125,10 +130,11 @@ public final class GPRbuildConfigurationManager implements ProjectComponent {
 	 */
 	@NotNull
 	public List<GPRbuildConfiguration> getAllConfigurations() {
-		return runManager.getConfigurationsList(GPRbuildConfigurationType.INSTANCE)
-			.stream()
-			.map(runConfiguration -> (GPRbuildConfiguration)runConfiguration)
-			.collect(Collectors.toList());
+		return !adaProject.isAdaProject() ? EMPTY_CONFIGURATION_LIST :
+			runManager.getConfigurationsList(GPRbuildConfigurationType.INSTANCE)
+				.stream()
+				.map(runConfiguration -> (GPRbuildConfiguration)runConfiguration)
+				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -141,6 +147,8 @@ public final class GPRbuildConfigurationManager implements ProjectComponent {
 	 */
 	@Nullable
 	public GPRbuildConfiguration getSelectedConfiguration() {
+		
+		if (!adaProject.isAdaProject()) { return null; }
 	
 		RunnerAndConfigurationSettings settings =
 			runManager.getSelectedConfiguration();
@@ -159,8 +167,10 @@ public final class GPRbuildConfigurationManager implements ProjectComponent {
 	 *
 	 * @param configuration The GPRbuild configuration to select.
 	 */
-	public void setSelectedConfiguration(@NotNull GPRbuildConfiguration configuration) {
-	
+	void setSelectedConfiguration(@NotNull GPRbuildConfiguration configuration) {
+		
+		if (!adaProject.isAdaProject()) { return; }
+		
 		runManager.getAllSettings()
 			.stream()
 			.filter(settings -> settings.getConfiguration().equals(configuration))
