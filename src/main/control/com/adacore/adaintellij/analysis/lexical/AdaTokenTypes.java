@@ -263,6 +263,21 @@ public final class AdaTokenTypes {
 	);
 	
 	/**
+	 * Token set representing all valid Ada tokens.
+	 */
+	public static final TokenSet ALL_VALID_TOKENS = TokenSet.orSet(
+		
+		WHITESPACE_TOKEN_SET, COMMENT_TOKEN_SET,
+		
+		DELIMITER_TOKEN_SET,
+		
+		IDENTIFIER_TOKEN_SET, LITERAL_TOKEN_SET,
+		
+		KEYWORD_TOKEN_SET
+		
+	);
+	
+	/**
 	 * Private default constructor to prevent instantiation.
 	 */
 	private AdaTokenTypes() {}
