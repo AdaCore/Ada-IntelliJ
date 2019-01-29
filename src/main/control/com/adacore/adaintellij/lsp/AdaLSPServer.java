@@ -1,6 +1,5 @@
 package com.adacore.adaintellij.lsp;
 
-import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -11,7 +10,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.progress.*;
-import com.intellij.openapi.vfs.*;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.*;
 
 import org.eclipse.lsp4j.*;
@@ -36,6 +35,14 @@ public final class AdaLSPServer {
 	 * Class-wide logger for the AdaLSPServer class.
 	 */
 	private static Logger LOGGER = Logger.getInstance(AdaLSPServer.class);
+	
+	/**
+	 * Empty result lists returned by servers.
+	 */
+	private static final List<TextEdit>       EMPTY_TEXT_EDIT_LIST       = Collections.emptyList();
+	private static final List<CompletionItem> EMPTY_COMPLETION_ITEM_LIST = Collections.emptyList();
+	private static final List<Location>       EMPTY_LOCATION_LIST        = Collections.emptyList();
+	private static final List<DocumentSymbol> EMPTY_DOCUMENT_SYMBOL_LIST = Collections.emptyList();
 	
 	/**
 	 * The LSP driver to which this server belongs.
@@ -131,7 +138,7 @@ public final class AdaLSPServer {
 				openClose         = true;
 				willSave          = true;
 				willSaveWaitUntil = false;
-				save              = new SaveOptions(false);
+				save              = new SaveOptions(change == TextDocumentSyncKind.Full);
 			}
 			
 		}
@@ -140,7 +147,12 @@ public final class AdaLSPServer {
 		serverSyncPolicy.setChange(change == null ? TextDocumentSyncKind.None : change);
 		serverSyncPolicy.setWillSave(willSave != null && willSave);
 		serverSyncPolicy.setWillSaveWaitUntil(willSaveWaitUntil != null && willSaveWaitUntil);
-		serverSyncPolicy.setSave(save == null ? new SaveOptions(false) : save);
+		
+		if (save != null && save.getIncludeText() == null) {
+			save.setIncludeText(false);
+		}
+		
+		serverSyncPolicy.setSave(save);
 		
 	}
 	
@@ -375,23 +387,23 @@ public final class AdaLSPServer {
 	/**
 	 * @see org.eclipse.lsp4j.services.TextDocumentService#didOpen(DidOpenTextDocumentParams)
 	 */
-	void didOpen(String documentUri) {
+	void didOpen(@NotNull String documentUri) {
 		
-		URL url = urlStringToUrl(documentUri);
+		VirtualFile file = findFileByUrlString(documentUri);
 		
-		if (url == null) { return; }
+		if (file == null) { return; }
 		
-		didOpen(VfsUtil.findFileByURL(url));
+		didOpen(file);
 		
 	}
 	
 	/**
 	 * @see org.eclipse.lsp4j.services.TextDocumentService#didOpen(DidOpenTextDocumentParams)
 	 */
-	void didOpen(VirtualFile file) {
+	void didOpen(@NotNull VirtualFile file) {
 		
-		if (!AdaFileType.isAdaFile(file) ||
-			!serverSyncPolicy.getOpenClose()) { return; }
+		if (!serverSyncPolicy.getOpenClose() ||
+			!AdaFileType.isAdaFile(file)) { return; }
 		
 		String   documentUri = file.getUrl();
 		Document document    = getVirtualFileDocument(file);
@@ -514,55 +526,94 @@ public final class AdaLSPServer {
 	/**
 	 * @see org.eclipse.lsp4j.services.TextDocumentService#willSave(WillSaveTextDocumentParams)
 	 */
-	void willSave() {
+	void willSave(@NotNull String documentUri) {
 		
 		if (!serverSyncPolicy.getWillSave()) { return; }
 		
-		// TODO: Implement `textDocument/willSave`
+		WillSaveTextDocumentParams params = new WillSaveTextDocumentParams();
+		
+		params.setTextDocument(new TextDocumentIdentifier(documentUri));
+		params.setReason(TextDocumentSaveReason.Manual);
+		
+		server.getTextDocumentService().willSave(params);
 		
 	}
 	
 	/**
 	 * @see org.eclipse.lsp4j.services.TextDocumentService#willSaveWaitUntil(WillSaveTextDocumentParams)
 	 */
-	void willSaveWaitUntil() {
+	@NotNull
+	List<TextEdit> willSaveWaitUntil(@NotNull VirtualFile file) {
 		
-		if (!serverSyncPolicy.getWillSaveWaitUntil()) { return; }
+		if (!serverSyncPolicy.getWillSaveWaitUntil() ||
+			!AdaFileType.isAdaFile(file))
+		{ return EMPTY_TEXT_EDIT_LIST; }
 		
-		// TODO: Implement `textDocument/willSaveWaitUntil`
+		String documentUri = file.getUrl();
+		
+		final WillSaveTextDocumentParams params = new WillSaveTextDocumentParams();
+		
+		params.setTextDocument(new TextDocumentIdentifier(documentUri));
+		params.setReason(TextDocumentSaveReason.Manual);
+		
+		List<TextEdit> textEdits =
+			documentRequest("textDocument/willSaveWaitUntil", documentUri,
+				() -> server.getTextDocumentService().willSaveWaitUntil(params));
+		
+		return textEdits == null ? EMPTY_TEXT_EDIT_LIST : textEdits;
 		
 	}
 	
 	/**
 	 * @see org.eclipse.lsp4j.services.TextDocumentService#didSave(DidSaveTextDocumentParams)
 	 */
-	void didSave() {
+	void didSave(@NotNull VirtualFile file) {
 		
-		if (serverSyncPolicy.getSave() == null) { return; }
+		SaveOptions saveOptions = serverSyncPolicy.getSave();
 		
-		// TODO: Implement `textDocument/didSave`
+		if (saveOptions == null ||
+			!AdaFileType.isAdaFile(file)) { return; }
+		
+		DidSaveTextDocumentParams params = new DidSaveTextDocumentParams();
+		
+		params.setTextDocument(new TextDocumentIdentifier(file.getUrl()));
+		
+		if (saveOptions.getIncludeText()) {
+			
+			Document document = getVirtualFileDocument(file);
+			
+			if (document != null) {
+				params.setText(document.getText());
+			}
+			
+		}
+		
+		server.getTextDocumentService().didSave(params);
 		
 	}
 	
 	/**
 	 * @see org.eclipse.lsp4j.services.TextDocumentService#didClose(DidCloseTextDocumentParams)
 	 */
-	void didClose(@NotNull VirtualFile file) { didClose(file.getUrl()); }
+	void didClose(@NotNull String documentUri) {
+		
+		VirtualFile file = findFileByUrlString(documentUri);
+		
+		if (file == null) { return; }
+		
+		didClose(file);
+		
+	}
 	
 	/**
 	 * @see org.eclipse.lsp4j.services.TextDocumentService#didClose(DidCloseTextDocumentParams)
 	 */
-	void didClose(@NotNull String documentUri) {
+	void didClose(@NotNull VirtualFile file) {
 		
-		if (!serverSyncPolicy.getOpenClose()) { return; }
+		if (!serverSyncPolicy.getOpenClose() ||
+			!AdaFileType.isAdaFile(file)) { return; }
 		
-		URL url = urlStringToUrl(documentUri);
-		
-		if (url == null) { return; }
-		
-		VirtualFile file = VfsUtil.findFileByURL(url);
-		
-		if (file == null || !AdaFileType.isAdaFile(file)) { return; }
+		String documentUri = file.getUrl();
 		
 		server.getTextDocumentService().didClose(
 			new DidCloseTextDocumentParams(new TextDocumentIdentifier(documentUri)));
@@ -581,7 +632,7 @@ public final class AdaLSPServer {
 	) {
 		
 		if (!driver.initialized() || capabilities.getCompletionProvider() == null) {
-			return Collections.emptyList();
+			return EMPTY_COMPLETION_ITEM_LIST;
 		}
 		
 		final CompletionParams params = new CompletionParams();
@@ -593,12 +644,12 @@ public final class AdaLSPServer {
 			documentRequest("textDocument/completion", documentUri,
 				() -> server.getTextDocumentService().completion(params));
 		
-		if (completionResult == null) { return Collections.emptyList(); }
+		if (completionResult == null) { return EMPTY_COMPLETION_ITEM_LIST; }
 		
 		return
 			completionResult.isLeft()  ? completionResult.getLeft() :
 			completionResult.isRight() ? completionResult.getRight().getItems() :
-				Collections.emptyList();
+				EMPTY_COMPLETION_ITEM_LIST;
 		
 	}
 	
@@ -636,9 +687,9 @@ public final class AdaLSPServer {
 		         boolean  includeDefinition
 	) {
 		
-		if (!driver.initialized() || !capabilities.getReferencesProvider()) {
-			return Collections.emptyList();
-		}
+		if (!driver.initialized() ||
+			!capabilities.getReferencesProvider())
+		{ return EMPTY_LOCATION_LIST; }
 		
 		final ReferenceParams params = new ReferenceParams();
 		
@@ -650,7 +701,7 @@ public final class AdaLSPServer {
 			documentRequest("textDocument/references", documentUri,
 				() -> server.getTextDocumentService().references(params));
 		
-		if (locations == null) { return Collections.emptyList(); }
+		if (locations == null) { return EMPTY_LOCATION_LIST; }
 		
 		return locations
 			.stream()
@@ -664,9 +715,9 @@ public final class AdaLSPServer {
 	 */
 	public List<DocumentSymbol> documentSymbol(@NotNull String documentUri) {
 		
-		if (!driver.initialized() || !capabilities.getDocumentSymbolProvider()) {
-			return Collections.emptyList();
-		}
+		if (!driver.initialized() ||
+			!capabilities.getDocumentSymbolProvider())
+		{ return EMPTY_DOCUMENT_SYMBOL_LIST; }
 		
 		final DocumentSymbolParams params = new DocumentSymbolParams(
 			new TextDocumentIdentifier(documentUri));
@@ -675,7 +726,7 @@ public final class AdaLSPServer {
 			documentRequest("textDocument/documentSymbol", documentUri,
 				() -> server.getTextDocumentService().documentSymbol(params));
 	
-		if (symbols == null) { return Collections.emptyList(); }
+		if (symbols == null) { return EMPTY_DOCUMENT_SYMBOL_LIST; }
 		
 		return symbols
 			.stream()
