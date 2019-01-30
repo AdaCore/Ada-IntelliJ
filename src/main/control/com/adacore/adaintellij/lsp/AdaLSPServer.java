@@ -197,7 +197,10 @@ public final class AdaLSPServer {
 				// Try to make the request and get the result before
 				// the end of the next check-cancel interval
 				
-				result = requestFuture.get(AdaLSPDriver.CHECK_CANCELED_INTERVAL, TimeUnit.MILLISECONDS);
+				result = requestFuture.get(
+					AdaLSPDriver.CHECK_CANCELED_INTERVAL,
+					TimeUnit.MILLISECONDS
+				);
 				
 				// The request resolved before the end of the next
 				// check-cancel interval, so break immediately

@@ -5,17 +5,20 @@ import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
 
 import com.intellij.notification.Notifications;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.*;
 
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.CompletableFutures;
 import org.eclipse.lsp4j.services.LanguageClient;
 
 import com.adacore.adaintellij.dialogs.ListChooserDialog;
+import com.adacore.adaintellij.file.AdaFileType;
+import com.adacore.adaintellij.misc.cache.*;
 import com.adacore.adaintellij.notifications.AdaIJNotification;
 import com.adacore.adaintellij.Utils;
 
@@ -25,6 +28,12 @@ import static com.adacore.adaintellij.lsp.LSPUtils.messageTypeToNotificationType
  * LSP client implementation for the Ada-IntelliJ plugin.
  */
 public final class AdaLSPClient implements LanguageClient {
+	
+	/**
+	 * Cache key for document diagnostics.
+	 */
+	public static final CacheKey<List<Diagnostic>>
+		DIAGNOSTICS_CACHE_KEY = CacheKey.getNewKey();
 	
 	/**
 	 * Class-wide logger for the AdaLSPClient class.
@@ -42,16 +51,6 @@ public final class AdaLSPClient implements LanguageClient {
 	private Project project;
 	
 	/**
-	 * Diagnostics received by the server, grouped by document URI.
-	 */
-	private Map<String, List<Diagnostic>> documentDiagnostics = new HashMap<>();
-	
-	/**
-	 * An empty list of diagnostics.
-	 */
-	public static final List<Diagnostic> EMPTY_DIAGNOSTIC_LIST = Collections.emptyList();
-	
-	/**
 	 * Constructs a new AdaLSPClient given its driver and a project.
 	 *
 	 * @param driver The driver to attach to this client.
@@ -60,25 +59,6 @@ public final class AdaLSPClient implements LanguageClient {
 	AdaLSPClient(AdaLSPDriver driver, Project project) {
 		this.driver  = driver;
 		this.project = project;
-	}
-	
-	/**
-	 * Returns the last received diagnostics for the given document.
-	 *
-	 * @param document The document for which to get diagnostics.
-	 * @return The given document's diagnostics.
-	 */
-	@Contract(pure = true)
-	@NotNull
-	public List<Diagnostic> getDiagnostics(@NotNull Document document) {
-		
-		VirtualFile file = Utils.getDocumentVirtualFile(document);
-		
-		if (file == null) { return EMPTY_DIAGNOSTIC_LIST; }
-		
-		return Collections.unmodifiableList(
-			documentDiagnostics.getOrDefault(file.getUrl(), EMPTY_DIAGNOSTIC_LIST));
-		
 	}
 	
 	/*
@@ -258,10 +238,23 @@ public final class AdaLSPClient implements LanguageClient {
 		
 		if (!driver.initialized()) { return; }
 		
-		String           documentUri    = diagnostics.getUri();
-		List<Diagnostic> diagnosticList = diagnostics.getDiagnostics();
+		// Find the file corresponding to the given diagnostics'
+		// document and check that it is an Ada source file
 		
-		documentDiagnostics.put(documentUri, diagnosticList);
+		final VirtualFile virtualFile = Utils.findFileByUrlString(diagnostics.getUri());
+		
+		if (virtualFile == null || !AdaFileType.isAdaFile(virtualFile)) { return; }
+		
+		// Get the corresponding document
+		
+		Document document = ApplicationManager.getApplication().runReadAction(
+			(Computable<Document>)() -> Utils.getVirtualFileDocument(virtualFile));
+		
+		if (document == null) { return; }
+		
+		// Store the diagnostics in the document
+		
+		Cacher.cacheData(document, DIAGNOSTICS_CACHE_KEY, diagnostics.getDiagnostics());
 		
 	}
 	

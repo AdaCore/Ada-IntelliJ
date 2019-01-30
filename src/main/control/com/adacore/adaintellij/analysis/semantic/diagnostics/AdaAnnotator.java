@@ -12,6 +12,7 @@ import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.Range;
 
 import com.adacore.adaintellij.lsp.*;
+import com.adacore.adaintellij.misc.cache.*;
 import com.adacore.adaintellij.Utils;
 
 import static com.adacore.adaintellij.lsp.LSPUtils.diagnosticSeverityToHighlightSeverity;
@@ -23,6 +24,17 @@ import static com.adacore.adaintellij.lsp.LSPUtils.diagnosticSeverityToHighlight
 public class AdaAnnotator extends ExternalAnnotator<List<Diagnostic>, List<Diagnostic>> {
 	
 	/**
+	 * Maximum number of attempts to get a document's diagnostics.
+	 */
+	private static final int MAXIMUM_GET_DIAGNOSTICS_ATTEMPTS = 7;
+	
+	/**
+	 * The interval duration, in milliseconds, before trying to get
+	 * a document's internally stored diagnostics.
+	 */
+	private static final long GET_DIAGNOSTICS_INTERVAL = 100;
+	
+	/**
 	 * @see com.intellij.lang.annotation.ExternalAnnotator#collectInformation(PsiFile)
 	 *
 	 * Fetches and returns the list of diagnostics from the LSP client.
@@ -31,25 +43,40 @@ public class AdaAnnotator extends ExternalAnnotator<List<Diagnostic>, List<Diagn
 	@Override
 	public List<Diagnostic> collectInformation(@NotNull PsiFile file) {
 		
-		// Get the file's document
+		// Get the file's corresponding document
 		
 		Document document = Utils.getPsiFileDocument(file);
 		
-		if (document == null) {
-			return AdaLSPClient.EMPTY_DIAGNOSTIC_LIST;
+		if (document == null) { return null; }
+		
+		// Get the list of diagnostics from the document's cache
+		
+		CacheResult<List<Diagnostic>> cacheResult =
+			Cacher.getCachedData(document, AdaLSPClient.DIAGNOSTICS_CACHE_KEY);
+		
+		int attempts = MAXIMUM_GET_DIAGNOSTICS_ATTEMPTS;
+		
+		// While the cache read was a miss and the number of attempts
+		// has not reached the maximum number of attempts, sleep for
+		// a short duration of time and try again
+		
+		while (!cacheResult.hit) {
+			
+			try {
+				Thread.sleep(GET_DIAGNOSTICS_INTERVAL);
+			} catch (InterruptedException exception) {}
+			
+			cacheResult = Cacher.getCachedData(document, AdaLSPClient.DIAGNOSTICS_CACHE_KEY);
+			
+			attempts--;
+			
+			if (attempts == 0) { break; }
+			
 		}
 		
-		// Get the project's LSP client
+		// Return the last cache read result
 		
-		AdaLSPClient lspClient = AdaLSPDriver.getClient(file.getProject());
-		
-		if (lspClient == null) {
-			return AdaLSPClient.EMPTY_DIAGNOSTIC_LIST;
-		}
-		
-		// Return the document's diagnostics
-		
-		return lspClient.getDiagnostics(document);
+		return cacheResult.data;
 		
 	}
 	
