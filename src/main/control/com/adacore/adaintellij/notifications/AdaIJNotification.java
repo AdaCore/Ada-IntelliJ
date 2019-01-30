@@ -7,12 +7,12 @@ import org.jetbrains.annotations.NotNull;
  * A notification originating from the Ada-IntelliJ plugin.
  */
 public final class AdaIJNotification extends Notification {
-	
+
 	/**
 	 * The group display ID used for this plugin.
 	 */
 	private static final String GROUP_DISPLAY_ID = "Ada-IntelliJ Plugin";
-	
+
 	/**
 	 * Constructs a new Ada-IntelliJ notification given a title,
 	 * notification content, and a notification type.

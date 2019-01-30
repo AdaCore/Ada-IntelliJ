@@ -20,17 +20,17 @@ public final class LSPUtils {
 	 * The LSP language ID for Ada.
 	 */
 	static final String ADA_LSP_LANGUAGE_ID = "ada";
-	
+
 	/**
 	 * The extension-less name of the Ada Language Server (ALS) executable.
 	 */
 	static final String ALS_NAME = "ada_language_server";
-	
+
 	/**
 	 * Private default constructor to prevent instantiation.
 	 */
 	private LSPUtils() {}
-	
+
 	/**
 	 * Translates the given message type, defined in the LSP standard,
 	 * to the notification type used in the IntelliJ platform.
@@ -40,21 +40,21 @@ public final class LSPUtils {
 	 */
 	@NotNull
 	public static NotificationType messageTypeToNotificationType(@NotNull MessageType type) {
-		
+
 		switch (type) {
-			
+
 			case Error:   return NotificationType.ERROR;
-			
+
 			case Warning: return NotificationType.WARNING;
-			
+
 			case Info:
 			case Log:
 			default:      return NotificationType.INFORMATION;
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * Translates the given diagnostic severity, defined in the LSP
 	 * standard, to the severity type used by the IntelliJ platform's
@@ -67,22 +67,22 @@ public final class LSPUtils {
 	public static HighlightSeverity diagnosticSeverityToHighlightSeverity(
 		@NotNull DiagnosticSeverity severity
 	) {
-		
+
 		switch (severity) {
-			
+
 			case Warning:     return HighlightSeverity.WARNING;
-			
+
 			case Information: return HighlightSeverity.INFORMATION;
-			
+
 			case Hint:        return HighlightSeverity.WEAK_WARNING;
-			
+
 			case Error:
 			default:          return HighlightSeverity.ERROR;
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * Translates the symbol kind of the given symbol, defined in the
 	 * LSP standard, to the Ada element type defined for Ada PSI
@@ -94,14 +94,14 @@ public final class LSPUtils {
 	 */
 	@Nullable
 	public static AdaElementType symbolKindToAdaElementType(@NotNull DocumentSymbol symbol) {
-		
+
 		SymbolKind symbolKind = symbol.getKind();
-		
+
 		return symbolKind == null ? null :
 			symbolKindToAdaElementType(symbolKind);
-		
+
 	}
-	
+
 	/**
 	 * Translates the given symbol kind, defined in the LSP standard,
 	 * to the Ada element type defined for Ada PSI elements.
@@ -112,24 +112,24 @@ public final class LSPUtils {
 	 */
 	@Nullable
 	public static AdaElementType symbolKindToAdaElementType(@NotNull SymbolKind kind) {
-		
+
 		switch (kind) {
-			
+
 			case Package:  return AdaElementType.PACKAGE_SPEC_IDENTIFIER;
 			case Module:   return AdaElementType.PACKAGE_BODY_IDENTIFIER;
-			
+
 			case Class:    return AdaElementType.TYPE_IDENTIFIER;
 			case Constant: return AdaElementType.CONSTANT_IDENTIFIER;
 			case Variable: return AdaElementType.VARIABLE_IDENTIFIER;
-			
+
 			case Function: return AdaElementType.FUNCTION_IDENTIFIER;
-			
+
 			default:       return null;
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * Translates the given IntelliJ platform document event to a
 	 * text-document content change event, defined in the LSP
@@ -142,26 +142,26 @@ public final class LSPUtils {
 	public static TextDocumentContentChangeEvent
 		documentEventToContentChangeEvent(@NotNull DocumentEvent event)
 	{
-		
+
 		Document changedDocument = event.getDocument();
-		
+
 		TextDocumentContentChangeEvent changeEvent =
 			new TextDocumentContentChangeEvent();
-		
+
 		int offset    = event.getOffset();
 		int oldLength = event.getOldLength();
-		
+
 		changeEvent.setRange(new Range(
 			offsetToPosition(changedDocument, offset),
 			offsetToPosition(changedDocument, offset + oldLength)
 		));
 		changeEvent.setRangeLength(oldLength);
 		changeEvent.setText(event.getNewFragment().toString());
-		
+
 		return changeEvent;
-		
+
 	}
-	
+
 	/**
 	 * Returns the offset corresponding to the given LSP position
 	 * in the given document.
@@ -171,14 +171,14 @@ public final class LSPUtils {
 	 * @return The corresponding offset.
 	 */
 	public static int positionToOffset(@NotNull Document document, @NotNull Position position) {
-		
+
 		int line   = position.getLine();
 		int column = position.getCharacter();
-		
+
 		return document.getLineStartOffset(line) + column;
-		
+
 	}
-	
+
 	/**
 	 * Returns the LSP position corresponding to the given offset
 	 * in the given document.
@@ -188,12 +188,12 @@ public final class LSPUtils {
 	 * @return The corresponding LSP position.
 	 */
 	public static Position offsetToPosition(@NotNull Document document, int offset) {
-		
+
 		int line   = document.getLineNumber(offset);
 		int column = offset - document.getLineStartOffset(line);
-		
+
 		return new Position(line, column);
-	
+
 	}
-	
+
 }

@@ -32,7 +32,7 @@ import com.adacore.adaintellij.UIUtils;
  *         +----------------------+--------+--------+
  */
 public final class ListChooserDialog<T> extends DialogWrapper {
-	
+
 	/**
 	 * UI components.
 	 */
@@ -41,7 +41,7 @@ public final class ListChooserDialog<T> extends DialogWrapper {
 	private JScrollPane optionListScrollPane;
 	private JBList<T>   optionList;
 	private JTextPane   footnoteTextPane;
-	
+
 	/**
 	 * Constructs a new ListChooserDialog given some parameters,
 	 * without a footnote.
@@ -59,7 +59,7 @@ public final class ListChooserDialog<T> extends DialogWrapper {
 		@NotNull List<T> options,
 		         int     listSelectionMode
 	) { this(project, title, mainText, options, null, listSelectionMode); }
-	
+
 	/**
 	 * Constructs a new ListChooserDialog given some parameters.
 	 *
@@ -78,45 +78,45 @@ public final class ListChooserDialog<T> extends DialogWrapper {
 		@Nullable String  footnote,
 		          int     listSelectionMode
 	) {
-		
+
 		super(project, false, IdeModalityType.PROJECT);
-		
+
 		// Check parameters
-		
+
 		assert options.size() > 0 : "Cannot create list-chooser-dialog from empty option list";
-		
+
 		// Initialize the dialog
-		
+
 		init();
-		
+
 		// Set the title
-		
+
 		setTitle(title);
-		
+
 		// Set the main text
-		
+
 		mainTextPane.setText(mainText);
-		
+
 		// Set up the option list
-		
+
 		UIUtils.addLineBorder(optionListScrollPane);
 		UIUtils.adjustScrollSpeed(optionListScrollPane);
-		
+
 		// TODO: Set maximum width on option list to avoid very
 		//       wide dialogs when there are gpr file paths that
 		//       are too long
-		
+
 		DefaultListModel<T> model = new DefaultListModel<>();
 		options.forEach(model::addElement);
 		optionList.setModel(model);
 		optionList.setSelectionMode(listSelectionMode);
-		
+
 		optionList.setSelectedIndex(0);
 		optionList.setVisibleRowCount(Math.min(options.size() + 2, 10));
 		optionList.setCellRenderer(new BasicListCellRenderer());
-		
+
 		optionList.addMouseListener(new MouseAdapter() {
-			
+
 			/**
 			 * Called when the mouse is clicked.
 			 *
@@ -124,38 +124,38 @@ public final class ListChooserDialog<T> extends DialogWrapper {
 			 */
 			@Override
 			public void mouseClicked(MouseEvent mouseEvent) {
-				
+
 				if (mouseEvent.getClickCount() >= 2) {
 					getOKAction().actionPerformed(null);
 				}
-				
+
 			}
-			
+
 		});
-		
+
 		// Set the footnote if it is not null
-		
+
 		if (footnote == null) {
 			footnoteTextPane.setVisible(false);
 		} else {
 			footnoteTextPane.setText(footnote);
 		}
-		
+
 	}
-	
+
 	/**
 	 * @see com.intellij.openapi.ui.DialogWrapper#createCenterPanel()
 	 */
 	@Nullable
 	@Override
 	protected JComponent createCenterPanel() { return contentPane; }
-	
+
 	/**
 	 * @see com.intellij.openapi.ui.DialogWrapper#getPreferredFocusedComponent()
 	 */
 	@Override
 	public JComponent getPreferredFocusedComponent() { return optionList; }
-	
+
 	/**
 	 * Displays this dialog to the user, waits for user action and returns
 	 * the list of selected options, or null if no selection was made.
@@ -164,13 +164,13 @@ public final class ListChooserDialog<T> extends DialogWrapper {
 	 */
 	@Nullable
 	public List<T> showAndGetSelections() {
-		
+
 		boolean selectionMade = showAndGet();
-		
+
 		return selectionMade ? optionList.getSelectedValuesList() : null;
-		
+
 	}
-	
+
 	/**
 	 * Single selection version of `showAndGetSelections`, returning a
 	 * single selection instead of a list, or null if no selection was made.
@@ -181,14 +181,14 @@ public final class ListChooserDialog<T> extends DialogWrapper {
 	 */
 	@Nullable
 	public T showAndGetSelection() {
-	
+
 		assert optionList.getSelectionMode() == ListSelectionModel.SINGLE_SELECTION :
 			"ListChooserDialog#showAndGetSelection() must not be used in multi-selection mode";
-		
+
 		List<T> selections = showAndGetSelections();
-		
+
 		return selections == null || selections.size() == 0 ? null : selections.get(0);
-	
+
 	}
-	
+
 }

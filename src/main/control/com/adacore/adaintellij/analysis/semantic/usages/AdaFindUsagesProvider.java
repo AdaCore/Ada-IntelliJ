@@ -16,7 +16,7 @@ import com.adacore.adaintellij.analysis.semantic.AdaPsiReference;
  * Find-usages provider for Ada.
  */
 public final class AdaFindUsagesProvider implements FindUsagesProvider {
-	
+
 	/**
 	 * @see com.intellij.lang.findUsages.FindUsagesProvider#getWordsScanner()
 	 */
@@ -30,7 +30,7 @@ public final class AdaFindUsagesProvider implements FindUsagesProvider {
 			AdaTokenTypes.LITERAL_TOKEN_SET
 		);
 	}
-	
+
 	/**
 	 * @see com.intellij.lang.findUsages.FindUsagesProvider#canFindUsagesFor(PsiElement)
 	 */
@@ -38,14 +38,14 @@ public final class AdaFindUsagesProvider implements FindUsagesProvider {
 	public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
 		return AdaPsiElement.getFrom(psiElement) instanceof AdaPsiReference;
 	}
-	
+
 	/**
 	 * @see com.intellij.lang.findUsages.FindUsagesProvider#getHelpId(PsiElement)
 	 */
 	@Nullable
 	@Override
 	public String getHelpId(@NotNull PsiElement psiElement) { return null; }
-	
+
 	/**
 	 * @see com.intellij.lang.findUsages.FindUsagesProvider#getType(PsiElement)
 	 */
@@ -55,7 +55,7 @@ public final class AdaFindUsagesProvider implements FindUsagesProvider {
 		// TODO: Return element type (e.g. package/procedure/variable...)
 		return "";
 	}
-	
+
 	/**
 	 * @see com.intellij.lang.findUsages.FindUsagesProvider#getDescriptiveName(PsiElement)
 	 */
@@ -64,7 +64,7 @@ public final class AdaFindUsagesProvider implements FindUsagesProvider {
 	public String getDescriptiveName(@NotNull PsiElement element) {
 		return getNodeText(element, true);
 	}
-	
+
 	/**
 	 * @see com.intellij.lang.findUsages.FindUsagesProvider#getNodeText(PsiElement, boolean)
 	 */
@@ -73,5 +73,5 @@ public final class AdaFindUsagesProvider implements FindUsagesProvider {
 	public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
 		return element.getText();
 	}
-	
+
 }

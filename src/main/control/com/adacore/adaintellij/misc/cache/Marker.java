@@ -7,12 +7,12 @@ import org.jetbrains.annotations.*;
  * @see com.adacore.adaintellij.misc.cache.Markable
  */
 public final class Marker extends CacheKey<Object> {
-	
+
 	/**
 	 * Constructs a new unique Marker.
 	 */
 	private Marker() {}
-	
+
 	/**
 	 * Factory method that returns a new marker.
 	 *

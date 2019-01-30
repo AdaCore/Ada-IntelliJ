@@ -9,18 +9,18 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> The type of data in a cache result.
  */
 public final class CacheResult<T> {
-	
+
 	/**
 	 * Whether this cache result represents a cache
 	 * hit or a cache miss.
 	 */
 	public final boolean hit;
-	
+
 	/**
 	 * The data in this cache result.
 	 */
 	public final T data;
-	
+
 	/**
 	 * Constructs a new CacheResult representing a
 	 * cache miss.
@@ -29,7 +29,7 @@ public final class CacheResult<T> {
 		this.hit  = false;
 		this.data = null;
 	}
-	
+
 	/**
 	 * Constructs a new CacheResult representing a
 	 * cache hit with the given data.
@@ -41,5 +41,5 @@ public final class CacheResult<T> {
 		this.hit  = true;
 		this.data = data;
 	}
-	
+
 }

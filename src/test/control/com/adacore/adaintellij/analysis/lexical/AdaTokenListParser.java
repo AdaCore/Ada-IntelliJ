@@ -47,7 +47,7 @@ import com.adacore.adaintellij.AdaTestUtils;
  *   by spaces or line feeds
  */
 final class AdaTokenListParser {
-	
+
 	/**
 	 * Parses the token list file at the given URI and returns
 	 * the list of tokens described by the list file as an iterator
@@ -59,57 +59,57 @@ final class AdaTokenListParser {
 	 *                   or if its syntax is invalid.
 	 */
 	static Iterator<AdaLexer.Token> parseTokenListFile(URI fileURI) throws Exception {
-		
+
 		String tokenListText = AdaTestUtils.getFileText(fileURI);
-		
+
 		String[] lines = tokenListText.split("\n");
-		
+
 		List<AdaLexer.Token> expectedTokens = new LinkedList<>();
-		
+
 		for (int i = 0 ; i < lines.length ; i++) {
-			
+
 			String line = lines[i];
-			
+
 			String[] lineComponents = line.split(" +");
 			int lineComponentsSize = 0;
-			
+
 			for (String component : lineComponents) {
 				if (component.startsWith("--")) { break; }
 				lineComponentsSize++;
 			}
-			
+
 			if (line.length() == 0 || lineComponentsSize == 0) { continue; }
 			else if (lineComponentsSize != 3) {
 				throw new Exception("Invalid token list file: line " + (i + 1) +
 					" does not have exactly 3 components.");
 			}
-			
+
 			String tokenName = lineComponents[0];
 			int tokenStart, tokenEnd;
-			
+
 			try {
-				
+
 				tokenStart = Integer.parseInt(lineComponents[1]);
 				tokenEnd   = Integer.parseInt(lineComponents[2]);
-				
+
 			} catch (NumberFormatException exception) {
-				
+
 				throw new Exception("Invalid token list file: line " + (i + 1) +
 					" contains a component that is not parsable as an integer.");
-				
+
 			}
-			
+
 			IElementType tokenType =
 				"WHITE_SPACE".equals(tokenName)   ? TokenType.WHITE_SPACE   :
 				"BAD_CHARACTER".equals(tokenName) ? TokenType.BAD_CHARACTER :
 				new AdaTokenType(tokenName);
-			
+
 			expectedTokens.add(new AdaLexer.Token(tokenType, tokenStart, tokenEnd));
-			
+
 		}
-		
+
 		return expectedTokens.iterator();
-		
+
 	}
 
 }

@@ -11,13 +11,13 @@ import org.jetbrains.annotations.*;
  * match only characters from a specific general category.
  */
 public final class GeneralCategoryRegex extends LexerRegex {
-	
+
 	/**
 	 * The internal pattern used to match a character
 	 * based on its general category.
 	 */
 	private final Pattern PATTERN;
-	
+
 	/**
 	 * Constructs a new general category regex given a general category
 	 * identifier string (e.g. "Lu" for category "Letter, uppercase").
@@ -27,7 +27,7 @@ public final class GeneralCategoryRegex extends LexerRegex {
 	public GeneralCategoryRegex(@NotNull String generalCategory) {
 		this(generalCategory, 0);
 	}
-	
+
 	/**
 	 * Constructs a new general category regex given a general category
 	 * identifier string (e.g. "Lu" for category "Letter, uppercase")
@@ -40,19 +40,19 @@ public final class GeneralCategoryRegex extends LexerRegex {
 		super(priority);
 		PATTERN  = Pattern.compile(String.format("\\p{%s}", generalCategory));
 	}
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#nullable()
 	 */
 	@Override
 	public boolean nullable() { return false; }
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#charactersMatched()
 	 */
 	@Override
 	public int charactersMatched() { return 1; }
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#advanced(char)
 	 */
@@ -62,5 +62,5 @@ public final class GeneralCategoryRegex extends LexerRegex {
 		return PATTERN.matcher(String.valueOf(character)).find() ?
 			new UnitRegex("") : null;
 	}
-	
+
 }

@@ -103,14 +103,14 @@ import org.jetbrains.annotations.NotNull;
  * ensure that the element you are working with is an Ada PSI element.
  */
 public final class AdaParser implements PsiParser {
-	
+
 	/**
 	 * @see com.intellij.lang.PsiParser#parse(IElementType, PsiBuilder)
 	 */
 	@NotNull
 	@Override
 	public ASTNode parse(@NotNull IElementType root, @NotNull PsiBuilder builder) {
-		
+
 		// Set the root marker for the whole source text
 		// Note: This absolutely needs to be done before any calls to `builder.advance`
 		//       *AND* `builder.getTokenType`. In the case of `PsiBuilderImpl`, the
@@ -120,60 +120,60 @@ public final class AdaParser implements PsiParser {
 		//       covering the entire source file, which will cause the IDE to throw an
 		//       exception every time a source file starting with whitespace or a
 		//       comment is loaded.
-		
+
 		PsiBuilder.Marker rootMarker = builder.mark();
-		
+
 		// Get the first token
-		
+
 		IElementType tokenType = builder.getTokenType();
-		
+
 		// Set the leaf node marker
-		
+
 		PsiBuilder.Marker marker = builder.mark();
-		
+
 		// While the lexer still produces tokens...
-		
+
 		// `tokenType != null` should be guaranteed to be false
 		// by the preceding check `!builder.eof()`, but we check
 		// nullability anyways just to be safe
 		while (!builder.eof() && tokenType != null) {
-			
+
 			// Advance to the next token
-			
+
 			builder.advanceLexer();
-			
+
 			// Set the next leaf node marker and mark the previous
 			// marker as done right before the newly created marker
 			// This is a neat little facility provided by the
 			// `PsiBuilder.Marker` interface
-			
+
 			PsiBuilder.Marker nextMarker = builder.mark();
 			marker.doneBefore(tokenType, nextMarker);
-			
+
 			// Store the newly created marker for the next iteration
-			
+
 			marker = nextMarker;
-			
+
 			// Get the next token
-			
+
 			tokenType = builder.getTokenType();
-			
+
 		}
-		
+
 		// The end of the source file was reached but we still
 		// have a set marker that does not correspond to any token,
 		// so drop it
-		
+
 		marker.drop();
-		
+
 		// Mark the root marker as done
-		
+
 		rootMarker.done(root);
-		
+
 		// Build the tree and return it
-		
+
 		return builder.getTreeBuilt();
-		
+
 	}
-	
+
 }

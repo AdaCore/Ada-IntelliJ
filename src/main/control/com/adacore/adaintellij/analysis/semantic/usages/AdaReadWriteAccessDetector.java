@@ -12,7 +12,7 @@ import com.adacore.adaintellij.analysis.semantic.AdaPsiReference;
  * Read/write access detector for Ada.
  */
 public final class AdaReadWriteAccessDetector extends ReadWriteAccessDetector {
-	
+
 	/**
 	 * Returns whether or not the given element can be classified
 	 * as a read and/or write access.
@@ -25,7 +25,7 @@ public final class AdaReadWriteAccessDetector extends ReadWriteAccessDetector {
 	public boolean isReadWriteAccessible(@NotNull PsiElement element) {
 		return AdaPsiElement.getFrom(element) instanceof AdaPsiReference;
 	}
-	
+
 	/**
 	 * Returns whether or not the given element is a write access
 	 * of a declaration.
@@ -39,7 +39,7 @@ public final class AdaReadWriteAccessDetector extends ReadWriteAccessDetector {
 		return element instanceof AdaPsiReference &&
 			((AdaPsiReference)element).isDeclaration();
 	}
-	
+
 	/**
 	 * Returns the access type of the given reference.
 	 *
@@ -57,7 +57,7 @@ public final class AdaReadWriteAccessDetector extends ReadWriteAccessDetector {
 	) {
 		return getExpressionAccess(reference.getElement());
 	}
-	
+
 	/**
 	 * Returns the access type of the given expression.
 	 *
@@ -70,5 +70,5 @@ public final class AdaReadWriteAccessDetector extends ReadWriteAccessDetector {
 	public Access getExpressionAccess(@NotNull PsiElement expression) {
 		return isDeclarationWriteAccess(expression) ? Access.Write : Access.Read;
 	}
-	
+
 }

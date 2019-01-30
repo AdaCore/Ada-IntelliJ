@@ -19,31 +19,31 @@ import com.adacore.adaintellij.Utils;
  * code completion or renaming.
  */
 public class AdaDocumentListener implements DocumentListener {
-	
+
 	/**
 	 * @see com.intellij.openapi.editor.event.DocumentListener#beforeDocumentChange(DocumentEvent)
 	 */
 	@Override
 	public final void beforeDocumentChange(DocumentEvent event) {
-		
+
 		if (!shouldHandleEvent(event)) { return; }
-		
+
 		beforeAdaDocumentChanged(event);
-		
+
 	}
-	
+
 	/**
 	 * @see com.intellij.openapi.editor.event.DocumentListener#documentChanged(DocumentEvent)
 	 */
 	@Override
 	public final void documentChanged(DocumentEvent event) {
-		
+
 		if (!shouldHandleEvent(event)) { return; }
-		
+
 		adaDocumentChanged(event);
-		
+
 	}
-	
+
 	/**
 	 * Returns whether or not the given document event should be
 	 * handled.
@@ -52,27 +52,27 @@ public class AdaDocumentListener implements DocumentListener {
 	 * @return Whether or not the given event should be handled.
 	 */
 	private boolean shouldHandleEvent(@Nullable DocumentEvent event) {
-		
+
 		if (event == null) { return false; }
-		
+
 		VirtualFile file = Utils.getDocumentVirtualFile(event.getDocument());
-		
+
 		return file != null &&
 			file.isInLocalFileSystem() &&
 			AdaFileType.isAdaFile(file);
-		
+
 	}
-	
+
 	/**
 	 * Variant of `beforeDocumentChanged` for Ada documents:
 	 * @see com.intellij.openapi.editor.event.DocumentListener#beforeDocumentChange(DocumentEvent)
 	 */
 	public void beforeAdaDocumentChanged(@NotNull DocumentEvent event) {}
-	
+
 	/**
 	 * Variant of `documentChanged` for Ada documents:
 	 * @see com.intellij.openapi.editor.event.DocumentListener#documentChanged(DocumentEvent)
 	 */
 	public void adaDocumentChanged(@NotNull DocumentEvent event) {}
-	
+
 }

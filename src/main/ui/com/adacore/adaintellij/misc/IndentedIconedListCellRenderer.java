@@ -13,22 +13,22 @@ import com.adacore.adaintellij.UIUtils;
  * discretized indentation.
  */
 public class IndentedIconedListCellRenderer extends BasicListCellRenderer {
-	
+
 	/**
 	 * Cell content indentation factor.
 	 */
 	private static int INDENTATION_FACTOR = 20;
-	
+
 	/**
 	 * Cell content indentation.
 	 */
 	private int indentation;
-	
+
 	/**
 	 * Cell icon.
 	 */
 	private Icon icon;
-	
+
 	/**
 	 * Constructs a new IndentedIconedListCellRenderer given
 	 * an indentation level and an icon.
@@ -44,7 +44,7 @@ public class IndentedIconedListCellRenderer extends BasicListCellRenderer {
 		this.indentation = indentation;
 		this.icon        = icon;
 	}
-	
+
 	/**
 	 * @see BasicListCellRenderer#getListCellRendererComponent(JList, Object, int, boolean, boolean)
 	 */
@@ -56,15 +56,15 @@ public class IndentedIconedListCellRenderer extends BasicListCellRenderer {
 		boolean  isSelected,
 		boolean  cellHasFocus
 	) {
-		
+
 		JLabel label = (JLabel)super.getListCellRendererComponent(
 			list, value, index, isSelected, cellHasFocus);
-		
+
 		UIUtils.addIconWithGap(label, icon);
 		label.setBorder(JBUI.Borders.empty(2, 2 + indentation * INDENTATION_FACTOR, 2, 2));
-		
+
 		return label;
-		
+
 	}
-	
+
 }

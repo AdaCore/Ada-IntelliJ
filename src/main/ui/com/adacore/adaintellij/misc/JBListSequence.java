@@ -27,75 +27,75 @@ import org.jetbrains.annotations.*;
  * @param <T> The type of the options in the underlying lists.
  */
 public final class JBListSequence<T> {
-	
+
 	/**
 	 * The `JBList`s in this sequence.
 	 */
 	private List<JBList<T>> lists = new ArrayList<>();
-	
+
 	/**
 	 * A reference to the list currently in focus.
 	 */
 	private JBList<T> listInFocus = null;
-	
+
 	/**
 	 * Listeners to selection changes in this sequence.
 	 */
 	private List<Consumer<T>> selectionListeners = new ArrayList<>();
-	
+
 	/**
 	 * Adds the given `JBList` to this sequence.
 	 *
 	 * @param list The list to add to this sequence.
 	 */
 	public void add(@NotNull JBList<T> list) {
-		
+
 		// Check that the list is in single-selection mode
-		
+
 		assert list.getSelectionMode() == ListSelectionModel.SINGLE_SELECTION :
 			"Cannot add non-single-selection JBList to JBListSequence";
-		
+
 		// Disable focus traversal keys for this list
-		
+
 		list.setFocusTraversalKeysEnabled(false);
-		
+
 		// Add a focus listener to pass focus to the
 		// list that is supposed to have focus
-		
+
 		list.addFocusListener(new FocusAdapter() {
-			
+
 			@Override
 			public void focusGained(FocusEvent focusEvent) {
-				
+
 				if (listInFocus != null) { listInFocus.requestFocusInWindow(); }
-				
+
 			}
-			
+
 		});
-		
+
 		// Add selection change listener to update the list
 		// in focus, clear the selection in all other lists
 		// and notify selection change listeners
-		
+
 		list.addListSelectionListener(event -> {
-			
+
 			if (!list.getValueIsAdjusting()) { return; }
-			
+
 			listInFocus = list;
-			
+
 			lists.stream()
 				.filter(jbList -> jbList != list)
 				.forEach(JBList::clearSelection);
-			
+
 			notifySelectionListeners();
-			
+
 		});
-		
+
 		// Add key listener to handle arrow keys and
 		// focus key combinations
-		
+
 		list.addKeyListener(new KeyAdapter() {
-			
+
 			/**
 			 * Called when a key is pressed.
 			 *
@@ -103,75 +103,75 @@ public final class JBListSequence<T> {
 			 */
 			@Override
 			public void keyPressed(KeyEvent keyEvent) {
-				
+
 				if (listInFocus == null) {
 					super.keyPressed(keyEvent);
 					return;
 				}
-				
+
 				int keyCode = keyEvent.getKeyCode();
-				
+
 				if (keyCode == KeyEvent.VK_TAB) {
-					
+
 					if (keyEvent.isShiftDown()) {
 						lists.get(0).transferFocusBackward();
 					} else {
 						lists.get(lists.size() - 1).transferFocus();
 					}
-					
+
 					return;
-					
+
 				}
-				
+
 				int selectedIndex    = listInFocus.getSelectedIndex();
 				int listInFocusIndex = lists.indexOf(listInFocus);
-				
+
 				boolean pressedUp              = keyCode == KeyEvent.VK_UP;
 				boolean pressedDown            = keyCode == KeyEvent.VK_DOWN;
 				boolean selectionIsFirstInList = selectedIndex == 0;
 				boolean selectionIsLastInList  = selectedIndex == listInFocus.getItemsCount() - 1;
 				boolean listInFocusIsFirst     = listInFocusIndex == 0;
 				boolean listInFocusIsLast      = listInFocusIndex == lists.size() - 1;
-				
+
 				if ((pressedUp && !(listInFocusIsFirst && selectionIsFirstInList)) ||
 					(pressedDown && !(listInFocusIsLast && selectionIsLastInList)))
 				{
-					
+
 					boolean switchToPreviousList = pressedUp   && selectionIsFirstInList;
 					boolean switchToNextList     = pressedDown && selectionIsLastInList;
-					
+
 					if (switchToPreviousList || switchToNextList) {
-						
+
 						JBList<T> previousListInFocus = listInFocus;
-						
+
 						listInFocus = lists.get(listInFocusIndex + (switchToNextList ? 1 : -1));
 						listInFocus.requestFocusInWindow();
-						
+
 						listInFocus.setSelectedIndex(
 							switchToNextList ? 0 : listInFocus.getItemsCount() - 1);
-						
+
 						if (previousListInFocus != null) {
 							SwingUtilities.invokeLater(previousListInFocus::clearSelection);
 						}
-						
+
 					}
-					
+
 					SwingUtilities.invokeLater(() -> notifySelectionListeners());
-					
+
 				}
-				
+
 				super.keyPressed(keyEvent);
-				
+
 			}
-			
+
 		});
-		
+
 		// Add the list to this sequence
-		
+
 		lists.add(list);
-		
+
 	}
-	
+
 	/**
 	 * Returns the current selection of the list currently
 	 * in focus, or null if no list in this sequence is in
@@ -183,7 +183,7 @@ public final class JBListSequence<T> {
 	public T getSelection() {
 		return listInFocus == null ? null : listInFocus.getSelectedValue();
 	}
-	
+
 	/**
 	 * Adds a listener to selection changes in this list sequence.
 	 *
@@ -192,7 +192,7 @@ public final class JBListSequence<T> {
 	public void addSelectionListener(@NotNull Consumer<T> listener) {
 		selectionListeners.add(listener);
 	}
-	
+
 	/**
 	 * Notifies selection change listeners of a selection change.
 	 */
@@ -200,5 +200,5 @@ public final class JBListSequence<T> {
 		selectionListeners.forEach(listener ->
 			listener.accept(getSelection()));
 	}
-	
+
 }

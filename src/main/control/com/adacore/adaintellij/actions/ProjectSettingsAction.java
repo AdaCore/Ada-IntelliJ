@@ -10,21 +10,21 @@ import com.adacore.adaintellij.settings.AdaProjectSettings;
  * IntelliJ action to open Ada project settings.
  */
 public final class ProjectSettingsAction extends AnAction {
-	
+
 	/**
 	 * @see com.intellij.openapi.actionSystem.AnAction#actionPerformed(AnActionEvent)
 	 */
 	@Override
 	public void actionPerformed(AnActionEvent event) {
-		
+
 		Project project = event.getProject();
-		
+
 		if (project == null) { return; }
-		
+
 		AdaProjectSettings settings = new AdaProjectSettings(project);
-	
+
 		settings.showAndGet();
-		
+
 	}
-	
+
 }

@@ -20,12 +20,12 @@ import com.adacore.adaintellij.AdaLanguage;
  * @see com.adacore.adaintellij.analysis.semantic.AdaParser
  */
 public final class AdaPsiFile extends PsiFileBase implements Markable {
-	
+
 	/**
 	 * The file view provider corresponding to this Ada file.
 	 */
 	private FileViewProvider viewProvider;
-	
+
 	/**
 	 * Constructs a new AdaPsiFile given a file view provider.
 	 *
@@ -36,32 +36,32 @@ public final class AdaPsiFile extends PsiFileBase implements Markable {
 		super(viewProvider, AdaLanguage.INSTANCE);
 		this.viewProvider = viewProvider;
 	}
-	
+
 	/**
 	 * @see com.intellij.psi.PsiFile#getFileType()
 	 */
 	@NotNull
 	@Override
 	public FileType getFileType() { return viewProvider.getFileType(); }
-	
+
 	/**
 	 * @see com.intellij.psi.PsiFile#subtreeChanged()
 	 */
 	@Override
 	public void subtreeChanged() {
-		
+
 		super.subtreeChanged();
-		
+
 		// Reparse the file
-		
+
 		VirtualFile file = getVirtualFile();
-		
+
 		if (file != null) {
 			FileContentUtil.reparseFiles(file);
 		}
-		
+
 	}
-	
+
 	/**
 	 * @see com.intellij.psi.PsiElement#getChildren()
 	 */
@@ -71,5 +71,5 @@ public final class AdaPsiFile extends PsiFileBase implements Markable {
 		return calcTreeElement().getChildrenAsPsiElements(
 			AdaTokenTypes.ALL_VALID_TOKENS, PsiElement.ARRAY_FACTORY);
 	}
-	
+
 }

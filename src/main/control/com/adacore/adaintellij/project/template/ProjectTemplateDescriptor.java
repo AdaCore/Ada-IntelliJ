@@ -11,13 +11,13 @@ import org.jetbrains.annotations.NotNull;
  * project template.
  */
 public final class ProjectTemplateDescriptor {
-	
+
 	/**
 	 * The resource directory containing the project
 	 * template files.
 	 */
 	public final VirtualFile templateDirectory;
-	
+
 	/**
 	 * The project template data.
 	 */
@@ -26,7 +26,7 @@ public final class ProjectTemplateDescriptor {
 	public final String             templateDescription;
 	public final String             projectFileName;
 	public final TemplateVariable[] templateVariables;
-	
+
 	/**
 	 * Constructs a new ProjectTemplateDescriptor given a
 	 * resource directory and template data.
@@ -55,7 +55,7 @@ public final class ProjectTemplateDescriptor {
 		this.projectFileName     = projectFileName;
 		this.templateVariables   = templateVariables;
 	}
-	
+
 	/**
 	 * Returns a string representation of this project template
 	 * descriptor.
@@ -65,20 +65,20 @@ public final class ProjectTemplateDescriptor {
 	 */
 	@Override
 	public String toString() { return templateName; }
-	
+
 	/**
 	 * Immutable data class representation of a project template
 	 * variable.
 	 */
 	public static class TemplateVariable {
-		
+
 		/**
 		 * The template variable data.
 		 */
 		public final String name;
 		public final String defaultValue;
 		public final String description;
-		
+
 		/**
 		 * Constructs a new TemplateVariable given some data.
 		 *
@@ -95,21 +95,21 @@ public final class ProjectTemplateDescriptor {
 			this.defaultValue = defaultValue;
 			this.description  = description;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Immutable data class representation of a project template
 	 * variable whose value can only be one of a finite set of
 	 * options.
 	 */
 	public static final class TemplateVariableWithOptions extends TemplateVariable {
-		
+
 		/**
 		 * The possible values for the variable.
 		 */
 		public final String[] options;
-		
+
 		/**
 		 * Constructs a new TemplateVariableWithOptions given
 		 * some data.
@@ -128,21 +128,21 @@ public final class ProjectTemplateDescriptor {
 			super(name, defaultValue, description);
 			this.options = options;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Immutable data class representation of a project template
 	 * variable setting.
 	 */
 	public static final class TemplateVariableSetting {
-		
+
 		/**
 		 * The variable setting data.
 		 */
 		public final String name;
 		public final String value;
-		
+
 		/**
 		 * Constructs a new TemplateVariableSetting given some
 		 * data.
@@ -157,14 +157,14 @@ public final class ProjectTemplateDescriptor {
 			this.name  = name;
 			this.value = value;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Project template descriptor builder.
 	 */
 	public static final class Builder {
-		
+
 		/**
 		 * Data for the project template descriptor being built.
 		 */
@@ -174,7 +174,7 @@ public final class ProjectTemplateDescriptor {
 		private StringBuilder          templateDescription = new StringBuilder();
 		private String                 projectFileName     = "";
 		private List<TemplateVariable> templateVariables   = new ArrayList<>();
-		
+
 		/**
 		 * Constructs a new Builder given a resource directory for
 		 * the project template descriptor being built.
@@ -184,7 +184,7 @@ public final class ProjectTemplateDescriptor {
 		public Builder(@NotNull VirtualFile templateDirectory) {
 			this.templateDirectory = templateDirectory;
 		}
-		
+
 		/**
 		 * Sets the project template name to the given name.
 		 *
@@ -193,7 +193,7 @@ public final class ProjectTemplateDescriptor {
 		public void setTemplateName(@NotNull String templateName) {
 			this.templateName = templateName;
 		}
-		
+
 		/**
 		 * Sets the project template category to the given category.
 		 *
@@ -202,7 +202,7 @@ public final class ProjectTemplateDescriptor {
 		public void setTemplateCategory(@NotNull String templateCategory) {
 			this.templateCategory = templateCategory;
 		}
-		
+
 		/**
 		 * Appends the given text to the project template description.
 		 *
@@ -211,7 +211,7 @@ public final class ProjectTemplateDescriptor {
 		public void appendToTemplateDescription(@NotNull String text) {
 			templateDescription.append(text);
 		}
-		
+
 		/**
 		 * Sets the project file name to the given name.
 		 *
@@ -220,7 +220,7 @@ public final class ProjectTemplateDescriptor {
 		public void setProjectFileName(@NotNull String projectFileName) {
 			this.projectFileName = projectFileName;
 		}
-		
+
 		/**
 		 * Adds the given template variable to the list of variables
 		 * of the template descriptor being built.
@@ -230,7 +230,7 @@ public final class ProjectTemplateDescriptor {
 		public void addTemplateVariable(@NotNull TemplateVariable variable) {
 			this.templateVariables.add(variable);
 		}
-		
+
 		/**
 		 * Builds and returns the project template descriptor.
 		 *
@@ -247,7 +247,7 @@ public final class ProjectTemplateDescriptor {
 				templateVariables.toArray(new TemplateVariable[0])
 			);
 		}
-		
+
 	}
-	
+
 }

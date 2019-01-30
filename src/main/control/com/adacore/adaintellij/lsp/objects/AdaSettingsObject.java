@@ -28,48 +28,48 @@ import org.eclipse.lsp4j.jsonrpc.validation.NonNull;
  *
  */
 public final class AdaSettingsObject {
-	
+
 	/**
 	 * Class representation of the "ada" JSON object.
 	 */
 	public class AdaObject {
-		
+
 		/**
 		 * The "projectFile" property.
 		 */
 		private String projectFile;
-		
+
 		/**
 		 * The "scenarioVariables" property.
 		 */
 		private Map<String, String> scenarioVariables;
-		
+
 		/**
 		 * The "projectFile" property getter.
 		 */
 		@Nullable
 		public String getProjectFile() { return projectFile; }
-		
+
 		/**
 		 * The "scenarioVariables" property getter.
 		 */
 		@Nullable
 		public Map<String, String> getScenarioVariables() { return scenarioVariables; }
-	
+
 	}
-	
+
 	/**
 	 * The "ada" property.
 	 */
 	@NonNull
 	@JsonAdapter(JsonElementTypeAdapter.Factory.class)
 	private AdaObject ada;
-	
+
 	/**
 	 * Constructs a new Ada settings object.
 	 */
 	public AdaSettingsObject() { ada = new AdaObject(); }
-	
+
 	/**
 	 * Sets the project file of this Ada settings object.
 	 *
@@ -78,7 +78,7 @@ public final class AdaSettingsObject {
 	public void setProjectFile(@NotNull String projectFile) {
 		ada.projectFile = projectFile;
 	}
-	
+
 	/**
 	 * Sets the scenario variables of this Ada settings object.
 	 *
@@ -87,11 +87,11 @@ public final class AdaSettingsObject {
 	public void setScenarioVariables(@NotNull Map<String, String> scenarioVariables) {
 		ada.scenarioVariables = scenarioVariables;
 	}
-	
+
 	/**
 	 * The "ada" property getter.
 	 */
 	@NotNull
 	public AdaObject getAda() { return ada; }
-	
+
 }

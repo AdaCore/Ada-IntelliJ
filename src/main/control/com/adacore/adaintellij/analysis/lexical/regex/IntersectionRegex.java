@@ -9,13 +9,13 @@ import org.jetbrains.annotations.*;
  * character.
  */
 public final class IntersectionRegex extends LexerRegex {
-	
+
 	/**
 	 * The intersection subregexes.
 	 */
 	final LexerRegex FIRST_REGEX;
 	final LexerRegex SECOND_REGEX;
-	
+
 	/**
 	 * Constructs a new intersection regex given two subregexes.
 	 *
@@ -26,7 +26,7 @@ public final class IntersectionRegex extends LexerRegex {
 		@NotNull LexerRegex firstRegex,
 		@NotNull LexerRegex secondRegex
 	) { this(firstRegex, secondRegex, 0); }
-	
+
 	/**
 	 * Constructs a new intersection regex given two subregexes and
 	 * a priority.
@@ -44,7 +44,7 @@ public final class IntersectionRegex extends LexerRegex {
 		FIRST_REGEX  = firstRegex;
 		SECOND_REGEX = secondRegex;
 	}
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#nullable()
 	 */
@@ -52,33 +52,33 @@ public final class IntersectionRegex extends LexerRegex {
 	public boolean nullable() {
 		return FIRST_REGEX.nullable() && SECOND_REGEX.nullable();
 	}
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#charactersMatched()
 	 */
 	@Override
 	public int charactersMatched() {
-		
+
 		int firstRegexCharacters  = FIRST_REGEX.charactersMatched();
 		int secondRegexCharacters = SECOND_REGEX.charactersMatched();
-		
+
 		return firstRegexCharacters != secondRegexCharacters ? -1 : firstRegexCharacters;
-		
+
 	}
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#advanced(char)
 	 */
 	@Nullable
 	@Override
 	public LexerRegex advanced(char character) {
-		
+
 		LexerRegex firstRegexAdvanced  = FIRST_REGEX.advanced(character);
 		LexerRegex secondRegexAdvanced = SECOND_REGEX.advanced(character);
-		
+
 		return firstRegexAdvanced != null && secondRegexAdvanced != null ?
 			new IntersectionRegex(firstRegexAdvanced, secondRegexAdvanced, PRIORITY) : null;
-		
+
 	}
-	
+
 }

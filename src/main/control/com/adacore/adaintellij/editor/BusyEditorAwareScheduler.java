@@ -24,28 +24,28 @@ import org.jetbrains.annotations.*;
  * @see com.intellij.util.ui.update.MergingUpdateQueue
  */
 public final class BusyEditorAwareScheduler implements ProjectComponent {
-	
+
 	/**
 	 * The default operation merge timeout.
 	 */
 	final static int DEFAULT_TIMEOUT = 800;
-	
+
 	/**
 	 * The set of currently active operations.
 	 */
 	private Set<BusyEditorAwareOperation> operations = new HashSet<>();
-	
+
 	/**
 	 * Editor event multi-caster.
 	 */
 	private static final EditorEventMulticaster EVENT_MULTICASTER =
 		EditorFactory.getInstance().getEventMulticaster();
-	
+
 	/**
 	 * The project to which this component belongs.
 	 */
 	private Project project;
-	
+
 	/**
 	 * Constructs a new BusyEditorAwareScheduler given a project.
 	 *
@@ -54,7 +54,7 @@ public final class BusyEditorAwareScheduler implements ProjectComponent {
 	public BusyEditorAwareScheduler(@NotNull Project project) {
 		this.project = project;
 	}
-	
+
 	/**
 	 * @see com.intellij.openapi.components.NamedComponent#getComponentName()
 	 */
@@ -63,41 +63,41 @@ public final class BusyEditorAwareScheduler implements ProjectComponent {
 	public String getComponentName() {
 		return "com.adacore.adaintellij.editor.BusyEditorAwareScheduler";
 	}
-	
+
 	/**
 	 * @see com.intellij.openapi.components.ProjectComponent#projectOpened()
 	 */
 	@Override
 	public void projectOpened() {
-		
+
 		// Register document-focus change listener
-		
+
 		MessageBus messageBus = project.getMessageBus();
-		
+
 		FileEditorManagerListener listener = new FileEditorManagerListener() {
-			
+
 			@Override
 			public void selectionChanged(@NotNull FileEditorManagerEvent event) {
 				operations.forEach(operation -> operation.queue.flush());
 			}
-			
+
 		};
-		
+
 		messageBus.connect().subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, listener);
-		
+
 		// Register document change listener
-		
+
 		EVENT_MULTICASTER.addDocumentListener(new AdaDocumentListener() {
-			
+
 			@Override
 			public void adaDocumentChanged(@NotNull DocumentEvent event) {
 				operations.forEach(operation -> operation.queue.restartTimer());
 			}
-			
+
 		});
-		
+
 	}
-	
+
 	/**
 	 * Returns the BusyEditorAwareScheduler project component of the
 	 * given project.
@@ -109,7 +109,7 @@ public final class BusyEditorAwareScheduler implements ProjectComponent {
 	public static BusyEditorAwareScheduler getInstance(@NotNull Project project) {
 		return project.getComponent(BusyEditorAwareScheduler.class);
 	}
-	
+
 	/**
 	 * Creates and returns a new `RunnableOperation` with the given
 	 * runnable.
@@ -124,7 +124,7 @@ public final class BusyEditorAwareScheduler implements ProjectComponent {
 	public RunnableOperation createRunnableOperation(@NotNull Runnable runnable) {
 		return addAndReturn(new RunnableOperation(this, runnable));
 	}
-	
+
 	/**
 	 * Creates and returns a new `RunnableOperation` with the given
 	 * runnable and merge timeout.
@@ -140,7 +140,7 @@ public final class BusyEditorAwareScheduler implements ProjectComponent {
 	public RunnableOperation createRunnableOperation(@NotNull Runnable runnable, int timeout) {
 		return addAndReturn(new RunnableOperation(this, timeout, runnable));
 	}
-	
+
 	/**
 	 * Creates and returns a new `ConsumerOperation` with the given
 	 * consumer.
@@ -156,7 +156,7 @@ public final class BusyEditorAwareScheduler implements ProjectComponent {
 	public <T> ConsumerOperation<T> createConsumerOperation(
 		@NotNull Consumer<List<T>> consumer
 	) { return addAndReturn(new ConsumerOperation<>(this, consumer)); }
-	
+
 	/**
 	 * Creates and returns a new `ConsumerOperation` with the given
 	 * consumer and merge timeout.
@@ -174,7 +174,7 @@ public final class BusyEditorAwareScheduler implements ProjectComponent {
 		@NotNull Consumer<List<T>> consumer,
 		         int               timeout
 	) { return addAndReturn(new ConsumerOperation<>(this, timeout, consumer)); }
-	
+
 	/**
 	 * Creates and returns a new `DocumentChangeConsumerOperation`
 	 * with the given consumer.
@@ -190,7 +190,7 @@ public final class BusyEditorAwareScheduler implements ProjectComponent {
 	public DocumentChangeConsumerOperation createDocumentChangeOperation(
 		@NotNull Consumer<List<DocumentEvent>> consumer
 	) { return addAndReturn(new DocumentChangeConsumerOperation(this, consumer)); }
-	
+
 	/**
 	 * Removes the given operation from the set of currently active
 	 * operations.
@@ -200,7 +200,7 @@ public final class BusyEditorAwareScheduler implements ProjectComponent {
 	void removeOperation(
 		@NotNull BusyEditorAwareOperation operation
 	) { operations.remove(operation); }
-	
+
 	/**
 	 * Returns the given operation after adding it to the set of
 	 * currently active operations.
@@ -214,11 +214,11 @@ public final class BusyEditorAwareScheduler implements ProjectComponent {
 	private <OperationType extends BusyEditorAwareOperation>
 		OperationType addAndReturn(@NotNull OperationType operation)
 	{
-		
+
 		operations.add(operation);
-		
+
 		return operation;
-		
+
 	}
-	
+
 }

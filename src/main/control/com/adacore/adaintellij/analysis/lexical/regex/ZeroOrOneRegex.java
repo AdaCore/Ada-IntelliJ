@@ -7,19 +7,19 @@ import org.jetbrains.annotations.*;
  * of characters matched by a subregex.
  */
 public final class ZeroOrOneRegex extends LexerRegex {
-	
+
 	/**
 	 * The subregex to be matched zero or one times.
 	 */
 	final LexerRegex REGEX;
-	
+
 	/**
 	 * Constructs a new zero or one regex given a subregex.
 	 *
 	 * @param regex The subregex for the zero or one regex.
 	 */
 	public ZeroOrOneRegex(@NotNull LexerRegex regex) { this(regex, 0); }
-	
+
 	/**
 	 * Constructs a new zero or one regex given a subregex and
 	 * a priority.
@@ -31,19 +31,19 @@ public final class ZeroOrOneRegex extends LexerRegex {
 		super(priority);
 		REGEX = regex;
 	}
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#nullable()
 	 */
 	@Override
 	public boolean nullable() { return true; }
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#charactersMatched()
 	 */
 	@Override
 	public int charactersMatched() { return -1; }
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#advanced(char)
 	 */
@@ -52,5 +52,5 @@ public final class ZeroOrOneRegex extends LexerRegex {
 	public LexerRegex advanced(char character) {
 		return REGEX.advanced(character);
 	}
-	
+
 }

@@ -13,7 +13,7 @@ import com.adacore.adaintellij.analysis.semantic.AdaPsiReference;
  * Processor of renaming operations over Ada PSI elements.
  */
 public class AdaRenamePsiElementProcessor extends RenamePsiElementProcessor {
-	
+
 	/**
 	 * Returns whether or not the given element can be renamed.
 	 *
@@ -23,7 +23,7 @@ public class AdaRenamePsiElementProcessor extends RenamePsiElementProcessor {
 	public static boolean canRenameElement(@NotNull PsiElement element) {
 		return AdaPsiElement.getFrom(element) instanceof AdaPsiReference;
 	}
-	
+
 	/**
 	 * @see AdaRenamePsiElementProcessor#canRenameElement(PsiElement)
 	 */
@@ -31,7 +31,7 @@ public class AdaRenamePsiElementProcessor extends RenamePsiElementProcessor {
 	public boolean canProcessElement(@NotNull PsiElement element) {
 		return canRenameElement(element);
 	}
-	
+
 	/**
 	 * Performs the actual process of renaming the given element
 	 * to the given name, as well as the given usages of that
@@ -57,27 +57,27 @@ public class AdaRenamePsiElementProcessor extends RenamePsiElementProcessor {
 		@NotNull  UsageInfo[]                usages,
 		@Nullable RefactoringElementListener listener
 	) {
-		
+
 		// Get an Ada PSI element from the given element
-		
+
 		AdaPsiElement adaPsiElement = AdaPsiElement.getFrom(element);
-		
+
 		// Use the Ada PSI element if it is available
-		
+
 		PsiElement patchedElement = adaPsiElement == null ? element : adaPsiElement;
-		
+
 		// Patch the element's usages in case they were not given
-		
+
 		UsageInfo[] patchedUsages = usages.length > 0 ? usages :
 			findReferences(patchedElement)
 				.stream()
 				.map(reference -> createUsageInfo(patchedElement, reference, reference.getElement()))
 				.toArray(UsageInfo[]::new);
-		
+
 		// Perform the renaming
-		
+
 		super.renameElement(patchedElement, newName, patchedUsages, listener);
-		
+
 	}
-	
+
 }

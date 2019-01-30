@@ -13,12 +13,12 @@ import org.jetbrains.annotations.*;
  * and directories, as well as reading text resource files.
  */
 public final class ResourceManager {
-	
+
 	/**
 	 * Private default constructor to prevent instantiation.
 	 */
 	private ResourceManager() {}
-	
+
 	/**
 	 * Returns the resource file or directory at the given path
 	 * relative to a base resource directory, or null if no such
@@ -29,13 +29,13 @@ public final class ResourceManager {
 	 */
 	@Nullable
 	private static VirtualFile getResourceFileOrDirectory(@NotNull String path) {
-		
+
 		URL resourceUrl = ResourceManager.class.getResource(path);
-		
+
 		return resourceUrl == null ? null : VfsUtil.findFileByURL(resourceUrl);
-		
+
 	}
-	
+
 	/**
 	 * Returns the resource file at the given path relative to a
 	 * base resource directory, or null if the entry at the given
@@ -46,13 +46,13 @@ public final class ResourceManager {
 	 */
 	@Nullable
 	public static VirtualFile getResource(@NotNull String path) {
-		
+
 		VirtualFile resource = getResourceFileOrDirectory(path);
-		
+
 		return resource == null || resource.isDirectory() ? null : resource;
-		
+
 	}
-	
+
 	/**
 	 * Returns the resource directory at the given path relative
 	 * to a base resource directory, or null if the entry at the
@@ -63,14 +63,14 @@ public final class ResourceManager {
 	 */
 	@Nullable
 	public static VirtualFile getResourceDirectory(@NotNull String path) {
-		
+
 		VirtualFile resource = getResourceFileOrDirectory(
 			path.endsWith("/") ? path : path + '/');
-		
+
 		return resource == null || !resource.isDirectory() ? null : resource;
-		
+
 	}
-	
+
 	/**
 	 * Returns the text content of the resource at the given
 	 * path, relative to a base resource directory, as a string,
@@ -83,13 +83,13 @@ public final class ResourceManager {
 	 */
 	@Nullable
 	public static String getResourceText(@NotNull String path) {
-	
+
 		VirtualFile resource = getResource(path);
-	
+
 		return resource == null ? null : Utils.getFileText(resource);
-		
+
 	}
-	
+
 	/**
 	 * Returns the text content of the resource at the given
 	 * path, relative to a base resource directory, as an
@@ -103,11 +103,11 @@ public final class ResourceManager {
 	 */
 	@Nullable
 	public static String[] getResourceLines(@NotNull String path) {
-		
+
 		VirtualFile resource = getResource(path);
-		
+
 		return resource == null ? null : Utils.getFileLines(resource);
-		
+
 	}
-	
+
 }

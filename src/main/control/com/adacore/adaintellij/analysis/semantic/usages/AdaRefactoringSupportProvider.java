@@ -8,7 +8,7 @@ import org.jetbrains.annotations.*;
  * Refactoring support provider for Ada elements.
  */
 public class AdaRefactoringSupportProvider extends RefactoringSupportProvider {
-	
+
 	/**
 	 * Returns whether or not the given element, in the context of
 	 * the second given element, supports being renamed in-place by
@@ -24,5 +24,5 @@ public class AdaRefactoringSupportProvider extends RefactoringSupportProvider {
 		@NotNull  PsiElement element,
 		@Nullable PsiElement context
 	) { return AdaRenamePsiElementProcessor.canRenameElement(element); }
-	
+
 }

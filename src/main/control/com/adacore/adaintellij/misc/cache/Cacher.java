@@ -17,7 +17,7 @@ import org.jetbrains.annotations.*;
  * cannot be extended.
  */
 public interface Cacher extends UserDataHolder {
-	
+
 	/**
 	 * Caches the given data with the given cache key.
 	 *
@@ -28,7 +28,7 @@ public interface Cacher extends UserDataHolder {
 	default <T> void cacheData(@NotNull CacheKey<T> key, @Nullable T data) {
 		cacheData(this, key, data);
 	}
-	
+
 	/**
 	 * Clears the cached data for the given key.
 	 *
@@ -38,7 +38,7 @@ public interface Cacher extends UserDataHolder {
 	default <T> void clearCachedData(@NotNull CacheKey<T> key) {
 		clearCachedData(this, key);
 	}
-	
+
 	/**
 	 * Returns the cached data for the given key as a cache
 	 * result.
@@ -52,7 +52,7 @@ public interface Cacher extends UserDataHolder {
 	default <T> CacheResult<T> getCachedData(@NotNull CacheKey<T> key) {
 		return getCachedData(this, key);
 	}
-	
+
 	/**
 	 * Caches the given data with the given cache key in the
 	 * given user data holder.
@@ -70,7 +70,7 @@ public interface Cacher extends UserDataHolder {
 	) {
 		dataHolder.putUserData(key, new CacheData<>(data));
 	}
-	
+
 	/**
 	 * Clears the cached data for the given key in the given
 	 * user data holder.
@@ -86,7 +86,7 @@ public interface Cacher extends UserDataHolder {
 	) {
 		dataHolder.putUserData(key, null);
 	}
-	
+
 	/**
 	 * Returns the cached data for the given key in the given
 	 * user data holder as a cache result.
@@ -103,12 +103,12 @@ public interface Cacher extends UserDataHolder {
 		@NotNull UserDataHolder dataHolder,
 		@NotNull CacheKey<T>    key
 	) {
-		
+
 		CacheData<T> cacheData = dataHolder.getUserData(key);
-		
+
 		return cacheData == null ?
 			new CacheResult<>() : new CacheResult<>(cacheData.data);
-		
+
 	}
-	
+
 }

@@ -14,12 +14,12 @@ import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
  * The presentation of an item in the structure view of an Ada file.
  */
 public final class AdaStructureItemPresentation implements ItemPresentation {
-	
+
 	/**
 	 * The PSI element that this item presentation represents.
 	 */
 	private NavigatablePsiElement element;
-	
+
 	/**
 	 * Constructs a new AdaStructureItemPresentation given a
 	 * PSI element.
@@ -30,7 +30,7 @@ public final class AdaStructureItemPresentation implements ItemPresentation {
 	AdaStructureItemPresentation(@NotNull NavigatablePsiElement element) {
 		this.element = element;
 	}
-	
+
 	/**
 	 * @see com.intellij.navigation.ItemPresentation#getPresentableText()
 	 */
@@ -40,25 +40,25 @@ public final class AdaStructureItemPresentation implements ItemPresentation {
 		return element instanceof PsiFile ?
 			((PsiFile)element).getName() : element.getText();
 	}
-	
+
 	/**
 	 * @see com.intellij.navigation.ItemPresentation#getLocationString()
 	 */
 	@Nullable
 	@Override
 	public String getLocationString() { return null; }
-	
+
 	/**
 	 * @see com.intellij.navigation.ItemPresentation#getIcon(boolean)
 	 */
 	@Nullable
 	@Override
 	public Icon getIcon(boolean unused) {
-		
+
 		AdaPsiElement adaPsiElement = AdaPsiElement.getFrom(element);
-		
+
 		return adaPsiElement == null ? null : adaPsiElement.getIcon();
-		
+
 	}
-	
+
 }

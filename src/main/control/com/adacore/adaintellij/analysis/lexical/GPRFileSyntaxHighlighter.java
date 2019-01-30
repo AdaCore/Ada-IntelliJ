@@ -14,7 +14,7 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
  * Syntax highlighter for GPR files.
  */
 public final class GPRFileSyntaxHighlighter implements SyntaxHighlighter {
-	
+
 	/**
 	 * Color attribute keys.
 	 */
@@ -30,7 +30,7 @@ public final class GPRFileSyntaxHighlighter implements SyntaxHighlighter {
 		createTextAttributesKey("GPR_FILE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
 	private static final TextAttributesKey BAD_CHARACTER_COLOR =
 		createTextAttributesKey("GPR_FILE_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
-	
+
 	/**
 	 * Text attribute key arrays.
 	 */
@@ -41,41 +41,41 @@ public final class GPRFileSyntaxHighlighter implements SyntaxHighlighter {
 	private static final TextAttributesKey[] COMMENT_KEYS           = new TextAttributesKey[]{ COMMENT_COLOR           };
 	private static final TextAttributesKey[] BAD_CHARACTER_KEYS     = new TextAttributesKey[]{ BAD_CHARACTER_COLOR     };
 	private static final TextAttributesKey[] EMPTY_KEYS             = new TextAttributesKey[0];
-	
+
 	/**
 	 * @see com.intellij.openapi.fileTypes.SyntaxHighlighter#getHighlightingLexer()
 	 */
 	@NotNull
 	@Override
 	public Lexer getHighlightingLexer() { return new GPRFileLexer(); }
-	
+
 	/**
 	 * @see com.intellij.openapi.fileTypes.SyntaxHighlighter#getTokenHighlights(IElementType)
 	 */
 	@NotNull
 	@Override
 	public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
-		
+
 		// Delimiters
 		if (GPRFileTokenTypes.DELIMITER_TOKEN_SET.contains(tokenType)) {
 			return DELIMITER_KEYS;
 		}
-		
+
 		// Identifiers
 		else if (GPRFileTokenTypes.IDENTIFIER_TOKEN_SET.contains(tokenType)) {
 			return IDENTIFIER_KEYS;
 		}
-		
+
 		// String literals
 		else if (GPRFileTokenTypes.STRING_LITERAL_TOKEN_SET.contains(tokenType)) {
 			return STRING_LITERAL_KEYS;
 		}
-		
+
 		// Comments
 		else if (GPRFileTokenTypes.COMMENT_TOKEN_SET.contains(tokenType)) {
 			return COMMENT_KEYS;
 		}
-		
+
 		// Keywords
 		else if (
 			GPRFileTokenTypes.KEYWORD_TOKEN_SET.contains(tokenType) ||
@@ -83,13 +83,13 @@ public final class GPRFileSyntaxHighlighter implements SyntaxHighlighter {
 		) {
 			return KEYWORD_QUALIFIER_KEYS;
 		}
-		
+
 		// Invalid tokens
 		else if (tokenType == GPRFileTokenTypes.BAD_CHARACTER) { return BAD_CHARACTER_KEYS; }
-		
+
 		// Whitespaces
 		else { return EMPTY_KEYS; }
-		
+
 	}
-	
+
 }

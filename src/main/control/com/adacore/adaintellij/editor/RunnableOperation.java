@@ -8,13 +8,13 @@ import org.jetbrains.annotations.NotNull;
  * @see com.adacore.adaintellij.editor.BusyEditorAwareOperation
  */
 public class RunnableOperation extends BusyEditorAwareOperation {
-	
+
 	/**
 	 * The underlying runnable that is run when this operation
 	 * is executed.
 	 */
 	Runnable runnable;
-	
+
 	/**
 	 * Constructs a new RunnableOperation given a scheduler and
 	 * a runnable.
@@ -31,7 +31,7 @@ public class RunnableOperation extends BusyEditorAwareOperation {
 		super(scheduler);
 		this.runnable = runnable;
 	}
-	
+
 	/**
 	 * Constructs a new RunnableOperation given a scheduler, a
 	 * merge timeout and a runnable.
@@ -49,20 +49,20 @@ public class RunnableOperation extends BusyEditorAwareOperation {
 		super(scheduler, timeout);
 		this.runnable = runnable;
 	}
-	
+
 	/**
 	 * Schedules an execution of this runnable operation.
 	 */
 	public void schedule() {
-		
+
 		// If this operation is not active, then return
-		
+
 		if (!isActive()) { return; }
-		
+
 		// Schedule an execution in the internal queue
-		
+
 		queue.queue(Update.create(this, runnable));
-		
+
 	}
-	
+
 }

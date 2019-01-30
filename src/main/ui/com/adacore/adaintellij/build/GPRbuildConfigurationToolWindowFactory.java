@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * Tool window factory for the GPRbuild configuration tool window.
  */
 public final class GPRbuildConfigurationToolWindowFactory implements ToolWindowFactory, DumbAware {
-	
+
 	/**
 	 * Creates content for a GPRbuild configuration tool window and
 	 * attaches it to the given tool window.
@@ -22,14 +22,14 @@ public final class GPRbuildConfigurationToolWindowFactory implements ToolWindowF
 	 */
 	@Override
 	public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-	
+
 		ContentManager contentManager = toolWindow.getContentManager();
-		
+
 		Content content = contentManager.getFactory().createContent(
 			new GPRbuildConfigurationToolWindow(project).getUIRoot(), null, false);
-		
+
 		contentManager.addContent(content);
-		
+
 	}
-	
+
 }

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * GPR file syntax highlighter factory.
  */
 public final class GPRFileSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
-	
+
 	/**
 	 * @see com.intellij.openapi.fileTypes.SyntaxHighlighterFactory#getSyntaxHighlighter(Project, VirtualFile)
 	 */
@@ -19,6 +19,6 @@ public final class GPRFileSyntaxHighlighterFactory extends SyntaxHighlighterFact
 	public SyntaxHighlighter getSyntaxHighlighter(Project project, VirtualFile virtualFile) {
 		return new GPRFileSyntaxHighlighter();
 	}
-	
+
 }
 

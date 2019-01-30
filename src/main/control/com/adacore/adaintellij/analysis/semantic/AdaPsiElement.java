@@ -24,7 +24,7 @@ import com.adacore.adaintellij.Utils;
  * @see com.adacore.adaintellij.analysis.semantic.AdaParser
  */
 public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiElement {
-	
+
 	/**
 	 * Represents the various types of elements that an `AdaPsiElement`
 	 * can represent.
@@ -46,27 +46,27 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	 * OTHER                   => Any other type of Ada element.
 	 */
 	public enum AdaElementType {
-		
+
 		PACKAGE_SPEC_IDENTIFIER, PACKAGE_BODY_IDENTIFIER,
-		
+
 		TYPE_IDENTIFIER, CONSTANT_IDENTIFIER, VARIABLE_IDENTIFIER,
-		
+
 		PROCEDURE_IDENTIFIER, FUNCTION_IDENTIFIER,
-		
+
 		OTHER
-		
+
 	}
-	
+
 	/**
 	 * The underlying tree node.
 	 */
 	private ASTNode node;
-	
+
 	/**
 	 * The type of this Ada element. Set to `OTHER` by default.
 	 */
 	private AdaElementType adaElementType = AdaElementType.OTHER;
-	
+
 	/**
 	 * Constructs a new AdaPsiElement given a tree node.
 	 *
@@ -77,49 +77,49 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 		super(node.getElementType(), node.getChars());
 		this.node = node;
 	}
-	
+
 	/**
 	 * @see com.intellij.psi.PsiElement#getParent()
 	 */
 	@Override
 	public PsiElement getParent() {
-		
+
 		ASTNode parentNode = node.getTreeParent();
-		
+
 		return parentNode == null ? null : parentNode.getPsi();
-		
+
 	}
-	
+
 	/**
 	 * @see com.intellij.psi.PsiElement#getNextSibling()
 	 */
 	@Override
 	public PsiElement getNextSibling() {
-		
+
 		ASTNode nextNode = node.getTreeNext();
-		
+
 		return nextNode == null ? null : nextNode.getPsi();
-		
+
 	}
-	
+
 	/**
 	 * @see com.intellij.psi.PsiElement#getPrevSibling()
 	 */
 	@Override
 	public PsiElement getPrevSibling() {
-		
+
 		ASTNode previousNode = node.getTreePrev();
-		
+
 		return previousNode == null ? null : previousNode.getPsi();
-		
+
 	}
-	
+
 	/**
 	 * @see com.intellij.psi.PsiElement#getContainingFile()
 	 */
 	@Override
 	public PsiFile getContainingFile() { return (PsiFile)getParent(); }
-	
+
 	/**
 	 * @see com.intellij.psi.PsiElement#findReferenceAt(int)
 	 *
@@ -130,44 +130,44 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 		return this instanceof AdaPsiReference && offset >= 0 && offset <= getTextLength() ?
 			(AdaPsiReference)this : null;
 	}
-	
+
 	/**
 	 * @see com.intellij.psi.PsiElement#isValid()
 	 */
 	@Override
 	public boolean isValid() {
-		
+
 		PsiFile containingFile = getContainingFile();
-		
+
 		return containingFile != null && containingFile.isValid();
-		
+
 	}
-	
+
 	/**
 	 * @see com.intellij.psi.PsiElement#isWritable()
 	 */
 	@Override
 	public boolean isWritable() { return getContainingFile().isWritable(); }
-	
+
 	/**
 	 * @see com.intellij.psi.PsiElement#getReference()
 	 */
 	@Override
 	public PsiReference getReference() {
-		
+
 		PsiReference[] references = getReferences();
-		
+
 		return references.length > 0 ? references[0] : null;
-		
+
 	}
-	
+
 	/**
 	 * @see com.intellij.psi.PsiElement#getReferences()
 	 */
 	@Override
 	@NotNull
 	public PsiReference[] getReferences() { return new PsiReference[0]; }
-	
+
 	/**
 	 * @see com.intellij.psi.PsiElement#replace(PsiElement)
 	 */
@@ -175,13 +175,13 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	public PsiElement replace(@NotNull PsiElement newElement) throws IncorrectOperationException {
 		throw new IncorrectOperationException("Not yet supported");
 	}
-	
+
 	/**
 	 * @see com.intellij.lang.ASTNode#getStartOffset()
 	 */
 	@Override
 	public int getStartOffset() { return node.getStartOffset(); }
-	
+
 	/**
 	 * Returns an icon representing this `AdaPsiElement` given
 	 * some flags packed in an integer. This implementation
@@ -195,26 +195,26 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	@Nullable
 	@Override
 	public Icon getIcon(int flags) {
-		
+
 		switch (adaElementType) {
-			
+
 			case PACKAGE_SPEC_IDENTIFIER: return Icons.ADA_SPEC_SOURCE_FILE;
 			case PACKAGE_BODY_IDENTIFIER: return Icons.ADA_BODY_SOURCE_FILE;
-			
+
 			case TYPE_IDENTIFIER:         return Icons.ADA_TYPE;
 			case CONSTANT_IDENTIFIER:     return Icons.ADA_CONSTANT;
 			case VARIABLE_IDENTIFIER:     return Icons.ADA_VARIABLE;
-			
+
 			case PROCEDURE_IDENTIFIER:    return Icons.ADA_PROCEDURE;
 			case FUNCTION_IDENTIFIER:     return Icons.ADA_FUNCTION;
-			
+
 			case OTHER:
 			default:                      return null;
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * Returns the icon representing this `AdaPsiElement`.
 	 *
@@ -222,7 +222,7 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	 */
 	@Nullable
 	public Icon getIcon() { return getIcon(ICON_FLAG_VISIBILITY); }
-	
+
 	/**
 	 * Sets the type of this Ada element to the given element type.
 	 *
@@ -231,7 +231,7 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	void setAdaElementType(@NotNull AdaElementType elementType) {
 		adaElementType = elementType;
 	}
-	
+
 	/**
 	 * Returns the Ada element type of this element.
 	 *
@@ -239,7 +239,7 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	 */
 	@NotNull
 	public AdaElementType getAdaElementType() { return adaElementType; }
-	
+
 	/**
 	 * Returns the `AdaPsiElement` corresponding to the given element,
 	 * or null if the latter has no such corresponding element.
@@ -253,32 +253,32 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	@Contract(pure = true)
 	@Nullable
 	public static AdaPsiElement getFrom(@NotNull PsiElement element) {
-		
+
 		// If the given PSI element is an Ada PSI element,
 		// then cast it and return it
-		
+
 		if (element instanceof AdaPsiElement) {
 			return (AdaPsiElement)element;
 		}
-		
+
 		// Else it is probably a leaf PSI element whose parent
 		// is an Ada PSI element (see explanation in `AdaParser`),
 		// so check if its parent is an Ada PSI element and if it
 		// is, cast it and return it
-		
+
 		PsiElement parent = element.getParent();
-		
+
 		if (parent instanceof AdaPsiElement) {
 			return (AdaPsiElement)parent;
 		}
-		
+
 		// Otherwise, the element has no corresponding Ada PSI
 		// element, so return null
-		
+
 		return null;
-		
+
 	}
-	
+
 	/**
 	 * Compares two PSI elements and returns true if they represent the
 	 * same element in the same file. Due to the flat nature of the ASTs
@@ -292,14 +292,14 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	 */
 	@Contract("null, _ -> false; _, null -> false")
 	public static boolean areEqual(@Nullable PsiElement element1, @Nullable PsiElement element2) {
-		
+
 		if (element1 == null || element2 == null) { return false; }
-		
+
 		return areInSameFile(element1, element2) &&
 			element1.getNode().getStartOffset() == element2.getNode().getStartOffset();
-		
+
 	}
-	
+
 	/**
 	 * Returns whether or not the given PSI elements are in the same file.
 	 *
@@ -311,7 +311,7 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 		return Utils.psiFilesRepresentSameFile(
 			element1.getContainingFile(), element2.getContainingFile());
 	}
-	
+
 	/**
 	 * Returns a string representation of this PSI element.
 	 *
@@ -321,5 +321,5 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	public String toString() {
 		return "AdaPsiElement(" + getElementType().toString() + ")";
 	}
-	
+
 }
