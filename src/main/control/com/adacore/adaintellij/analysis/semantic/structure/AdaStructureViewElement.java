@@ -6,7 +6,6 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.*;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.NavigatablePsiElement;
-import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
 import com.adacore.adaintellij.analysis.semantic.*;
@@ -71,13 +70,15 @@ public final class AdaStructureViewElement implements StructureViewTreeElement, 
 		// If this element is not the root element representing
 		// the file itself, then return no children
 		
-		if (!(element instanceof PsiFile)) { return TreeElement.EMPTY_ARRAY; }
+		if (!(element instanceof AdaPsiFile)) { return TreeElement.EMPTY_ARRAY; }
 		
 		// Filter this element's children by Ada element type,
 		// map them to `AdaStructureViewElement` and return them
 		
 		return Stream.of(element.getChildren())
 			.filter(element -> {
+				
+				if (element == null) { return false; }
 				
 				AdaPsiElement adaPsiElement = AdaPsiElement.getFrom(element);
 				

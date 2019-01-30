@@ -3,10 +3,11 @@ package com.adacore.adaintellij.analysis.semantic;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.*;
 import com.intellij.util.FileContentUtil;
 import org.jetbrains.annotations.NotNull;
 
+import com.adacore.adaintellij.analysis.lexical.AdaTokenTypes;
 import com.adacore.adaintellij.misc.cache.Markable;
 import com.adacore.adaintellij.AdaLanguage;
 
@@ -59,6 +60,16 @@ public final class AdaPsiFile extends PsiFileBase implements Markable {
 			FileContentUtil.reparseFiles(file);
 		}
 		
+	}
+	
+	/**
+	 * @see com.intellij.psi.PsiElement#getChildren()
+	 */
+	@NotNull
+	@Override
+	public PsiElement[] getChildren() {
+		return calcTreeElement().getChildrenAsPsiElements(
+			AdaTokenTypes.ALL_VALID_TOKENS, PsiElement.ARRAY_FACTORY);
 	}
 	
 }
