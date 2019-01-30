@@ -14,7 +14,7 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
  * Syntax highlighter for Ada 2012.
  */
 public final class AdaSyntaxHighlighter extends SyntaxHighlighterBase {
-	
+
 	/**
 	 * Color attribute keys.
 	 */
@@ -32,7 +32,7 @@ public final class AdaSyntaxHighlighter extends SyntaxHighlighterBase {
 		createTextAttributesKey("ADA_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
 	private static final TextAttributesKey BAD_CHARACTER_COLOR =
 		createTextAttributesKey("ADA_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
-	
+
 	/**
 	 * Text attribute key arrays.
 	 */
@@ -44,57 +44,57 @@ public final class AdaSyntaxHighlighter extends SyntaxHighlighterBase {
 	private static final TextAttributesKey[] COMMENT_KEYS         = new TextAttributesKey[]{ COMMENT_COLOR         };
 	private static final TextAttributesKey[] BAD_CHARACTER_KEYS   = new TextAttributesKey[]{ BAD_CHARACTER_COLOR   };
 	private static final TextAttributesKey[] EMPTY_KEYS           = new TextAttributesKey[0];
-	
+
 	/**
 	 * @see com.intellij.openapi.fileTypes.SyntaxHighlighter#getHighlightingLexer()
 	 */
 	@NotNull
 	@Override
 	public Lexer getHighlightingLexer() { return new AdaLexer(); }
-	
+
 	/**
 	 * @see com.intellij.openapi.fileTypes.SyntaxHighlighter#getTokenHighlights(IElementType)
 	 */
 	@NotNull
 	@Override
 	public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
-		
+
 		// Single-character and compound delimiters
 		if (AdaTokenTypes.DELIMITER_TOKEN_SET.contains(tokenType)) {
 			return DELIMITER_KEYS;
 		}
-		
+
 		// Identifiers
 		else if (AdaTokenTypes.IDENTIFIER_TOKEN_SET.contains(tokenType)) {
 			return IDENTIFIER_KEYS;
 		}
-		
+
 		// Numeric literals
 		else if (AdaTokenTypes.NUMERIC_LITERAL_TOKEN_SET.contains(tokenType)) {
 			return NUMERIC_LITERAL_KEYS;
 		}
-		
+
 		// Textual literals
 		else if (AdaTokenTypes.TEXTUAl_LITERAL_TOKEN_SET.contains(tokenType)) {
 			return TEXTUAL_LITERAL_KEYS;
 		}
-		
+
 		// Comments
 		else if (AdaTokenTypes.COMMENT_TOKEN_SET.contains(tokenType)) {
 			return COMMENT_KEYS;
 		}
-		
+
 		// Keywords
 		else if (AdaTokenTypes.KEYWORD_TOKEN_SET.contains(tokenType)) {
 			return KEYWORD_KEYS;
 		}
-		
+
 		// Invalid tokens
 		else if (tokenType == AdaTokenTypes.BAD_CHARACTER) { return BAD_CHARACTER_KEYS; }
-		
+
 		// Whitespaces
 		else { return EMPTY_KEYS; }
-		
+
 	}
-	
+
 }

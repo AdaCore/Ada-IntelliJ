@@ -14,17 +14,17 @@ import com.adacore.adaintellij.Icons;
  * @see com.adacore.adaintellij.project.module.AdaModuleBuilder
  */
 public final class AdaModuleType extends ModuleType<AdaModuleBuilder> {
-	
+
 	/**
 	 * Unique identifier of this module type.
 	 */
 	private static final String ID = "ADA_MODULE_TYPE";
-	
+
 	/**
 	 * Constructs a new AdaModuleType.
 	 */
 	public AdaModuleType() { super(ID); }
-	
+
 	/**
 	 * Returns an Ada module type instance.
 	 *
@@ -33,7 +33,7 @@ public final class AdaModuleType extends ModuleType<AdaModuleBuilder> {
 	public static AdaModuleType getInstance() {
 		return (AdaModuleType)ModuleTypeManager.getInstance().findByID(ID);
 	}
-	
+
 	/**
 	 * Creates and returns a new Ada module builder.
 	 *
@@ -44,7 +44,7 @@ public final class AdaModuleType extends ModuleType<AdaModuleBuilder> {
 	public AdaModuleBuilder createModuleBuilder() {
 		return new AdaModuleBuilder();
 	}
-	
+
 	/**
 	 * Returns the name of this module type.
 	 *
@@ -53,7 +53,7 @@ public final class AdaModuleType extends ModuleType<AdaModuleBuilder> {
 	@NotNull
 	@Override
 	public String getName() { return "Ada Module"; }
-	
+
 	/**
 	 * Returns a description of this module type.
 	 *
@@ -62,7 +62,7 @@ public final class AdaModuleType extends ModuleType<AdaModuleBuilder> {
 	@NotNull
 	@Override
 	public String getDescription() { return "Ada Module"; }
-	
+
 	/**
 	 * Returns the icon representing this module type.
 	 *
@@ -70,7 +70,7 @@ public final class AdaModuleType extends ModuleType<AdaModuleBuilder> {
 	 */
 	@Override
 	public Icon getIcon() { return Icons.ADA_MODULE; }
-	
+
 	/**
 	 * @deprecated but still required by ModuleType.
 	 * To be removed in the future.
@@ -79,5 +79,5 @@ public final class AdaModuleType extends ModuleType<AdaModuleBuilder> {
 	public Icon getNodeIcon(@Deprecated boolean isOpened) {
 		return getIcon();
 	}
-	
+
 }

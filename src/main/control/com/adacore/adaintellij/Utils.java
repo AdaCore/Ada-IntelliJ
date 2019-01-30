@@ -17,31 +17,31 @@ import org.jetbrains.annotations.*;
  * Global plugin utilities.
  */
 public final class Utils {
-	
+
 	/**
 	 * Various system-dependent separators.
 	 */
 	public static final String FILE_PATH_SEPARATOR        = System.getProperty("file.separator");
 	public static final String ENVIRONMENT_PATH_SEPARATOR = System.getProperty("path.separator");
 	public static final String LINE_SEPARATOR             = System.getProperty("line.separator");
-	
+
 	public static final String UNIX_LINE_SEPARATOR        = "\n";
-	
+
 	/**
 	 * Class-wide logger for the Utils class.
 	 */
 	private static final Logger LOGGER = Logger.getInstance(Utils.class);
-	
+
 	/**
 	 * File/document manager for retrieving `VirtualFile` and `Document` instances.
 	 */
 	private static FileDocumentManager fileDocumentManager = FileDocumentManager.getInstance();
-	
+
 	/**
 	 * Private default constructor to prevent instantiation.
 	 */
 	private Utils() {}
-	
+
 	/**
 	 * Performs a checked conversion from a URL string to a URL object:
 	 * - If the string represents a valid URL, the corresponding URL object
@@ -54,19 +54,19 @@ public final class Utils {
 	 */
 	@Nullable
 	public static URL urlStringToUrl(@NotNull String urlString) {
-		
+
 		URL url = null;
-		
+
 		try {
 			url = new URL(urlString);
 		} catch (MalformedURLException exception) {
 			LOGGER.error("An invalid URL string was used to construct a URL object", exception);
 		}
-		
+
 		return url;
-		
+
 	}
-	
+
 	/**
 	 * Returns whether or not the given path points to a file or directory
 	 * that is in the file hierarchy of the given project.
@@ -78,7 +78,7 @@ public final class Utils {
 	public static boolean isInProjectHierarchy(@NotNull Project project, @NotNull String path) {
 		return getPathRelativeToProjectBase(project, path) != null;
 	}
-	
+
 	/**
 	 * Returns the path representing the target of the given path, but
 	 * relative to the base directory of the given project.
@@ -91,23 +91,23 @@ public final class Utils {
 	 */
 	@Nullable
 	public static String getPathRelativeToProjectBase(@NotNull Project project, @NotNull String path) {
-		
+
 		String projectBasePath = project.getBasePath();
-		
+
 		if (projectBasePath == null || !path.startsWith(projectBasePath)) {
 			return null;
 		} else if (path.equals(projectBasePath)) {
 			return "";
 		}
-		
+
 		String relativePath = path.substring(projectBasePath.length());
-		
+
 		if (!relativePath.startsWith(FILE_PATH_SEPARATOR)) { return null; }
-		
+
 		return relativePath.substring(1);
-		
+
 	}
-	
+
 	/**
 	 * Returns whether or not an executable with the given name is on
 	 * the system PATH.
@@ -120,7 +120,7 @@ public final class Utils {
 	public static boolean isOnSystemPath(String executableName, boolean withExtension) {
 		return getPathFromSystemPath(executableName, withExtension) != null;
 	}
-	
+
 	/**
 	 * Returns the absolute path to the executable with the given name
 	 * by searching the system PATH directories, or null if no such
@@ -133,61 +133,61 @@ public final class Utils {
 	 */
 	@Nullable
 	public static String getPathFromSystemPath(@NotNull String executableName, boolean withExtension) {
-		
+
 		String[] paths = System.getenv("PATH").split(ENVIRONMENT_PATH_SEPARATOR);
-		
+
 		// For each entry in the PATH...
-		
+
 		for (String path : paths) {
-			
+
 			// Get the directory of the entry
-			
+
 			VirtualFile directory = LocalFileSystem.getInstance().findFileByPath(path);
-			
+
 			// Check that it is indeed a directory
 			// Should always be the case in a PATH variable but just to be safe
-			
+
 			if (directory == null || !directory.isDirectory()) { continue; }
-			
+
 			// For each child of the entry...
-			
+
 			for (VirtualFile file : directory.getChildren()) {
-				
+
 				// Check that it is an executable file
-				
+
 				if (file.isDirectory() || !(new File(file.getPath()).canExecute())) { continue; }
-				
+
 				String filename = withExtension ? file.getName() : file.getNameWithoutExtension();
-				
+
 				if (executableName.equals(filename)) {
-					
+
 					StringBuilder executablePathBuilder = new StringBuilder(path);
-					
+
 					// Append the file separator character if it is not already
 					// at the end of the PATH entry
 					// It should generally not be the case, but just to be safe
-					
+
 					if (!FILE_PATH_SEPARATOR.equals(String.valueOf(path.charAt(path.length() - 1)))) {
 						executablePathBuilder.append(FILE_PATH_SEPARATOR);
 					}
-					
+
 					// Return the full path to the executable
-					
+
 					return executablePathBuilder.append(file.getName()).toString();
-					
+
 				}
-				
+
 			}
-			
+
 		}
-		
+
 		// No matching executable was found in any PATH entry,
 		// so return null
-		
+
 		return null;
-		
+
 	}
-	
+
 	/**
 	 * Returns the document corresponding to the given virtual file.
 	 *
@@ -198,7 +198,7 @@ public final class Utils {
 	public static Document getVirtualFileDocument(@NotNull VirtualFile file) {
 		return fileDocumentManager.getDocument(file);
 	}
-	
+
 	/**
 	 * Returns the virtual file corresponding to the given document.
 	 *
@@ -209,7 +209,7 @@ public final class Utils {
 	public static VirtualFile getDocumentVirtualFile(@NotNull Document document) {
 		return fileDocumentManager.getFile(document);
 	}
-	
+
 	/**
 	 * Returns the document corresponding to the given PSI file.
 	 *
@@ -220,7 +220,7 @@ public final class Utils {
 	public static Document getPsiFileDocument(@NotNull PsiFile file) {
 		return file.getViewProvider().getDocument();
 	}
-	
+
 	/**
 	 * Returns the PSI file corresponding to the given virtual file.
 	 *
@@ -233,7 +233,7 @@ public final class Utils {
 		@NotNull Project     project,
 		@NotNull VirtualFile file
 	) { return PsiManager.getInstance(project).findFile(file); }
-	
+
 	/**
 	 * Returns the virtual file corresponding to the given PSI file.
 	 *
@@ -244,7 +244,7 @@ public final class Utils {
 	public static VirtualFile getPsiFileVirtualFile(@NotNull PsiFile file) {
 		return file.getVirtualFile();
 	}
-	
+
 	/**
 	 * Returns whether or not the given PSI files represent the
 	 * same underlying file.
@@ -257,14 +257,14 @@ public final class Utils {
 		@NotNull PsiFile file1,
 		@NotNull PsiFile file2
 	) {
-		
+
 		VirtualFile virtualFile1 = getPsiFileVirtualFile(file1);
-		
+
 		return virtualFile1 != null &&
 			virtualFile1.equals(getPsiFileVirtualFile(file2));
-		
+
 	}
-	
+
 	/**
 	 * Returns whether or not the given documents represent the
 	 * same underlying file.
@@ -277,14 +277,14 @@ public final class Utils {
 		@NotNull Document document1,
 		@NotNull Document document2
 	) {
-		
+
 		VirtualFile virtualFile1 = getDocumentVirtualFile(document1);
-		
+
 		return virtualFile1 != null &&
 			virtualFile1.equals(getDocumentVirtualFile(document2));
-		
+
 	}
-	
+
 	/**
 	 * Finds the file at the given URL string by transforming that
 	 * string to a URL and passing it to the virtual file system.
@@ -296,13 +296,13 @@ public final class Utils {
 	 */
 	@Nullable
 	public static VirtualFile findFileByUrlString(@NotNull String urlString) {
-		
+
 		URL url = urlStringToUrl(urlString);
-		
+
 		return url == null ? null : VfsUtil.findFileByURL(url);
-		
+
 	}
-	
+
 	/**
 	 * Returns the text content of the given file as a string, or
 	 * null if the given file is in binary format.
@@ -312,13 +312,13 @@ public final class Utils {
 	 */
 	@Nullable
 	public static String getFileText(@NotNull VirtualFile file) {
-		
+
 		Document resourceDocument = getVirtualFileDocument(file);
-		
+
 		return resourceDocument == null ? null : resourceDocument.getText();
-		
+
 	}
-	
+
 	/**
 	 * Returns the text content of the given file as an array of
 	 * strings, one for each line of text, or null if the given
@@ -329,11 +329,11 @@ public final class Utils {
 	 */
 	@Nullable
 	public static String[] getFileLines(@NotNull VirtualFile file) {
-		
+
 		String fileText = getFileText(file);
-		
+
 		return fileText == null ? null : fileText.split(UNIX_LINE_SEPARATOR);
-		
+
 	}
-	
+
 }

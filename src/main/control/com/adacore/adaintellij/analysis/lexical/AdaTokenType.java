@@ -11,7 +11,7 @@ import com.adacore.adaintellij.AdaLanguage;
  * Ada 2012 token type.
  */
 public class AdaTokenType extends IElementType {
-	
+
 	/**
 	 * Constructs a new Ada token type.
 	 *
@@ -22,7 +22,7 @@ public class AdaTokenType extends IElementType {
 	AdaTokenType(@NotNull @NonNls String debugName) {
 		super(debugName, AdaLanguage.INSTANCE);
 	}
-	
+
 	/**
 	 * Returns a string representation of this token type.
 	 *
@@ -30,5 +30,5 @@ public class AdaTokenType extends IElementType {
 	 */
 	@Override
 	public String toString() { return "AdaTokenType." + super.toString(); }
-	
+
 }

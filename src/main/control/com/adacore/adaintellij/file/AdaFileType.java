@@ -9,12 +9,12 @@ import com.adacore.adaintellij.AdaLanguage;
  * Any file type specific to the Ada language.
  */
 public abstract class AdaFileType extends LanguageFileType {
-	
+
 	/**
 	 * Constructs a new Ada-specific file type.
 	 */
 	AdaFileType() { super(AdaLanguage.INSTANCE); }
-	
+
 	/**
 	 * Returns whether or not the given file is an Ada source file.
 	 *
@@ -24,5 +24,5 @@ public abstract class AdaFileType extends LanguageFileType {
 	public static boolean isAdaFile(VirtualFile file) {
 		return file.getFileType() instanceof AdaFileType;
 	}
-	
+
 }

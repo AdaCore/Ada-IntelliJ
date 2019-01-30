@@ -11,13 +11,13 @@ import com.adacore.adaintellij.analysis.semantic.AdaPsiStructureManager;
  * Structure view builder for Ada files.
  */
 public final class AdaTreeBasedStructureViewBuilder extends TreeBasedStructureViewBuilder {
-	
+
 	/**
 	 * The PSI file represented by the structure views built
 	 * by this builder.
 	 */
 	private AdaPsiFile file;
-	
+
 	/**
 	 * Constructs a new AdaTreeBasedStructureViewBuilder given
 	 * a PSI file.
@@ -26,28 +26,28 @@ public final class AdaTreeBasedStructureViewBuilder extends TreeBasedStructureVi
 	 *             structure view builder.
 	 */
 	AdaTreeBasedStructureViewBuilder(@NotNull AdaPsiFile file) { this.file = file; }
-	
+
 	/**
 	 * @see com.intellij.ide.structureView.TreeBasedStructureViewBuilder#createStructureViewModel(Editor)
 	 */
 	@NotNull
 	@Override
 	public StructureViewModel createStructureViewModel(@Nullable Editor editor) {
-		
+
 		// Patch the file with Ada element types
-		
+
 		AdaPsiStructureManager.patchPsiFileElementTypes(file);
-		
+
 		// Return a new Ada structure view model
-		
+
 		return new AdaStructureViewModel(file);
-		
+
 	}
-	
+
 	/**
 	 * @see com.intellij.ide.structureView.TreeBasedStructureViewBuilder#isRootNodeShown()
 	 */
 	@Override
 	public boolean isRootNodeShown() { return false; }
-	
+
 }

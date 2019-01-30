@@ -12,19 +12,19 @@ import org.jetbrains.annotations.*;
  * regexes to be reused when defining complex regexes.
  */
 public abstract class LexerRegex {
-	
+
 	/**
 	 * The priority of this regex. This may be used to choose a regex
 	 * when multiple regexes match a string. Greater numbers represent
 	 * higher priority.
 	 */
 	public final int PRIORITY;
-	
+
 	/**
 	 * Constructs a new LexerRegex.
 	 */
 	public LexerRegex() { this(0); }
-	
+
 	/**
 	 * Constructs a new LexerRegex given a priority.
 	 *
@@ -33,7 +33,7 @@ public abstract class LexerRegex {
 	public LexerRegex(int priority) {
 		PRIORITY = priority;
 	}
-	
+
 	/**
 	 * Returns whether or not this regex is nullable, i.e. whether
 	 * or not it accepts the empty string.
@@ -43,7 +43,7 @@ public abstract class LexerRegex {
 	 * @return The "nullability" of this regex.
 	 */
 	public abstract boolean nullable();
-	
+
 	/**
 	 * Returns the number of characters matched by this regex.
 	 * This is useful to enforce constraints on the usage of certain
@@ -54,7 +54,7 @@ public abstract class LexerRegex {
 	 *         if this regex matches an indefinite number of characters.
 	 */
 	public abstract int charactersMatched();
-	
+
 	/**
 	 * Returns a new regex that is "advanced" by the given character.
 	 * If a regex `r` matches a sequence of characters `(c_1, ... c_n)`,
@@ -80,5 +80,5 @@ public abstract class LexerRegex {
 	 */
 	@Nullable
 	public abstract LexerRegex advanced(char character);
-	
+
 }

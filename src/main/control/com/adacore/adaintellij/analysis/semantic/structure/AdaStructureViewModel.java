@@ -14,7 +14,7 @@ import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
 public final class AdaStructureViewModel extends StructureViewModelBase
 	implements StructureViewModel.ElementInfoProvider
 {
-	
+
 	/**
 	 * Constructs an AdaStructureViewModel for the given PSI file.
 	 *
@@ -24,7 +24,7 @@ public final class AdaStructureViewModel extends StructureViewModelBase
 	AdaStructureViewModel(@NotNull PsiFile psiFile) {
 		super(psiFile, new AdaStructureViewElement(psiFile));
 	}
-	
+
 	/**
 	 * @see com.intellij.ide.structureView.TextEditorBasedStructureViewModel#getSuitableClasses()
 	 */
@@ -33,7 +33,7 @@ public final class AdaStructureViewModel extends StructureViewModelBase
 	protected Class[] getSuitableClasses() {
 		return new Class[] { AdaPsiElement.class };
 	}
-	
+
 	/**
 	 * Returns whether or not the given element is always a container
 	 * that can be expanded to reveal a subtree of elements.
@@ -45,7 +45,7 @@ public final class AdaStructureViewModel extends StructureViewModelBase
 	public boolean isAlwaysShowsPlus(StructureViewTreeElement element) {
 		return false;
 	}
-	
+
 	/**
 	 * Returns whether or not the given element is always a leaf element.
 	 *
@@ -56,5 +56,5 @@ public final class AdaStructureViewModel extends StructureViewModelBase
 	public boolean isAlwaysLeaf(StructureViewTreeElement element) {
 		return false;
 	}
-	
+
 }

@@ -25,10 +25,10 @@ import static com.adacore.adaintellij.lsp.LSPUtils.offsetToPosition;
  * Ada Language Server (ALS).
  */
 public final class AdaCompletionContributor extends CompletionContributor {
-	
+
 	/**
 	 * @see CompletionContributor#fillCompletionVariants(CompletionParameters, CompletionResultSet)
-	 * 
+	 *
 	 * Makes a `textDocument/completion` request to the ALS to get a
 	 * list of completion items for the current caret position, and
 	 * adds them to the given completion results.
@@ -38,54 +38,54 @@ public final class AdaCompletionContributor extends CompletionContributor {
 		@NotNull CompletionParameters parameters,
 		@NotNull CompletionResultSet  result
 	) {
-		
+
 		PsiFile  file        = parameters.getOriginalFile();
 		Document document    = getPsiFileDocument(file);
 		String   documentUri = file.getVirtualFile().getUrl();
-		
+
 		if (document == null) { return; }
-		
+
 		Project project = parameters.getOriginalFile().getProject();
-		
+
 		// Make the request and wait for the result
-		
+
 		AdaLSPServer lspServer = AdaLSPDriver.getServer(project);
-		
+
 		if (lspServer == null) { return; }
-		
+
 		List<CompletionItem> completionItems =
 			lspServer.completion(documentUri, offsetToPosition(document, parameters.getOffset()));
-		
+
 		// Map completion items to instances of `LookupElement`
 		// and add them all to the given `CompletionResult`
-		
+
 		result.addAllElements(
 			completionItems
 				.stream()
 				.map(completionItem -> {
-					
+
 					LookupElementBuilder element =
 						LookupElementBuilder.create(completionItem.getLabel())
 							.bold();
-					
+
 					Boolean deprecated = completionItem.getDeprecated();
-					
+
 					if (deprecated != null && deprecated) {
 						element = element.strikeout();
 					}
-					
+
 					String detail = completionItem.getDetail();
-					
+
 					if (detail != null) {
 						element = element.withTypeText(detail, null, false);
 					}
-					
+
 					return element;
-					
+
 				})
 				.collect(Collectors.toList())
 		);
-		
+
 	}
-	
+
 }

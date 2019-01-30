@@ -22,45 +22,45 @@ import static com.adacore.adaintellij.project.template.ProjectTemplateDescriptor
  * @see com.adacore.adaintellij.project.module.AdaModuleType
  */
 public final class AdaModuleBuilder extends ModuleBuilder {
-	
+
 	/**
 	 * The project template currently selected.
 	 */
 	private ProjectTemplateDescriptor selectedTemplate = null;
-	
+
 	/**
 	 * The variable settings for the currently selected
 	 * project template.
 	 */
 	private List<TemplateVariableSetting> variableSettings = new ArrayList<>();
-	
+
 	/**
 	 * A reference to the name/location settings of the
 	 * module being set up.
 	 */
 	private ModuleNameLocationSettings moduleNameLocationSettings = null;
-	
+
 	/**
 	 * Project template setup wizard UI.
 	 */
 	private AdaProjectWizardUI wizardStepUI;
-	
+
 	/**
 	 * Constructs a new AdaModuleBuilder.
 	 */
 	public AdaModuleBuilder() {
-		
+
 		try {
-			
+
 			wizardStepUI = new AdaProjectWizardUI(
 				ProjectTemplateManager.getAllProjectTemplates());
-			
+
 		} catch (Exception exception) {
 			wizardStepUI = null;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Sets up the newly created module given the corresponding
 	 * modifiable model of roots.
@@ -72,26 +72,26 @@ public final class AdaModuleBuilder extends ModuleBuilder {
 	@Override
 	public void setupRootModel(ModifiableRootModel modifiableRootModel)
 		throws ConfigurationException {
-		
+
 		// Check that the root model is not null
-		
+
 		assert modifiableRootModel != null;
-		
+
 		// If the selected template reference is somehow
 		// still unset, throw a configuration exception
-		
+
 		if (selectedTemplate == null) {
 			throw new ConfigurationException("Project setup started " +
 				"while no project template has been selected");
 		}
-		
+
 		// Apply the selected project template
-		
+
 		ProjectTemplateManager.applyProjectTemplate(
 			selectedTemplate, variableSettings, modifiableRootModel);
-		
+
 	}
-	
+
 	/**
 	 * Returns this module builder's corresponding module type.
 	 *
@@ -101,7 +101,7 @@ public final class AdaModuleBuilder extends ModuleBuilder {
 	public ModuleType getModuleType() {
 		return AdaModuleType.getInstance();
 	}
-	
+
 	/**
 	 * Modifies the given module settings step.
 	 * In this case, updates the reference to the module name/
@@ -113,23 +113,23 @@ public final class AdaModuleBuilder extends ModuleBuilder {
 	 */
 	@Override
 	public ModuleWizardStep modifyStep(SettingsStep settingsStep) {
-		
+
 		// Update the reference to the module
 		// name/location settings
-		
+
 		moduleNameLocationSettings =
 			settingsStep.getModuleNameLocationSettings();
-		
+
 		// Update the module name
-		
+
 		updateModuleName();
-		
+
 		// Call the original `modifyStep` method
-		
+
 		return super.modifyStep(settingsStep);
-		
+
 	}
-	
+
 	/**
 	 * Creates additional module setup wizard steps given a wizard
 	 * context and a module provider.
@@ -144,18 +144,18 @@ public final class AdaModuleBuilder extends ModuleBuilder {
 		@NotNull WizardContext   wizardContext,
 		@NotNull ModulesProvider modulesProvider
 	) {
-		
+
 		// If the setup wizard UI could not be properly
 		// initialized, then return an empty array
-		
+
 		if (wizardStepUI == null) {
 			return ModuleWizardStep.EMPTY_ARRAY;
 		}
-		
+
 		// Create a module wizard step
-		
+
 		ModuleWizardStep wizardStep = new ModuleWizardStep() {
-			
+
 			/**
 			 * Returns this wizard step's root UI component.
 			 *
@@ -163,19 +163,19 @@ public final class AdaModuleBuilder extends ModuleBuilder {
 			 */
 			@Override
 			public JComponent getComponent() { return wizardStepUI.getUIRoot(); }
-			
+
 			/**
 			 * @see com.intellij.ide.util.projectWizard.ModuleWizardStep#updateStep()
 			 */
 			@Override
 			public void updateStep() {
-				
+
 				if (moduleNameLocationSettings != null) {
 					wizardStepUI.setProjectName(moduleNameLocationSettings.getModuleName());
 				}
-				
+
 			}
-			
+
 			/**
 			 * @see com.intellij.ide.util.projectWizard.ModuleWizardStep#updateDataModel()
 			 */
@@ -184,43 +184,43 @@ public final class AdaModuleBuilder extends ModuleBuilder {
 				selectedTemplate = wizardStepUI.getSelectedTemplate();
 				variableSettings = wizardStepUI.getTemplateVariables();
 			}
-			
+
 			/**
 			 * @see com.intellij.ide.util.projectWizard.ModuleWizardStep#validate()
 			 */
 			@Override
 			public boolean validate() { return wizardStepUI.isValid(); }
-			
+
 			/**
 			 * Called when leaving this wizard step.
 			 */
 			@Override
 			public void onStepLeaving() { updateModuleName(); }
-			
+
 		};
-		
+
 		// Return the wizard step in an array
-		
+
 		return new ModuleWizardStep[]{ wizardStep };
-		
+
 	}
-	
+
 	/**
 	 * Updates the name of the module being setup in
 	 * the name/location settings.
 	 */
 	private void updateModuleName() {
-		
+
 		if (wizardStepUI != null && moduleNameLocationSettings != null) {
-			
+
 			String name = wizardStepUI.getProjectName();
-			
+
 			if (name != null) {
 				moduleNameLocationSettings.setModuleName(name);
 			}
-			
+
 		}
-		
+
 	}
-	
+
 }

@@ -8,19 +8,19 @@ import org.jetbrains.annotations.*;
  * using other regexes.
  */
 public final class UnitRegex extends LexerRegex {
-	
+
 	/**
 	 * The sequence of characters matched by this regex.
 	 */
 	final String SEQUENCE;
-	
+
 	/**
 	 * Constructs a new unit regex given a sequence of characters.
 	 *
 	 * @param sequence The sequence of characters to match.
 	 */
 	public UnitRegex(@NotNull String sequence) { this(sequence, 0); }
-	
+
 	/**
 	 * Constructs a new unit regex given a sequence of characters and
 	 * a priority.
@@ -32,19 +32,19 @@ public final class UnitRegex extends LexerRegex {
 		super(priority);
 		SEQUENCE = sequence;
 	}
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#nullable()
 	 */
 	@Override
 	public boolean nullable() { return SEQUENCE.length() == 0; }
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#charactersMatched()
 	 */
 	@Override
 	public int charactersMatched() { return SEQUENCE.length(); }
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.regex.LexerRegex#advanced(char)
 	 */
@@ -54,5 +54,5 @@ public final class UnitRegex extends LexerRegex {
 		return SEQUENCE.length() == 0 || SEQUENCE.charAt(0) != character ?
 			null : new UnitRegex(SEQUENCE.substring(1), PRIORITY);
 	}
-	
+
 }

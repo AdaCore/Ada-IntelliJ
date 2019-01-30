@@ -12,19 +12,19 @@ import org.jetbrains.annotations.*;
  * @param <T> The type of data that a key represents.
  */
 public class CacheKey<T> extends Key<CacheData<T>> {
-	
+
 	/**
 	 * Class-wide random number generator.
 	 */
 	private static Random RANDOM_NUMBER_GENERATOR = new Random();
-	
+
 	/**
 	 * Constructs a new CacheKey.
 	 * Initializes the parent key with a random name.
 	 * @see CacheKey#getRandomName()
 	 */
 	protected CacheKey() { super(getRandomName()); }
-	
+
 	/**
 	 * Factory method that returns a new cache key.
 	 * @see CacheKey#CacheKey()
@@ -37,7 +37,7 @@ public class CacheKey<T> extends Key<CacheData<T>> {
 	public static <T> CacheKey<T> getNewKey() {
 		return new CacheKey<>();
 	}
-	
+
 	/**
 	 * Returns a random name to be used when constructing
 	 * cache keys.
@@ -49,16 +49,16 @@ public class CacheKey<T> extends Key<CacheData<T>> {
 	@Contract(" -> new")
 	@NotNull
 	private static String getRandomName() {
-		
+
 		byte[] bytes = new byte[32];
-		
+
 		RANDOM_NUMBER_GENERATOR.nextBytes(bytes);
-		
+
 		return new String(
 			Base64.getEncoder().encode(bytes),
 			StandardCharsets.UTF_8
 		);
-		
+
 	}
-	
+
 }

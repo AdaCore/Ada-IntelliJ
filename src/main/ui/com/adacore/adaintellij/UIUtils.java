@@ -15,24 +15,24 @@ import org.jetbrains.annotations.NotNull;
  * UI-specific utilities.
  */
 public final class UIUtils {
-	
+
 	/**
 	 * Light/dark color pair used for component borders.
 	 */
 	private static final Color BORDER_COLOR = new JBColor(0xbbbbbb, 0x555555);
-	
+
 	/**
 	 * Various UI-related constants.
 	 */
 	private static final int LABEL_ICON_TEXT_GAP   = 5;
 	private static final int ADJUSTED_SCROLL_SPEED = 12;
-	
+
 	/**
 	 * File chooser descriptor for choosing single files only.
 	 */
 	public static final FileChooserDescriptor SINGLE_FILE_CHOOSER_DESCRIPTOR =
 		new FileChooserDescriptor(true, false, false, false, false, false);
-	
+
 	/**
 	 * Adds a simple line border to the given component.
 	 *
@@ -41,7 +41,7 @@ public final class UIUtils {
 	public static void addLineBorder(@NotNull JComponent component) {
 		component.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
 	}
-	
+
 	/**
 	 * Adds a titled border to the given component.
 	 * The component must have a border that inherits from `TitledBorder`
@@ -52,7 +52,7 @@ public final class UIUtils {
 	public static void addTitledBorder(@NotNull JComponent component) {
 		addTitledBorder(component, ((TitledBorder)component.getBorder()).getTitle());
 	}
-	
+
 	/**
 	 * Adds a titled border with the given title to the given component.
 	 *
@@ -63,7 +63,7 @@ public final class UIUtils {
 		component.setBorder(new TitledBorder(
 			BorderFactory.createLineBorder(BORDER_COLOR), title));
 	}
-	
+
 	/**
 	 * Adjusts the scroll speed of the given scroll-pane, both vertically
 	 * and horizontally.
@@ -74,7 +74,7 @@ public final class UIUtils {
 		scrollPane.getVerticalScrollBar().setUnitIncrement(ADJUSTED_SCROLL_SPEED);
 		scrollPane.getHorizontalScrollBar().setUnitIncrement(ADJUSTED_SCROLL_SPEED);
 	}
-	
+
 	/**
 	 * Adds the given icon, along with an icon-text gap, to the given label.
 	 *
@@ -85,7 +85,7 @@ public final class UIUtils {
 		label.setIcon(icon);
 		label.setIconTextGap(LABEL_ICON_TEXT_GAP);
 	}
-	
+
 	/**
 	 * Recursively traverses the UI descendants of the given container,
 	 * calling the given handler for each component of the given class or
@@ -105,7 +105,7 @@ public final class UIUtils {
 		@NotNull Class<T>             classToHandle,
 		@NotNull Function<T, Boolean> handler
 	) { traverse(container, classToHandle, handler); }
-	
+
 	/**
 	 * Returns whether or not the given container has at least one UI
 	 * descendant that is a `JTextComponent` and whose text content is
@@ -116,23 +116,23 @@ public final class UIUtils {
 	 *         empty text component descendant.
 	 */
 	public static boolean hasEffectivelyEmptyTextComponentDescendant(@NotNull Container container) {
-		
+
 		AtomicBoolean result = new AtomicBoolean(false);
-		
+
 		traverse(container, JTextComponent.class, textComponent -> {
-			
+
 			boolean empty = textComponent.getText().trim().length() == 0;
-			
+
 			if (empty) { result.set(true); }
-			
+
 			return empty;
-			
+
 		});
-		
+
 		return result.get();
-		
+
 	}
-	
+
 	/**
 	 * Internal UI container traversal method. Performs recursive,
 	 * depth-first traversal of the given container. Returns a boolean
@@ -149,37 +149,37 @@ public final class UIUtils {
 		@NotNull Class<T>             classToHandle,
 		@NotNull Function<T, Boolean> handler
 	) {
-		
+
 		for (Component child : container.getComponents()) {
-			
+
 			// Make sure the child is not null
-			
+
 			if (child == null) { continue; }
-			
+
 			boolean stop = false;
-			
+
 			// If the child is an instance of the class to
 			// handle, then call the handler on that child
-			
+
 			if (classToHandle.isInstance(child)) {
 				stop = handler.apply(classToHandle.cast(child));
 			}
-			
+
 			if (stop) { return true; }
-			
+
 			// If the child is itself a container, then
 			// traverse it recursively
-			
+
 			if (child instanceof Container) {
 				stop = traverse((Container)child,classToHandle, handler);
 			}
-			
+
 			if (stop) { return true; }
-			
+
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 }

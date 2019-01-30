@@ -13,7 +13,7 @@ public final class AdaFileElementType extends IFileElementType {
 	 * Unique instance representing the Ada file element type.
 	 */
 	public static final AdaFileElementType INSTANCE = new AdaFileElementType();
-	
+
 	/**
 	 * Constructs a new instance of the Ada file element type.
 	 */

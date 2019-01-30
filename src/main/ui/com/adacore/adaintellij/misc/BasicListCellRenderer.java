@@ -9,7 +9,7 @@ import com.intellij.util.ui.JBUI;
  * Basic list cell renderer adding small borders.
  */
 public class BasicListCellRenderer extends DefaultListCellRenderer {
-	
+
 	/**
 	 * Returns the component to be rendered, representing the cell
 	 * in the given list at the given index.
@@ -29,14 +29,14 @@ public class BasicListCellRenderer extends DefaultListCellRenderer {
 		boolean  isSelected,
 		boolean  cellHasFocus
 	) {
-		
+
 		JLabel label = (JLabel)super.getListCellRendererComponent(
 			list, value, index, isSelected, cellHasFocus);
-		
+
 		label.setBorder(JBUI.Borders.empty(2));
-		
+
 		return label;
-		
+
 	}
-	
+
 }

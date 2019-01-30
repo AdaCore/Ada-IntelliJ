@@ -14,14 +14,14 @@ import javax.swing.*;
  * a non-null UI representing its parent UI.
  */
 public abstract class AdaIntelliJUI {
-	
+
 	/**
 	 * The UI in which this view is embedded.
 	 * Its value is null if this view is not embedded in another UI.
 	 */
 	@Nullable
 	private AdaIntelliJUI parentUI;
-	
+
 	/**
 	 * Constructs a new AdaIntelliJUI that is either a standalone UI
 	 * if the given parent UI is null, or embedded in it otherwise.
@@ -32,7 +32,7 @@ public abstract class AdaIntelliJUI {
 	public AdaIntelliJUI(@Nullable AdaIntelliJUI parentUI) {
 		this.parentUI = parentUI;
 	}
-	
+
 	/**
 	 * Returns the root component of this UI view.
 	 *
@@ -40,18 +40,18 @@ public abstract class AdaIntelliJUI {
 	 */
 	@NotNull
 	public abstract JComponent getUIRoot();
-	
+
 	/**
 	 * Updates this UI view.
 	 */
 	protected void updateUI() {
-		
+
 		if (parentUI != null) {
 			parentUI.updateUI();
 		} else {
 			getUIRoot().updateUI();
 		}
-		
+
 	}
 
 }

@@ -21,19 +21,19 @@ import com.adacore.adaintellij.Utils;
 public final class DocumentChangeConsumerOperation
 	extends ConsumerOperation<DocumentEvent>
 {
-	
+
 	/**
 	 * Editor event multi-caster.
 	 */
 	private static final EditorEventMulticaster EVENT_MULTICASTER =
 		EditorFactory.getInstance().getEventMulticaster();
-	
+
 	/**
 	 * Document change listener for scheduling operation executions
 	 * on document changes.
 	 */
 	private DocumentListener documentListener = new AdaDocumentListener() {
-		
+
 		/**
 		 * @see com.adacore.adaintellij.editor.AdaDocumentListener#adaDocumentChanged(DocumentEvent)
 		 */
@@ -41,9 +41,9 @@ public final class DocumentChangeConsumerOperation
 		public void adaDocumentChanged(@NotNull DocumentEvent event) {
 			schedule(event);
 		}
-		
+
 	};
-	
+
 	/**
 	 * Constructs a new DocumentChangeConsumerOperation given a
 	 * scheduler and a consumer.
@@ -56,13 +56,13 @@ public final class DocumentChangeConsumerOperation
 		@NotNull BusyEditorAwareScheduler      scheduler,
 		@NotNull Consumer<List<DocumentEvent>> consumer
 	) {
-		
+
 		super(scheduler, consumer);
-		
+
 		EVENT_MULTICASTER.addDocumentListener(documentListener);
-		
+
 	}
-	
+
 	/**
 	 * Schedules an execution of this document event consumer operation
 	 * with the given document event.
@@ -73,28 +73,28 @@ public final class DocumentChangeConsumerOperation
 	 */
 	@Override
 	public void schedule(@NotNull DocumentEvent event) {
-		
+
 		// If this operation is not active, then return
-		
+
 		if (!isActive()) { return; }
-		
+
 		// If the event document is different than that of the
 		// events currently scheduled to be consumed, then flush
 		// the internal merging queue and clear the event list
-		
+
 		if (!scheduledValues.isEmpty() && !Utils.documentsRepresentSameFile(
 			scheduledValues.get(0).getDocument(), event.getDocument()))
 		{
 			queue.flush();
 			scheduledValues.clear();
 		}
-		
+
 		// Schedule an execution with the event
-		
+
 		super.schedule(event);
-		
+
 	}
-	
+
 	/**
 	 * @see com.adacore.adaintellij.editor.BusyEditorAwareOperation#cleanUp()
 	 */
@@ -102,5 +102,5 @@ public final class DocumentChangeConsumerOperation
 	void cleanUp() {
 		EVENT_MULTICASTER.removeDocumentListener(documentListener);
 	}
-	
+
 }

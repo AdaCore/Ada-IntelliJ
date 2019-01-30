@@ -34,7 +34,7 @@ import static com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElement
  * @see com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElementType
  */
 public class AdaPsiStructureManager {
-	
+
 	/**
 	 * Patch markers used to mark PSI files that already underwent
 	 * their corresponding patches. This is useful to avoid
@@ -45,7 +45,7 @@ public class AdaPsiStructureManager {
 	 * Each patch must have its own marker.
 	 */
 	private static final Marker SYMBOLS_PATCH_MARKER = Marker.getNewMarker();
-	
+
 	/**
 	 * Applies all possible patches to the given PSI file.
 	 *
@@ -54,7 +54,7 @@ public class AdaPsiStructureManager {
 	public static void patchPsiFile(@NotNull AdaPsiFile psiFile) {
 		patchPsiFileElementTypes(psiFile);
 	}
-	
+
 	/**
 	 * Makes a `textDocument/documentSymbol` request to the ALS and
 	 * patches the given PSI file with Ada element types based on
@@ -63,61 +63,61 @@ public class AdaPsiStructureManager {
 	 * @param psiFile The PSI file to patch.
 	 */
 	public static void patchPsiFileElementTypes(@NotNull AdaPsiFile psiFile) {
-		
+
 		patchPsiFileIfMarked(
 			psiFile,
 			SYMBOLS_PATCH_MARKER,
 			() -> {
-				
+
 				Document    document    = Utils.getPsiFileDocument(psiFile);
 				VirtualFile virtualFile = Utils.getPsiFileVirtualFile(psiFile);
-				
+
 				if (document == null || virtualFile == null) { return; }
-				
+
 				String documentUri = virtualFile.getUrl();
-				
+
 				// Make the request and wait for the result
-				
+
 				AdaLSPServer lspServer = AdaLSPDriver.getServer(psiFile.getProject());
-				
+
 				if (lspServer == null) { return; }
-				
+
 				List<DocumentSymbol> symbols = lspServer.documentSymbol(documentUri);
-				
+
 				// For each symbol in the result...
-				
+
 				symbols.forEach(symbol -> {
-					
+
 					// Find the PSI element at the given position
-					
+
 					PsiElement element = psiFile.findElementAt(
 						LSPUtils.positionToOffset(document, symbol.getSelectionRange().getStart()));
-					
+
 					if (element == null) { return; }
-					
+
 					// Get the corresponding `AdaPsiElement`
-					
+
 					AdaPsiElement adaPsiElement = AdaPsiElement.getFrom(element);
-					
+
 					if (adaPsiElement == null) { return; }
-					
+
 					// Map the symbol kind to the corresponding Ada
 					// element type and set the type of the element
-					
+
 					AdaElementType elementType =
 						LSPUtils.symbolKindToAdaElementType(symbol);
-					
+
 					if (elementType == null) { return; }
-					
+
 					adaPsiElement.setAdaElementType(elementType);
-					
+
 				});
-				
+
 			}
 		);
-		
+
 	}
-	
+
 	/**
 	 * Applies the given patch only if the given PSI file is marked
 	 * with the given marker, then marks the file with that marker.
@@ -131,19 +131,19 @@ public class AdaPsiStructureManager {
 		@NotNull Marker     marker,
 		@NotNull Runnable   patch
 	) {
-		
+
 		// If the file is marked with the marker, then abort
-		
+
 		if (psiFile.isMarked(marker)) { return; }
-		
+
 		// Apply the patch
-		
+
 		patch.run();
-		
+
 		// Mark the file with the marker
-		
+
 		psiFile.mark(marker);
-		
+
 	}
-	
+
 }

@@ -13,13 +13,13 @@ import static com.adacore.adaintellij.analysis.lexical.AdaTokenTypes.*;
  * Lexical Analyser for Ada 2012 (ISO/IEC 8652:2012(E)).
  */
 public final class AdaLexer extends Lexer {
-	
+
 	/*
 		Constants
 	*/
-	
+
 	// Delimiters
-	
+
 	/**
 	 * Unit regexes for matching Ada single delimiters.
 	 */
@@ -39,7 +39,7 @@ public final class AdaLexer extends Lexer {
 	private static final LexerRegex EQUALS_SIGN_REGEX       = new UnitRegex(EQUALS_SIGN.TOKEN_TEXT);
 	private static final LexerRegex GREATER_THAN_SIGN_REGEX = new UnitRegex(GREATER_THAN_SIGN.TOKEN_TEXT);
 	private static final LexerRegex VERTICAL_LINE_REGEX     = new UnitRegex(VERTICAL_LINE.TOKEN_TEXT);
-	
+
 	/**
 	 * Unit regexes for matching Ada compound delimiters.
 	 */
@@ -53,16 +53,16 @@ public final class AdaLexer extends Lexer {
 	private static final LexerRegex LEFT_LABEL_BRACKET_REGEX  = new UnitRegex(LEFT_LABEL_BRACKET.TOKEN_TEXT);
 	private static final LexerRegex RIGHT_LABEL_BRACKET_REGEX = new UnitRegex(RIGHT_LABEL_BRACKET.TOKEN_TEXT);
 	private static final LexerRegex BOX_SIGN_REGEX            = new UnitRegex(BOX_SIGN.TOKEN_TEXT);
-	
+
 	// Numeric Literals
-	
+
 	/**
 	 * Regex defining a digit.
 	 *
 	 * digit ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 	 */
 	private static final LexerRegex DIGIT_REGEX = UnionRegex.fromRange('0', '9');
-	
+
 	/**
 	 * Regex defining a numeral (used to define numeric literals).
 	 *
@@ -78,7 +78,7 @@ public final class AdaLexer extends Lexer {
 				)
 			)
 		);
-	
+
 	/**
 	 * Regex defining an exponent (used to define numeric literals).
 	 *
@@ -93,9 +93,9 @@ public final class AdaLexer extends Lexer {
 			),
 			NUMERAL_REGEX
 		);
-	
+
 	// Decimal Literals
-	
+
 	/**
 	 * Regex defining an Ada decimal literal.
 	 *
@@ -112,16 +112,16 @@ public final class AdaLexer extends Lexer {
 			),
 			new ZeroOrOneRegex(EXPONENT_REGEX)
 		);
-	
+
 	// Based Literals
-	
+
 	/**
 	 * Regex defining a base (used to define based literals).
 	 *
 	 * base ::= numeral
 	 */
 	private static final LexerRegex BASE_REGEX = NUMERAL_REGEX;
-	
+
 	/**
 	 * Regex defining an extended digit (hexadecimal digit).
 	 *
@@ -137,7 +137,7 @@ public final class AdaLexer extends Lexer {
 			new UnitRegex("e"),
 			new UnitRegex("f")
 		);
-	
+
 	/**
 	 * Regex defining a based numeral (used to define based literals).
 	 *
@@ -154,7 +154,7 @@ public final class AdaLexer extends Lexer {
 				)
 			)
 		);
-	
+
 	/**
 	 * Regex defining an Ada based literal.
 	 *
@@ -175,9 +175,9 @@ public final class AdaLexer extends Lexer {
 			new UnitRegex("#"),
 			new ZeroOrOneRegex(EXPONENT_REGEX)
 		);
-	
+
 	// Character Literals
-	
+
 	/**
 	 * Regex defining an Ada character literal.
 	 *
@@ -189,9 +189,9 @@ public final class AdaLexer extends Lexer {
 			GRAPHIC_CHARACTER_REGEX,
 			APOSTROPHE_REGEX
 		);
-	
+
 	// Keywords
-	
+
 	/**
 	 * Unit regexes for matching Ada keywords.
 	 */
@@ -205,58 +205,58 @@ public final class AdaLexer extends Lexer {
 	private static final LexerRegex AND_KEYWORD_REGEX          = new UnitRegex(AND_KEYWORD.TOKEN_TEXT         , 1);
 	private static final LexerRegex ARRAY_KEYWORD_REGEX        = new UnitRegex(ARRAY_KEYWORD.TOKEN_TEXT       , 1);
 	private static final LexerRegex AT_KEYWORD_REGEX           = new UnitRegex(AT_KEYWORD.TOKEN_TEXT          , 1);
-	
+
 	private static final LexerRegex BEGIN_KEYWORD_REGEX        = new UnitRegex(BEGIN_KEYWORD.TOKEN_TEXT       , 1);
 	private static final LexerRegex BODY_KEYWORD_REGEX         = new UnitRegex(BODY_KEYWORD.TOKEN_TEXT        , 1);
-	
+
 	private static final LexerRegex CASE_KEYWORD_REGEX         = new UnitRegex(CASE_KEYWORD.TOKEN_TEXT        , 1);
 	private static final LexerRegex CONSTANT_KEYWORD_REGEX     = new UnitRegex(CONSTANT_KEYWORD.TOKEN_TEXT    , 1);
-	
+
 	private static final LexerRegex DECLARE_KEYWORD_REGEX      = new UnitRegex(DECLARE_KEYWORD.TOKEN_TEXT     , 1);
 	private static final LexerRegex DELAY_KEYWORD_REGEX        = new UnitRegex(DELAY_KEYWORD.TOKEN_TEXT       , 1);
 	private static final LexerRegex DELTA_KEYWORD_REGEX        = new UnitRegex(DELTA_KEYWORD.TOKEN_TEXT       , 1);
 	private static final LexerRegex DIGITS_KEYWORD_REGEX       = new UnitRegex(DIGITS_KEYWORD.TOKEN_TEXT      , 1);
 	private static final LexerRegex DO_KEYWORD_REGEX           = new UnitRegex(DO_KEYWORD.TOKEN_TEXT          , 1);
-	
+
 	private static final LexerRegex ELSE_KEYWORD_REGEX         = new UnitRegex(ELSE_KEYWORD.TOKEN_TEXT        , 1);
 	private static final LexerRegex ELSIF_KEYWORD_REGEX        = new UnitRegex(ELSIF_KEYWORD.TOKEN_TEXT       , 1);
 	private static final LexerRegex END_KEYWORD_REGEX          = new UnitRegex(END_KEYWORD.TOKEN_TEXT         , 1);
 	private static final LexerRegex ENTRY_KEYWORD_REGEX        = new UnitRegex(ENTRY_KEYWORD.TOKEN_TEXT       , 1);
 	private static final LexerRegex EXCEPTION_KEYWORD_REGEX    = new UnitRegex(EXCEPTION_KEYWORD.TOKEN_TEXT   , 1);
 	private static final LexerRegex EXIT_KEYWORD_REGEX         = new UnitRegex(EXIT_KEYWORD.TOKEN_TEXT        , 1);
-	
+
 	private static final LexerRegex FOR_KEYWORD_REGEX          = new UnitRegex(FOR_KEYWORD.TOKEN_TEXT         , 1);
 	private static final LexerRegex FUNCTION_KEYWORD_REGEX     = new UnitRegex(FUNCTION_KEYWORD.TOKEN_TEXT    , 1);
-	
+
 	private static final LexerRegex GENERIC_KEYWORD_REGEX      = new UnitRegex(GENERIC_KEYWORD.TOKEN_TEXT     , 1);
 	private static final LexerRegex GOTO_KEYWORD_REGEX         = new UnitRegex(GOTO_KEYWORD.TOKEN_TEXT        , 1);
-	
+
 	private static final LexerRegex IF_KEYWORD_REGEX           = new UnitRegex(IF_KEYWORD.TOKEN_TEXT          , 1);
 	private static final LexerRegex IN_KEYWORD_REGEX           = new UnitRegex(IN_KEYWORD.TOKEN_TEXT          , 1);
 	private static final LexerRegex INTERFACE_KEYWORD_REGEX    = new UnitRegex(INTERFACE_KEYWORD.TOKEN_TEXT   , 1);
 	private static final LexerRegex IS_KEYWORD_REGEX           = new UnitRegex(IS_KEYWORD.TOKEN_TEXT          , 1);
-	
+
 	private static final LexerRegex LIMITED_KEYWORD_REGEX      = new UnitRegex(LIMITED_KEYWORD.TOKEN_TEXT     , 1);
 	private static final LexerRegex LOOP_KEYWORD_REGEX         = new UnitRegex(LOOP_KEYWORD.TOKEN_TEXT        , 1);
-	
+
 	private static final LexerRegex MOD_KEYWORD_REGEX          = new UnitRegex(MOD_KEYWORD.TOKEN_TEXT         , 1);
-	
+
 	private static final LexerRegex NEW_KEYWORD_REGEX          = new UnitRegex(NEW_KEYWORD.TOKEN_TEXT         , 1);
 	private static final LexerRegex NOT_KEYWORD_REGEX          = new UnitRegex(NOT_KEYWORD.TOKEN_TEXT         , 1);
 	private static final LexerRegex NULL_KEYWORD_REGEX         = new UnitRegex(NULL_KEYWORD.TOKEN_TEXT        , 1);
-	
+
 	private static final LexerRegex OF_KEYWORD_REGEX           = new UnitRegex(OF_KEYWORD.TOKEN_TEXT          , 1);
 	private static final LexerRegex OR_KEYWORD_REGEX           = new UnitRegex(OR_KEYWORD.TOKEN_TEXT          , 1);
 	private static final LexerRegex OTHERS_KEYWORD_REGEX       = new UnitRegex(OTHERS_KEYWORD.TOKEN_TEXT      , 1);
 	private static final LexerRegex OUT_KEYWORD_REGEX          = new UnitRegex(OUT_KEYWORD.TOKEN_TEXT         , 1);
 	private static final LexerRegex OVERRIDING_KEYWORD_REGEX   = new UnitRegex(OVERRIDING_KEYWORD.TOKEN_TEXT  , 1);
-	
+
 	private static final LexerRegex PACKAGE_KEYWORD_REGEX      = new UnitRegex(PACKAGE_KEYWORD.TOKEN_TEXT     , 1);
 	private static final LexerRegex PRAGMA_KEYWORD_REGEX       = new UnitRegex(PRAGMA_KEYWORD.TOKEN_TEXT      , 1);
 	private static final LexerRegex PRIVATE_KEYWORD_REGEX      = new UnitRegex(PRIVATE_KEYWORD.TOKEN_TEXT     , 1);
 	private static final LexerRegex PROCEDURE_KEYWORD_REGEX    = new UnitRegex(PROCEDURE_KEYWORD.TOKEN_TEXT   , 1);
 	private static final LexerRegex PROTECTED_KEYWORD_REGEX    = new UnitRegex(PROTECTED_KEYWORD.TOKEN_TEXT   , 1);
-	
+
 	private static final LexerRegex RAISE_KEYWORD_REGEX        = new UnitRegex(RAISE_KEYWORD.TOKEN_TEXT       , 1);
 	private static final LexerRegex RANGE_KEYWORD_REGEX        = new UnitRegex(RANGE_KEYWORD.TOKEN_TEXT       , 1);
 	private static final LexerRegex RECORD_KEYWORD_REGEX       = new UnitRegex(RECORD_KEYWORD.TOKEN_TEXT      , 1);
@@ -265,48 +265,48 @@ public final class AdaLexer extends Lexer {
 	private static final LexerRegex REQUEUE_KEYWORD_REGEX      = new UnitRegex(REQUEUE_KEYWORD.TOKEN_TEXT     , 1);
 	private static final LexerRegex RETURN_KEYWORD_REGEX       = new UnitRegex(RETURN_KEYWORD.TOKEN_TEXT      , 1);
 	private static final LexerRegex REVERSE_KEYWORD_REGEX      = new UnitRegex(REVERSE_KEYWORD.TOKEN_TEXT     , 1);
-	
+
 	private static final LexerRegex SELECT_KEYWORD_REGEX       = new UnitRegex(SELECT_KEYWORD.TOKEN_TEXT      , 1);
 	private static final LexerRegex SEPARATE_KEYWORD_REGEX     = new UnitRegex(SEPARATE_KEYWORD.TOKEN_TEXT    , 1);
 	private static final LexerRegex SOME_KEYWORD_REGEX         = new UnitRegex(SOME_KEYWORD.TOKEN_TEXT        , 1);
 	private static final LexerRegex SUBTYPE_KEYWORD_REGEX      = new UnitRegex(SUBTYPE_KEYWORD.TOKEN_TEXT     , 1);
 	private static final LexerRegex SYNCHRONIZED_KEYWORD_REGEX = new UnitRegex(SYNCHRONIZED_KEYWORD.TOKEN_TEXT, 1);
-	
+
 	private static final LexerRegex TAGGED_KEYWORD_REGEX       = new UnitRegex(TAGGED_KEYWORD.TOKEN_TEXT      , 1);
 	private static final LexerRegex TASK_KEYWORD_REGEX         = new UnitRegex(TASK_KEYWORD.TOKEN_TEXT        , 1);
 	private static final LexerRegex TERMINATE_KEYWORD_REGEX    = new UnitRegex(TERMINATE_KEYWORD.TOKEN_TEXT   , 1);
 	private static final LexerRegex THEN_KEYWORD_REGEX         = new UnitRegex(THEN_KEYWORD.TOKEN_TEXT        , 1);
 	private static final LexerRegex TYPE_KEYWORD_REGEX         = new UnitRegex(TYPE_KEYWORD.TOKEN_TEXT        , 1);
-	
+
 	private static final LexerRegex UNTIL_KEYWORD_REGEX        = new UnitRegex(UNTIL_KEYWORD.TOKEN_TEXT       , 1);
 	private static final LexerRegex USE_KEYWORD_REGEX          = new UnitRegex(USE_KEYWORD.TOKEN_TEXT         , 1);
-	
+
 	private static final LexerRegex WHEN_KEYWORD_REGEX         = new UnitRegex(WHEN_KEYWORD.TOKEN_TEXT        , 1);
 	private static final LexerRegex WHILE_KEYWORD_REGEX        = new UnitRegex(WHILE_KEYWORD.TOKEN_TEXT       , 1);
 	private static final LexerRegex WITH_KEYWORD_REGEX         = new UnitRegex(WITH_KEYWORD.TOKEN_TEXT        , 1);
-	
+
 	private static final LexerRegex XOR_KEYWORD_REGEX          = new UnitRegex(XOR_KEYWORD.TOKEN_TEXT         , 1);
-	
+
 	// Lexer data
-	
+
 	/**
 	 * A map associating root regexes with the token types
 	 * they represent.
 	 */
 	private static final Map<LexerRegex, IElementType> REGEX_TOKEN_TYPES;
-	
+
 	/*
 		Static Initializer
 	*/
-	
+
 	static {
-		
+
 		// Populate the regex -> token-type map
-		
+
 		Map<LexerRegex, IElementType> regexTokenTypes = new HashMap<>();
-		
+
 		regexTokenTypes.put(WHITESPACES_REGEX         , WHITESPACES);
-		
+
 		regexTokenTypes.put(AMPERSAND_REGEX           , AMPERSAND);
 		regexTokenTypes.put(APOSTROPHE_REGEX          , APOSTROPHE);
 		regexTokenTypes.put(LEFT_PARENTHESIS_REGEX    , LEFT_PARENTHESIS);
@@ -323,7 +323,7 @@ public final class AdaLexer extends Lexer {
 		regexTokenTypes.put(EQUALS_SIGN_REGEX         , EQUALS_SIGN);
 		regexTokenTypes.put(GREATER_THAN_SIGN_REGEX   , GREATER_THAN_SIGN);
 		regexTokenTypes.put(VERTICAL_LINE_REGEX       , VERTICAL_LINE);
-		
+
 		regexTokenTypes.put(ARROW_REGEX               , ARROW);
 		regexTokenTypes.put(DOUBLE_DOT_REGEX          , DOUBLE_DOT);
 		regexTokenTypes.put(DOUBLE_ASTERISK_REGEX     , DOUBLE_ASTERISK);
@@ -334,15 +334,15 @@ public final class AdaLexer extends Lexer {
 		regexTokenTypes.put(LEFT_LABEL_BRACKET_REGEX  , LEFT_LABEL_BRACKET);
 		regexTokenTypes.put(RIGHT_LABEL_BRACKET_REGEX , RIGHT_LABEL_BRACKET);
 		regexTokenTypes.put(BOX_SIGN_REGEX            , BOX_SIGN);
-		
+
 		regexTokenTypes.put(IDENTIFIER_REGEX          , IDENTIFIER);
 		regexTokenTypes.put(DECIMAL_LITERAL_REGEX     , DECIMAL_LITERAL);
 		regexTokenTypes.put(BASED_LITERAL_REGEX       , BASED_LITERAL);
 		regexTokenTypes.put(CHARACTER_LITERAL_REGEX   , CHARACTER_LITERAL);
 		regexTokenTypes.put(STRING_LITERAL_REGEX      , STRING_LITERAL);
-		
+
 		regexTokenTypes.put(COMMENT_REGEX             , COMMENT);
-		
+
 		regexTokenTypes.put(ABORT_KEYWORD_REGEX       , ABORT_KEYWORD);
 		regexTokenTypes.put(ABS_KEYWORD_REGEX         , ABS_KEYWORD);
 		regexTokenTypes.put(ABSTRACT_KEYWORD_REGEX    , ABSTRACT_KEYWORD);
@@ -353,58 +353,58 @@ public final class AdaLexer extends Lexer {
 		regexTokenTypes.put(AND_KEYWORD_REGEX         , AND_KEYWORD);
 		regexTokenTypes.put(ARRAY_KEYWORD_REGEX       , ARRAY_KEYWORD);
 		regexTokenTypes.put(AT_KEYWORD_REGEX          , AT_KEYWORD);
-		
+
 		regexTokenTypes.put(BEGIN_KEYWORD_REGEX       , BEGIN_KEYWORD);
 		regexTokenTypes.put(BODY_KEYWORD_REGEX        , BODY_KEYWORD);
-		
+
 		regexTokenTypes.put(CASE_KEYWORD_REGEX        , CASE_KEYWORD);
 		regexTokenTypes.put(CONSTANT_KEYWORD_REGEX    , CONSTANT_KEYWORD);
-		
+
 		regexTokenTypes.put(DECLARE_KEYWORD_REGEX     , DECLARE_KEYWORD);
 		regexTokenTypes.put(DELAY_KEYWORD_REGEX       , DELAY_KEYWORD);
 		regexTokenTypes.put(DELTA_KEYWORD_REGEX       , DELTA_KEYWORD);
 		regexTokenTypes.put(DIGITS_KEYWORD_REGEX      , DIGITS_KEYWORD);
 		regexTokenTypes.put(DO_KEYWORD_REGEX          , DO_KEYWORD);
-		
+
 		regexTokenTypes.put(ELSE_KEYWORD_REGEX        , ELSE_KEYWORD);
 		regexTokenTypes.put(ELSIF_KEYWORD_REGEX       , ELSIF_KEYWORD);
 		regexTokenTypes.put(END_KEYWORD_REGEX         , END_KEYWORD);
 		regexTokenTypes.put(ENTRY_KEYWORD_REGEX       , ENTRY_KEYWORD);
 		regexTokenTypes.put(EXCEPTION_KEYWORD_REGEX   , EXCEPTION_KEYWORD);
 		regexTokenTypes.put(EXIT_KEYWORD_REGEX        , EXIT_KEYWORD);
-		
+
 		regexTokenTypes.put(FOR_KEYWORD_REGEX         , FOR_KEYWORD);
 		regexTokenTypes.put(FUNCTION_KEYWORD_REGEX    , FUNCTION_KEYWORD);
-		
+
 		regexTokenTypes.put(GENERIC_KEYWORD_REGEX     , GENERIC_KEYWORD);
 		regexTokenTypes.put(GOTO_KEYWORD_REGEX        , GOTO_KEYWORD);
-		
+
 		regexTokenTypes.put(IF_KEYWORD_REGEX          , IF_KEYWORD);
 		regexTokenTypes.put(IN_KEYWORD_REGEX          , IN_KEYWORD);
 		regexTokenTypes.put(INTERFACE_KEYWORD_REGEX   , INTERFACE_KEYWORD);
 		regexTokenTypes.put(IS_KEYWORD_REGEX          , IS_KEYWORD);
-		
+
 		regexTokenTypes.put(LIMITED_KEYWORD_REGEX     , LIMITED_KEYWORD);
 		regexTokenTypes.put(LOOP_KEYWORD_REGEX        , LOOP_KEYWORD);
-		
+
 		regexTokenTypes.put(MOD_KEYWORD_REGEX         , MOD_KEYWORD);
-		
+
 		regexTokenTypes.put(NEW_KEYWORD_REGEX         , NEW_KEYWORD);
 		regexTokenTypes.put(NOT_KEYWORD_REGEX         , NOT_KEYWORD);
 		regexTokenTypes.put(NULL_KEYWORD_REGEX        , NULL_KEYWORD);
-		
+
 		regexTokenTypes.put(OF_KEYWORD_REGEX          , OF_KEYWORD);
 		regexTokenTypes.put(OR_KEYWORD_REGEX          , OR_KEYWORD);
 		regexTokenTypes.put(OTHERS_KEYWORD_REGEX      , OTHERS_KEYWORD);
 		regexTokenTypes.put(OUT_KEYWORD_REGEX         , OUT_KEYWORD);
 		regexTokenTypes.put(OVERRIDING_KEYWORD_REGEX  , OVERRIDING_KEYWORD);
-		
+
 		regexTokenTypes.put(PACKAGE_KEYWORD_REGEX     , PACKAGE_KEYWORD);
 		regexTokenTypes.put(PRAGMA_KEYWORD_REGEX      , PRAGMA_KEYWORD);
 		regexTokenTypes.put(PRIVATE_KEYWORD_REGEX     , PRIVATE_KEYWORD);
 		regexTokenTypes.put(PROCEDURE_KEYWORD_REGEX   , PROCEDURE_KEYWORD);
 		regexTokenTypes.put(PROTECTED_KEYWORD_REGEX   , PROTECTED_KEYWORD);
-		
+
 		regexTokenTypes.put(RAISE_KEYWORD_REGEX       , RAISE_KEYWORD);
 		regexTokenTypes.put(RANGE_KEYWORD_REGEX       , RANGE_KEYWORD);
 		regexTokenTypes.put(RECORD_KEYWORD_REGEX      , RECORD_KEYWORD);
@@ -413,80 +413,80 @@ public final class AdaLexer extends Lexer {
 		regexTokenTypes.put(REQUEUE_KEYWORD_REGEX     , REQUEUE_KEYWORD);
 		regexTokenTypes.put(RETURN_KEYWORD_REGEX      , RETURN_KEYWORD);
 		regexTokenTypes.put(REVERSE_KEYWORD_REGEX     , REVERSE_KEYWORD);
-		
+
 		regexTokenTypes.put(SELECT_KEYWORD_REGEX      , SELECT_KEYWORD);
 		regexTokenTypes.put(SEPARATE_KEYWORD_REGEX    , SEPARATE_KEYWORD);
 		regexTokenTypes.put(SOME_KEYWORD_REGEX        , SOME_KEYWORD);
 		regexTokenTypes.put(SUBTYPE_KEYWORD_REGEX     , SUBTYPE_KEYWORD);
 		regexTokenTypes.put(SYNCHRONIZED_KEYWORD_REGEX, SYNCHRONIZED_KEYWORD);
-		
+
 		regexTokenTypes.put(TAGGED_KEYWORD_REGEX      , TAGGED_KEYWORD);
 		regexTokenTypes.put(TASK_KEYWORD_REGEX        , TASK_KEYWORD);
 		regexTokenTypes.put(TERMINATE_KEYWORD_REGEX   , TERMINATE_KEYWORD);
 		regexTokenTypes.put(THEN_KEYWORD_REGEX        , THEN_KEYWORD);
 		regexTokenTypes.put(TYPE_KEYWORD_REGEX        , TYPE_KEYWORD);
-		
+
 		regexTokenTypes.put(UNTIL_KEYWORD_REGEX       , UNTIL_KEYWORD);
 		regexTokenTypes.put(USE_KEYWORD_REGEX         , USE_KEYWORD);
-		
+
 		regexTokenTypes.put(WHEN_KEYWORD_REGEX        , WHEN_KEYWORD);
 		regexTokenTypes.put(WHILE_KEYWORD_REGEX       , WHILE_KEYWORD);
 		regexTokenTypes.put(WITH_KEYWORD_REGEX        , WITH_KEYWORD);
-		
+
 		regexTokenTypes.put(XOR_KEYWORD_REGEX         , XOR_KEYWORD);
-		
+
 		REGEX_TOKEN_TYPES = Collections.unmodifiableMap(regexTokenTypes);
-		
+
 	}
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.Lexer#badCharacterTokenType()
 	 */
 	@NotNull
 	@Override
 	protected IElementType badCharacterTokenType() { return BAD_CHARACTER; }
-	
+
 	/**
 	 * @see com.adacore.adaintellij.analysis.lexical.Lexer#regexTokenTypeMap()
 	 */
 	@NotNull
 	@Override
 	protected Map<LexerRegex, IElementType> regexTokenTypeMap() { return REGEX_TOKEN_TYPES; }
-	
+
 	/**
 	 * @see com.intellij.lexer.Lexer#advance()
 	 */
 	@Override
 	public void advance() {
-		
+
 		// If the end of the text is reached, then call the
 		// original `advance` method to handle it properly
-		
+
 		if (reachedEndOfText()) {
 			super.advance();
 			return;
 		}
-		
+
 		// The next character to be analysed
 		Character nextCharacter = nextCharacter();
-		
+
 		// If the next character is an apostrophe and the last token
 		// was an identifier, then immediately mark this token as an
 		// apostrophe token and return
-		
+
 		if (nextCharacter != null && nextCharacter == '\'' && getTokenType() == IDENTIFIER) {
-			
+
 			tokenStart = tokenEnd;
-			
+
 			lexingOffset = tokenEnd = tokenStart + 1;
-			
+
 			tokenType = APOSTROPHE;
-			
+
 			return;
-			
+
 		}
-		
+
 		super.advance();
-		
+
 	}
 }

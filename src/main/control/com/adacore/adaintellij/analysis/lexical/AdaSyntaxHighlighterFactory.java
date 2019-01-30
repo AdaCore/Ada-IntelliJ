@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * Ada syntax highlighter factory.
  */
 public final class AdaSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
-	
+
 	/**
 	 * @see com.intellij.openapi.fileTypes.SyntaxHighlighterFactory#getSyntaxHighlighter(Project, VirtualFile)
 	 */
@@ -19,5 +19,5 @@ public final class AdaSyntaxHighlighterFactory extends SyntaxHighlighterFactory 
 	public SyntaxHighlighter getSyntaxHighlighter(Project project, VirtualFile virtualFile) {
 		return new AdaSyntaxHighlighter();
 	}
-	
+
 }

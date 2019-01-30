@@ -13,22 +13,22 @@ import org.jetbrains.annotations.*;
  * and instead leaves it to the implementations to do so.
  */
 abstract class BusyEditorAwareOperation {
-	
+
 	/**
 	 * Internal merging queue holding scheduled executions.
 	 */
 	MergingUpdateQueue queue;
-	
+
 	/**
 	 * The scheduler responsible for this operation.
 	 */
 	private BusyEditorAwareScheduler scheduler;
-	
+
 	/**
 	 * Whether or not this operation is active.
 	 */
 	private boolean active = true;
-	
+
 	/**
 	 * Constructs a new BusyEditorAwareOperation given a scheduler.
 	 *
@@ -38,7 +38,7 @@ abstract class BusyEditorAwareOperation {
 	BusyEditorAwareOperation(@NotNull BusyEditorAwareScheduler scheduler) {
 		this(scheduler, BusyEditorAwareScheduler.DEFAULT_TIMEOUT);
 	}
-	
+
 	/**
 	 * Constructs a new BusyEditorAwareOperation given a scheduler
 	 * and a merge timeout.
@@ -52,36 +52,36 @@ abstract class BusyEditorAwareOperation {
 		this.queue     = new MergingUpdateQueue(
 			"BusyEditorAwareOperation@" + hashCode(), timeout, true, null);
 	}
-	
+
 	/**
 	 * Stops this operation from executing in the future.
 	 */
 	public final void stop() {
-		
+
 		// If this operation has already been stopped,
 		// then return immediately
-		
+
 		if (!active) { return; }
-		
+
 		// Deactivate this operation
-		
+
 		active = false;
-		
+
 		// Call the extensible clean-up method
-		
+
 		cleanUp();
-		
+
 		// Perform global clean-up
-		
+
 		queue.deactivate();
 		Disposer.dispose(queue);
-		
+
 		// Remove this operation from the scheduler
-		
+
 		scheduler.removeOperation(this);
-		
+
 	}
-	
+
 	/**
 	 * Returns whether or not this operation is active.
 	 *
@@ -89,7 +89,7 @@ abstract class BusyEditorAwareOperation {
 	 */
 	@Contract(pure = true)
 	public final boolean isActive() { return active; }
-	
+
 	/**
 	 * Performs additional clean-up.
 	 * This method is meant to be overridden by concrete operation
@@ -97,5 +97,5 @@ abstract class BusyEditorAwareOperation {
 	 * The default implementation performs no clean-up.
 	 */
 	void cleanUp() {}
-	
+
 }

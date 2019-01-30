@@ -11,7 +11,7 @@ import com.adacore.adaintellij.GPRLanguage;
  * GPR file token type.
  */
 public class GPRFileTokenType extends IElementType {
-	
+
 	/**
 	 * Constructs a new GPR file token type.
 	 *
@@ -22,7 +22,7 @@ public class GPRFileTokenType extends IElementType {
 	GPRFileTokenType(@NotNull @NonNls String debugName) {
 		super(debugName, GPRLanguage.INSTANCE);
 	}
-	
+
 	/**
 	 * Returns a string representation of this token type.
 	 *
@@ -30,5 +30,5 @@ public class GPRFileTokenType extends IElementType {
 	 */
 	@Override
 	public String toString() { return "GPRFileTokenType." + super.toString(); }
-	
+
 }

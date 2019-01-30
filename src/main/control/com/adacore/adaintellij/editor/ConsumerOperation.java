@@ -17,18 +17,18 @@ import org.jetbrains.annotations.NotNull;
  * @see DocumentChangeConsumerOperation
  */
 public class ConsumerOperation<T> extends BusyEditorAwareOperation {
-	
+
 	/**
 	 * The underlying consumer that is run when this operation
 	 * is executed.
 	 */
 	Consumer<List<T>> consumer;
-	
+
 	/**
 	 * The list of scheduled execution values to be consumed.
 	 */
 	List<T> scheduledValues = new ArrayList<>();
-	
+
 	/**
 	 * Constructs a new ConsumerOperation given a scheduler and
 	 * a consumer.
@@ -45,7 +45,7 @@ public class ConsumerOperation<T> extends BusyEditorAwareOperation {
 		super(scheduler);
 		this.consumer = consumer;
 	}
-	
+
 	/**
 	 * Constructs a new ConsumerOperation given a scheduler, a
 	 * merge timeout and a consumer.
@@ -64,7 +64,7 @@ public class ConsumerOperation<T> extends BusyEditorAwareOperation {
 		super(scheduler, timeout);
 		this.consumer = consumer;
 	}
-	
+
 	/**
 	 * Schedules an execution of this consumer operation, with
 	 * the given value.
@@ -72,33 +72,33 @@ public class ConsumerOperation<T> extends BusyEditorAwareOperation {
 	 * @param value The value to be consumed.
 	 */
 	public void schedule(@NotNull T value) {
-		
+
 		// If this operation is not active, then return
-		
+
 		if (!isActive()) { return; }
-		
+
 		boolean empty = scheduledValues.isEmpty();
-		
+
 		// Add the value to the list of values to be consumed
-		
+
 		scheduledValues.add(value);
-		
+
 		// If the list was empty, then schedule an execution
 		// in the internal queue
-		
+
 		if (empty) {
-			
+
 			queue.queue(Update.create(this, () -> {
-				
+
 				consumer.accept(scheduledValues);
-				
+
 				scheduledValues.clear();
-				
+
 			}));
-			
+
 		}
-		
-		
+
+
 	}
-	
+
 }
