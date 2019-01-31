@@ -79,7 +79,7 @@ public final class ListChooserDialog<T> extends DialogWrapper {
 		          int     listSelectionMode
 	) {
 
-		super(project, false, IdeModalityType.PROJECT);
+		super(project, false, IdeModalityType.IDE);
 
 		// Check parameters
 
