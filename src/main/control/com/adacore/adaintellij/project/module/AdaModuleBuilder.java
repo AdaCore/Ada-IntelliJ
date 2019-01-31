@@ -197,6 +197,15 @@ public final class AdaModuleBuilder extends ModuleBuilder {
 			@Override
 			public void onStepLeaving() { updateModuleName(); }
 
+			/**
+			 * Called when the wizard is finished.
+			 */
+			@Override
+			public void onWizardFinished() {
+				updateStep();
+				updateDataModel();
+			}
+
 		};
 
 		// Return the wizard step in an array
