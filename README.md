@@ -1,24 +1,57 @@
 
-# Ada-IntelliJ
+# Ada-IntelliJ 
 
-Ada-IntelliJ is a plugin for IntelliJ IDEs adding support for the Ada programming language, with many planned features including syntax and error highlighting, code completion, reference resolution, project management, building, and more.
+Ada-IntelliJ is a plugin for IntelliJ-based IDEs adding support for the Ada programming language, with many planned features including syntax and error highlighting, code completion, reference resolution, project management, building, and more.
 
-Features currently supported:
+The plugin is currently under development and **most supported features are still experimental**. If you encounter problems/bugs, please [submit an issue](https://github.com/AdaCore/Ada-IntelliJ/issues/new) to this repository.
+
+#### Supported Features
+
 * Recognizing `.adb`, `.ads` and `.gpr` files
-* Syntax highlighting for `.adb` and `.ads` files
-* Basic gprbuild support
-* Basic references/usages features (goto definition, usage highlighting, find references)
-* Basic code completion
-* Quick line commenting
+* Limited syntax highlighting for `.adb`, `.ads` and `.gpr` files
+* Syntax error highlighting for `.adb` and `.ads` files
+* Basic project file and GPRbuild support:
+	* Build configurations
+	* Build arguments
+	* Scenario variables
+	* Location hyperlinks in output errors
+* Basic references/usages features:
+	* Goto definition
+	* Usage highlighting
+	* Find references
+* Global symbol renaming
+* Code outline
+* Code completion
+* Quick line commenting/uncommenting
+* Project creation from predefined templates
 
-The plugin is currently under development and most supported features are still experimental. If you encounter problems/bugs, please [submit an issue](https://github.com/AdaCore/Ada-IntelliJ/issues/new) to this repository.
+#### Sections
 
-Sections:
+* [Development](#development)
 * [Gradle](#gradle)
 * [Building the Plugin](#building-the-plugin)
 * [Running the Plugin](#running-the-plugin)
 * [Testing the Plugin](#testing-the-plugin)
 * [Change Notes](#change-notes)
+
+## Development
+
+The plugin is written entirely in Java 8. The highest usable Java version is upper-bounded by that of the [JBRE](https://confluence.jetbrains.com/display/JRE/JetBrains+Runtime) which at the time of writing is based on OpenJDK 8.
+
+The plugin architecture is centered around the [Microsoft Language Server Protocol](https://microsoft.github.io/language-server-protocol/) (LSP). It is therefore designed in such a way as to perform as little Ada code analysis as possible. Instead, it features an integrated LSP client and relies on an external Ada LSP server in order to achieve most of the smart features it provides. The integrated LSP client is tailored to work with the [Ada Language Server](https://github.com/AdaCore/ada_language_server) (ALS), a specific implementation of an LSP server for Ada with minor extensions to provide support for Ada-specific features such as project files and GPRbuild scenario variables.
+
+The project depends directly on the following:
+* The [IntelliJ platform](https://www.jetbrains.org/intellij/sdk/docs/)
+* Eclipse [LSP4J](https://github.com/eclipse/lsp4j), a library for implementing LSP clients and servers
+* [JUnit5](https://junit.org/junit5/) (for testing only)
+
+The project makes heavy use of JetBrains annotations such as `@Contract(...)`, `@NotNull` and `@Nullable`. IntelliJ IDEA runs live inspections based on these annotations and reports redundancies, potential problems and improvements directly in the source code. It is therefore recommended to use IntelliJ IDEA when working on the project in order to make the most out of these annotations.
+
+Useful resources:
+* [The IntelliJ platform docs](https://www.jetbrains.org/intellij/sdk/docs/)
+* [JetBrains support forums](https://intellij-support.jetbrains.com/hc/en-us/community/topics) (especially the "IntelliJ IDEA Open API and Plugin Development" section)
+* [LSP specification](https://microsoft.github.io/language-server-protocol/specification)
+* [LSP4J documentation](https://github.com/eclipse/lsp4j/tree/master/documentation)
 
 ## Gradle
 
@@ -39,21 +72,11 @@ Note that all Gradle tasks can also be run from within IntelliJ IDEA's Gradle pl
 
 #### Steps
 
-1. Clone the project and move into the root directory:
+1. Clone the project (or [download the latest release](https://github.com/AdaCore/Ada-IntelliJ/archive/latest_release.zip) and extract it) and move into the root directory
 
-```
-git clone https://github.com/AdaCore/Ada-IntelliJ.git
-cd Ada-IntelliJ
-```
+2. Run the Gradle wrapper script with the `build` task
 
-Alternatively, you may [download the source code of the master branch](https://github.com/AdaCore/Ada-IntelliJ/archive/master.zip) as a zip archive and extract it:
-
-```
-unzip Ada-IntelliJ-master.zip
-cd Ada-IntelliJ-master
-```
-
-2. Run the Gradle wrapper script with the `build` task. The `build` task involves running JUnit tests (see [Testing the plugin](#testing-the-plugin)) after compiling the Java sources, which is recommended when running the plugin by [installing it from disk](#installing-the-plugin-from-disk) to ensure that it passes the tests first. If however you wish to build the plugin without running the tests, use the `buildPlugin` task instead.
+The `build` task involves running JUnit tests (see [Testing the plugin](#testing-the-plugin)) after compiling the Java sources, which is recommended when running the plugin by [installing it from disk](#installing-the-plugin-from-disk) to ensure that it passes the tests first. If however you wish to build the plugin without running the tests, use the `buildPlugin` task instead.
 
 All build-generated files reside in the `build/` directory and can be cleaned up by running the `clean` task.
 
@@ -64,15 +87,17 @@ There are currently two ways to run the plugin in an IntelliJ IDE.
 * [Using Gradle (recommended)](#using-gradle-recommended)
 * [Installing the Plugin from Disk](#installing-the-plugin-from-disk)
 
+Note that in order to enable smart features such as code completion and goto-definition, you need to install the Ada Language Server (follow the instructions [here](https://github.com/AdaCore/ada_language_server#install)).
+
 ### Using Gradle (recommended)
 
-This is the easier and recommended method as it does not require any additional installation, not even an IntelliJ IDE! The Gradle wrapper takes care of fetching all the dependencies, including an appropriate version of IntelliJ IDEA, and running it in a sandboxed environment with the plugin installed.
+This is the easier and recommended method as it does not require any additional installation, not even an IntelliJ-based IDE! The Gradle wrapper takes care of fetching all the dependencies, including an appropriate version of IntelliJ IDEA CE, and running it in a sandboxed environment with the plugin installed.
 
 Even though the plugin should in general never affect the configuration of the IDE instance in which it is installed, this may still happen due to a bug that might appear during the development phase, which is why this method is recommended as it does not involve installing the plugin to your IDE installation. If however you wish to try the plugin without giving up all your IDE configurations, or you wish to try it on an IntelliJ IDE other than IDEA, then you may proceed with [Installing the Plugin from Disk](#installing-the-plugin-from-disk) at your own risk.
 
 #### Steps
 
-1. Clone the project and move into the root directory, as in step 1 of [Building the Plugin](#building-the-plugin)
+1. Clone the project (or [download the latest release](https://github.com/AdaCore/Ada-IntelliJ/archive/latest_release.zip) and extract it) and move into the root directory
 
 Before running the plugin, you may want to [run the tests](#testing-the-plugin) and make sure they all pass.
 
@@ -88,23 +113,27 @@ This method requires building the project with Gradle before installing it to an
 
 1. [Clone/Download and build the plugin](#building-the-plugin), making sure that the build is successful
 
-2. Open the IntelliJ IDE of your choice and go to `File | Settings | Plugins` and click on `Install plugin from disk...`
+2. Open the IntelliJ-based IDE of your choice and go to `File | Settings | Plugins`
 
-3. In the file chooser that opens, navigate to the directory of the cloned/extracted Ada-IntelliJ repo, then from there navigate into `build > distributions` and choose the zip archive named `Ada-IntelliJ-<version>.zip` (if the `distributions` directory does not exist than the build in step 1 probably failed)
+3. Click on `Install plugin from disk...` (to access this option in newer version, you first need to click on the gear icon next to the `Updates` tab)
 
-4. Finally, in the `Plugins` tab of the `Settings` window, click on `Restart <IDE name>`
+4. In the file chooser that opens, navigate to the directory of the cloned/extracted Ada-IntelliJ repo, then from there navigate into `build > distributions` and choose the zip archive named `Ada-IntelliJ-<version>.zip` (if the `distributions` directory does not exist then the build in step 1 probably failed)
+
+5. Finally, in the `Plugins` tab of the `Settings` window, click on `Restart <IDE name>`
 
 If all goes well, your IDE should restart with the plugin installed.
 
-## Testing the plugin
+## Testing the Plugin
 
-The project uses JUnit5 to test part of its implementation. Most non-private methods whose function/behavior is not strongly tied to the IntelliJ platform (e.g. registering file types, saving/restoring run configuration settings, etc.) and that are not system-dependent (e.g. searching the PATH for executables) are tested, each with various scenarios.
+The project uses JUnit5 for testing.
 
-Test source files are located in [`src/test/control/`](https://github.com/AdaCore/Ada-IntelliJ/tree/master/src/test/control) and [`src/test/ui/`](https://github.com/AdaCore/Ada-IntelliJ/tree/master/src/test/ui), and test resource files are located in [`src/test/resources/`](https://github.com/AdaCore/Ada-IntelliJ/tree/master/src/test/resources).
+Currently, only the lexer and lexer regex classes are tested. We have plans to set up more comprehensive tests, which is tricky given the limitations of testing within the IntelliJ platform.
+
+Test source files are located in [`src/test/control/`](https://github.com/AdaCore/Ada-IntelliJ/tree/master/src/test/control) and test resource files are located in [`src/test/resources/`](https://github.com/AdaCore/Ada-IntelliJ/tree/master/src/test/resources).
 
 #### Steps
 
-1. Clone the project and move into the root directory, as in step 1 of [Building the Plugin](#building-the-plugin)
+1. Clone the project (or [download the latest release](https://github.com/AdaCore/Ada-IntelliJ/archive/latest_release.zip) and extract it) and move into the root directory
 
 2. Run the Gradle wrapper script with task `test`
 
@@ -114,24 +143,50 @@ A comprehensive test report including success rates and execution durations is a
 
 ## Change Notes
 
+###### 0.4-dev
+
+* Registration of separate GPR file language
+* Separate lexer and token-based highlighter for `.gpr` files
+* GPRbuild scenario variables
+* GPRbuild configuration serialization/deserialization on IDE shutdown/startup
+* GPRbuild configuration tool window
+* Removed `gps_cli` requirement for GPRbuild output hyperlinks in favor of using `-gnatef` flag
+* Separate global Ada settings and project settings
+* Quick line commenting/uncommenting
+* Global symbol renaming
+* Project wizard with project templates
+* Support for LSP v3.13.0
+* LSP request timeouts
+* Ada program structure view / code outline (using ALS)
+* Ada code annotation / syntax error highlighting (using ALS)
+* Fixed plugin sending LSP `textDocument/references` requests for PSI viewer mock files (#19)
+* Fixed reference highlighting bug (#19)
+* Fixed lexer end-of-file bug (#33)
+* Performance improvements (#42, #43)
+
 ###### 0.3-dev
 
-* LSP integration
-* Ada parser creating PSI trees from Ada source files
+* Automatic creation of default GPRbuild configurations
+* Automatic GPR-file-based detection of Ada projects
+* Integrated LSP client (supporting LSP v3.10.0) for ALS
+* PSI element family implementations for Ada
+* Ada parser creating flat PSI trees from Ada source files
 * Resolving references (using ALS)
-* Finding references (using ALS)
-* Completion contributor (using ALS)
+* Finding references / usage highlighting (using ALS)
+* Code completion (using ALS)
+* Fixed apostrophe-related lexer bugs (#12)
+* Fixed GPR file selection dialog sometimes causing IDE to freeze (#13)
 
 ###### 0.2-dev
 
-* IDE recognizes GPR (.gpr) files (no syntax highlighting)
-* Basic gprbuild support, build configurations with limited customization
-* gprbuild output hyperlinks to source code (requires gps_cli to be on PATH)
-* Basic GPR file management
+* Registration of the `.gpr` file type
+* File icons for `.adb`, `.ads` and `.gpr` files
+* Basic GPRbuild configurations with limited customization
+* GPRbuild output hyperlinks to source code (requires `gps_cli` to be on `PATH`)
+* Basic GPR file manager
+* Fixed non-case-insensitive lexical analysis (#2, #5)
 
 ###### 0.1-dev
 
-* IDE recognizes Ada body (.adb) and spec (.ads) files
-* Basic syntax highlighting for body and spec files
-
-##### 0-dev
+* Registration of Ada language along with `.adb` and `.ads` file types
+* Ada lexer and token-based highlighter for `.adb` and `.ads` files

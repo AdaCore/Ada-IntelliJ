@@ -1,67 +1,95 @@
 <idea-plugin>
-	
+
 	<!-- Plugin metadata -->
-	
+
 	<id>com.adacore.Ada-IntelliJ</id>
 	<name>Ada support for IntelliJ IDEs</name>
-	<vendor email="soufi@adacore.com" url="https://www.adacore.com">AdaCore</vendor>
-	
+	<vendor email="jetbrains@adacore.com" url="https://www.adacore.com">AdaCore</vendor>
+
 	<description><![CDATA[
 		IntelliJ plugin adding Ada support with functionalities ranging from syntax highlighting to building.
 	]]></description>
-	
+
 	<!-- Change-notes -->
-	
+
 	<change-notes><![CDATA[
+		<strong>0.4-dev</strong>
+		<ul>
+			<li>Registration of separate GPR file language</li>
+			<li>Separate lexer and token-based highlighter for `.gpr` files</li>
+			<li>GPRbuild scenario variables</li>
+			<li>GPRbuild configuration serialization/deserialization on IDE shutdown/startup</li>
+			<li>GPRbuild configuration tool window</li>
+			<li>Removed `gps_cli` requirement for GPRbuild output hyperlinks in favor of using `-gnatef` flag</li>
+			<li>Separate global Ada settings and project settings</li>
+			<li>Quick line commenting/uncommenting</li>
+			<li>Global symbol renaming</li>
+			<li>Project wizard with project templates</li>
+			<li>Support for LSP v3.13.0</li>
+			<li>LSP request timeouts</li>
+			<li>Ada program structure view / code outline (using ALS)</li>
+			<li>Ada code annotation / syntax error highlighting (using ALS)</li>
+			<li>Fixed plugin sending LSP `textDocument/references` requests for PSI viewer mock files (#19)</li>
+			<li>Fixed reference highlighting bug (#19)</li>
+			<li>Fixed lexer end-of-file bug (#33)</li>
+			<li>Performance improvements (#42, #43)</li>
+		</ul>
 		<strong>0.3-dev</strong>
 		<ul>
-			<li>LSP integration</li>
-			<li>Ada parser creating PSI trees from Ada source files</li>
+			<li>Automatic creation of default GPRbuild configurations</li>
+			<li>Automatic GPR-file-based detection of Ada projects</li>
+			<li>Integrated LSP client (supporting LSP v3.10.0) for ALS</li>
+			<li>PSI element family implementations for Ada</li>
+			<li>Ada parser creating flat PSI trees from Ada source files</li>
 			<li>Resolving references (using ALS)</li>
-			<li>Finding references (using ALS)</li>
-			<li>Completion contributor (using ALS)</li>
+			<li>Finding references / usage highlighting (using ALS)</li>
+			<li>Code completion (using ALS)</li>
+			<li>Fixed apostrophe-related lexer bugs (#12)</li>
+			<li>Fixed GPR file selection dialog sometimes causing IDE to freeze (#13)</li>
 		</ul>
 		<strong>0.2-dev</strong>
 		<ul>
-			<li>IDE recognizes GPR (.gpr) files (no syntax highlighting)</li>
-			<li>Basic gprbuild support, build configurations with limited customization</li>
-			<li>gprbuild output hyperlinks to source code (requires gps_cli to be on PATH)</li>
-			<li>Basic GPR file management</li>
+			<li>Registration of the `.gpr` file type</li>
+			<li>File icons for `.adb`, `.ads` and `.gpr` files</li>
+			<li>Basic GPRbuild configurations with limited customization</li>
+			<li>GPRbuild output hyperlinks to source code (requires `gps_cli` to be on `PATH`)</li>
+			<li>Basic GPR file manager</li>
+			<li>Fixed non-case-insensitive lexical analysis (#2, #5)</li>
 		</ul>
 		<strong>0.1-dev</strong>
 		<ul>
-			<li>IDE recognizes Ada body (.adb) and spec (.ads) files</li>
-			<li>Basic syntax highlighting for body and spec files</li>
+			<li>Registration of Ada language along with `.adb` and `.ads` file types</li>
+			<li>Ada lexer and token-based highlighter for `.adb` and `.ads` files</li>
 		</ul>
 		<strong>0-dev</strong>
 	]]></change-notes>
-	
+
 	<!-- Dependencies -->
-	
+
 	<!-- Allows compatibility with all IntelliJ IDEs -->
 	<!-- See https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
 	<depends>com.intellij.modules.lang</depends>
-	
+
 	<!-- Application-wide components -->
-	
+
 	<application-components>
-		
+
 		<!-- GPRbuild manager component -->
 		<component>
 			<implementation-class>com.adacore.adaintellij.build.GPRbuildManager</implementation-class>
 		</component>
-		
+
 	</application-components>
-	
+
 	<!-- Project-wide components -->
-	
+
 	<project-components>
-		
+
 		<!-- Ada project component -->
 		<component>
 			<implementation-class>com.adacore.adaintellij.project.AdaProject</implementation-class>
 		</component>
-		
+
 		<!-- GPR file manager component -->
 		<component>
 			<implementation-class>com.adacore.adaintellij.project.GPRFileManager</implementation-class>
@@ -70,39 +98,39 @@
 		<component>
 			<implementation-class>com.adacore.adaintellij.build.GPRbuildConfigurationManager</implementation-class>
 		</component>
-		
+
 		<!-- LSP driver component -->
 		<component>
 			<implementation-class>com.adacore.adaintellij.lsp.AdaLSPDriver</implementation-class>
 		</component>
-		
+
 		<!-- Busy-editor-aware operation scheduler -->
 		<component>
 			<implementation-class>com.adacore.adaintellij.editor.BusyEditorAwareScheduler</implementation-class>
 		</component>
-		
+
 	</project-components>
-	
+
 	<!-- Platform extensions -->
-	
+
 	<extensions defaultExtensionNs="com.intellij">
-		
+
 		<!-- Ada global settings -->
 		<applicationConfigurable instance="com.adacore.adaintellij.settings.AdaGlobalSettings" groupId="language"/>
-		
+
 		<!-- Ada file type factory -->
 		<fileTypeFactory implementation="com.adacore.adaintellij.file.AdaFileTypeFactory"/>
-		
+
 		<!-- Ada module builder -->
 		<moduleBuilder builderClass="com.adacore.adaintellij.project.module.AdaModuleBuilder" id="ADA_MODULE_BUILDER" order="first"/>
 		<!-- Ada module type -->
 		<moduleType implementationClass="com.adacore.adaintellij.project.module.AdaModuleType" id="ADA_MODULE_TYPE"/>
-		
+
 		<!-- Ada syntax highligher factory -->
 		<lang.syntaxHighlighterFactory language="Ada" implementationClass="com.adacore.adaintellij.analysis.lexical.AdaSyntaxHighlighterFactory"/>
 		<!-- GPR file syntax highligher factory -->
 		<lang.syntaxHighlighterFactory language="GPR File" implementationClass="com.adacore.adaintellij.analysis.lexical.GPRFileSyntaxHighlighterFactory"/>
-		
+
 		<!-- Ada parser definition -->
 		<lang.parserDefinition language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.AdaParserDefinition"/>
 		<!-- Ada find-usages provider -->
@@ -117,26 +145,26 @@
 		<lang.psiStructureViewFactory language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.structure.AdaStructureViewFactory"/>
 		<!-- Ada code annotator -->
 		<externalAnnotator language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.diagnostics.AdaAnnotator"/>
-		
+
 		<!-- Ada names validator -->
 		<lang.namesValidator language="Ada" implementationClass="com.adacore.adaintellij.analysis.lexical.AdaNamesValidator"/>
 		<!-- Ada PSI element rename processor -->
 		<renamePsiElementProcessor implementation="com.adacore.adaintellij.analysis.semantic.usages.AdaRenamePsiElementProcessor"/>
 		<!-- Ada refactoring support provider -->
 		<lang.refactoringSupport language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.usages.AdaRefactoringSupportProvider"/>
-		
+
 		<!-- Ada code commenter -->
 		<lang.commenter language="Ada" implementationClass="com.adacore.adaintellij.misc.AdaCommenter"/>
-		
+
 		<!-- GPRbuild run configuration type -->
 		<configurationType implementation="com.adacore.adaintellij.build.GPRbuildConfigurationType"/>
 		<!-- GPRbuild configuration tool window -->
 		<toolWindow id="GPRbuild" anchor="left" secondary="false" factoryClass="com.adacore.adaintellij.build.GPRbuildConfigurationToolWindowFactory"/>
-		
+
 	</extensions>
-	
+
 	<!-- Plugin actions -->
-	
+
 	<actions>
 		<group text="Ada">
 			<add-to-group group-id="MainMenu" anchor="after" relative-to-action="RefactoringMenu"/>
@@ -145,5 +173,5 @@
 			</action>
 		</group>
 	</actions>
-	
+
 </idea-plugin>
