@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'com.adacore'
-version '0.4-dev'
+version '0.5-dev'
 
 sourceCompatibility = 1.8
 
