@@ -61,7 +61,6 @@
 			<li>Registration of Ada language along with `.adb` and `.ads` file types</li>
 			<li>Ada lexer and token-based highlighter for `.adb` and `.ads` files</li>
 		</ul>
-		<strong>0-dev</strong>
 	]]></change-notes>
 
 	<!-- Dependencies -->

@@ -159,10 +159,10 @@ A comprehensive test report including success rates and execution durations is a
 * LSP request timeouts
 * Ada program structure view / code outline (using ALS)
 * Ada code annotation / syntax error highlighting (using ALS)
-* Fixed plugin sending LSP `textDocument/references` requests for PSI viewer mock files (#19)
-* Fixed reference highlighting bug (#19)
-* Fixed lexer end-of-file bug (#33)
-* Performance improvements (#42, #43)
+* Fixed plugin sending LSP `textDocument/references` requests for PSI viewer mock files ([#19](https://github.com/AdaCore/Ada-IntelliJ/pull/19))
+* Fixed reference highlighting bug ([#19](https://github.com/AdaCore/Ada-IntelliJ/pull/19))
+* Fixed lexer end-of-file bug ([#33](https://github.com/AdaCore/Ada-IntelliJ/pull/33))
+* Performance improvements ([#42](https://github.com/AdaCore/Ada-IntelliJ/pull/42), [#43](https://github.com/AdaCore/Ada-IntelliJ/pull/43))
 
 ###### 0.3-dev
 
@@ -174,8 +174,8 @@ A comprehensive test report including success rates and execution durations is a
 * Resolving references (using ALS)
 * Finding references / usage highlighting (using ALS)
 * Code completion (using ALS)
-* Fixed apostrophe-related lexer bugs (#12)
-* Fixed GPR file selection dialog sometimes causing IDE to freeze (#13)
+* Fixed apostrophe-related lexer bugs ([#12](https://github.com/AdaCore/Ada-IntelliJ/pull/12))
+* Fixed GPR file selection dialog sometimes causing IDE to freeze ([#13](https://github.com/AdaCore/Ada-IntelliJ/pull/13))
 
 ###### 0.2-dev
 
@@ -184,7 +184,7 @@ A comprehensive test report including success rates and execution durations is a
 * Basic GPRbuild configurations with limited customization
 * GPRbuild output hyperlinks to source code (requires `gps_cli` to be on `PATH`)
 * Basic GPR file manager
-* Fixed non-case-insensitive lexical analysis (#2, #5)
+* Fixed non-case-insensitive lexical analysis ([#2](https://github.com/AdaCore/Ada-IntelliJ/issues/2), [#5](https://github.com/AdaCore/Ada-IntelliJ/pull/5))
 
 ###### 0.1-dev
 
