@@ -143,6 +143,11 @@ A comprehensive test report including success rates and execution durations is a
 
 ## Change Notes
 
+###### 0.5-dev
+
+* Fixed minor bugs in project wizard and project templates ([#54](https://github.com/AdaCore/Ada-IntelliJ/pull/54))
+* Fixed GPR file selection dialog sometimes causing IDE to freeze ([#54](https://github.com/AdaCore/Ada-IntelliJ/pull/54))
+
 ###### 0.4-dev
 
 * Registration of separate GPR file language
