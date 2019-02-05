@@ -26,6 +26,13 @@ intellij {
 	updateSinceUntilBuild false
 }
 
+publishPlugin {
+	// Put publish token as `publishToken` in `gradle.properties`
+	// and run the `publishPlugin` gradle task to publish a new
+	// version of the plugin
+	token publishToken
+}
+
 sourceSets {
 	main.java.srcDirs = [ 'src/main/control' , 'src/main/ui' ]
 	test.java.srcDirs = [ 'src/test/control' , 'src/test/ui' ]

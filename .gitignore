@@ -8,3 +8,6 @@
 # Build files & generated binaries
 /build
 /out
+
+# Plugin publishing token
+/gradle.properties
