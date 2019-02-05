@@ -299,7 +299,16 @@ public final class Utils {
 
 		URL url = urlStringToUrl(urlString);
 
-		return url == null ? null : VfsUtil.findFileByURL(url);
+		if (url == null) { return null; }
+
+		String host = url.getHost();
+		String path = url.getPath();
+
+		if ("file".equals(url.getProtocol()) &&
+			host != null && host.length() > 0)
+		{ path = host + ":" + path; }
+
+		return LocalFileSystem.getInstance().findFileByPath(path);
 
 	}
 
