@@ -6,6 +6,8 @@
 	<name>Ada</name>
 	<vendor email="jetbrains@adacore.com" url="https://www.adacore.com">AdaCore</vendor>
 
+	<idea-version since-build="182"/>
+
 	<description><![CDATA[
 		Support for the Ada and SPARK languages, and GPR project files.
 	]]></description>
