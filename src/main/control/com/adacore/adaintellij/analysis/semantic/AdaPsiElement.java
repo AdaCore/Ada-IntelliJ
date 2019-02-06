@@ -302,14 +302,21 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 
 	/**
 	 * Returns whether or not the given PSI elements are in the same file.
+	 * Returns true only if both files containing the two given elements
+	 * are found and are equivalent.
 	 *
 	 * @param element1 The first element to compare.
 	 * @param element2 The second element to compare.
 	 * @return Whether or not the given elements are in the same file.
 	 */
 	public static boolean areInSameFile(@NotNull PsiElement element1, @NotNull PsiElement element2) {
-		return Utils.psiFilesRepresentSameFile(
-			element1.getContainingFile(), element2.getContainingFile());
+
+		PsiFile file1 = element1.getContainingFile();
+		PsiFile file2 = element2.getContainingFile();
+
+		return file1 != null && file2 != null &&
+			Utils.psiFilesRepresentSameFile(file1, file2);
+
 	}
 
 	/**
