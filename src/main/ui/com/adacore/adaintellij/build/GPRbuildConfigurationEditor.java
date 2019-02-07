@@ -86,6 +86,28 @@ public final class GPRbuildConfigurationEditor extends AdaIntelliJUI {
 	public JComponent getUIRoot() { return rootPanel; }
 
 	/**
+	 * @see com.adacore.adaintellij.AdaIntelliJUI#updateUI()
+	 */
+	@Override
+	protected void updateUI() {
+
+		super.updateUI();
+
+		// The `SettingsEditor` class does not provide any mechanism to manually
+		// mark the editor as "changed" and enable the option to apply the editor
+		// to a configuration. It seems that some other component takes care of
+		// detecting changes in the editor, probably by listening to changes in
+		// its UI components. However, this seems to work when the text inside
+		// text fields is changed, but not when components are removed from the
+		// view, which is what happens when scenario variables are removed.
+		// The simplest solution to this problem seems to be this harmless little
+		// hack which consists in setting the the build arguments field to its
+		// own content.
+		buildArgumentsField.setText(buildArgumentsField.getText());
+
+	}
+
+	/**
 	 * Adapter of this editor to the `SettingsEditor` class.
 	 */
 	public static class SettingsEditorAdapter extends SettingsEditor<GPRbuildConfiguration> {
