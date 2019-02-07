@@ -117,7 +117,7 @@
 		<!-- GPRbuild run configuration type -->
 		<configurationType implementation="com.adacore.adaintellij.build.GPRbuildConfigurationType"/>
 		<!-- GPRbuild configuration tool window -->
-		<toolWindow id="GPRbuild" anchor="left" secondary="false" factoryClass="com.adacore.adaintellij.build.GPRbuildConfigurationToolWindowFactory"/>
+		<toolWindow id="GPRbuild" anchor="left" secondary="false" icon="/actions/compile.svg" factoryClass="com.adacore.adaintellij.build.GPRbuildConfigurationToolWindowFactory"/>
 
 	</extensions>
 
