@@ -1,6 +1,7 @@
 package com.adacore.adaintellij.analysis.lexical;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.*;
@@ -10,7 +11,7 @@ import com.adacore.adaintellij.analysis.lexical.regex.*;
 import static com.adacore.adaintellij.analysis.lexical.AdaTokenTypes.*;
 
 /**
- * Lexical Analyser for Ada 2012 (ISO/IEC 8652:2012(E)).
+ * Lexical analyser for Ada 2012 (ISO/IEC 8652:2012(E)).
  */
 public final class AdaLexer extends Lexer {
 
@@ -295,6 +296,11 @@ public final class AdaLexer extends Lexer {
 	 */
 	private static final Map<LexerRegex, IElementType> REGEX_TOKEN_TYPES;
 
+	/**
+	 * The set of all root regexes except keyword regexes.
+	 */
+	private static final Set<LexerRegex> NON_KEYWORD_ROOT_REGEXES;
+
 	/*
 		Static Initializer
 	*/
@@ -437,6 +443,13 @@ public final class AdaLexer extends Lexer {
 
 		REGEX_TOKEN_TYPES = Collections.unmodifiableMap(regexTokenTypes);
 
+		// Populate the non-keyword root regex set
+
+		NON_KEYWORD_ROOT_REGEXES = REGEX_TOKEN_TYPES.keySet()
+			.stream()
+			.filter(regex -> !KEYWORD_TOKEN_SET.contains(REGEX_TOKEN_TYPES.get(regex)))
+			.collect(Collectors.toSet());
+
 	}
 
 	/**
@@ -452,6 +465,16 @@ public final class AdaLexer extends Lexer {
 	@NotNull
 	@Override
 	protected Map<LexerRegex, IElementType> regexTokenTypeMap() { return REGEX_TOKEN_TYPES; }
+
+	/**
+	 * @see com.adacore.adaintellij.analysis.lexical.Lexer#getLexingStartingRegexes()
+	 */
+	@NotNull
+	@Override
+	protected Set<LexerRegex> getLexingStartingRegexes() {
+		return getTokenType() == APOSTROPHE ?
+			NON_KEYWORD_ROOT_REGEXES : super.getLexingStartingRegexes();
+	}
 
 	/**
 	 * @see com.intellij.lexer.Lexer#advance()
@@ -489,4 +512,5 @@ public final class AdaLexer extends Lexer {
 		super.advance();
 
 	}
+
 }

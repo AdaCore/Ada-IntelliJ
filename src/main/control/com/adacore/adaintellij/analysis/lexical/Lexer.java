@@ -9,7 +9,7 @@ import org.jetbrains.annotations.*;
 import com.adacore.adaintellij.analysis.lexical.regex.*;
 
 /**
- * Lexical Analyser for Ada 2012 (ISO/IEC 8652:2012(E)).
+ * Base lexical analyser for Ada and related languages.
  */
 abstract class Lexer extends LexerBase {
 
@@ -320,6 +320,19 @@ abstract class Lexer extends LexerBase {
 	protected abstract Map<LexerRegex, IElementType> regexTokenTypeMap();
 
 	/**
+	 * Returns the set of root regexes to use at the start of a token
+	 * lexing round. This method may be overridden by subclasses to
+	 * limit the set of regexes that may match in a lexing round based
+	 * on the state of the lexer.
+	 *
+	 * @return The set of root regexes to use when lexing a token.
+	 */
+	@NotNull
+	protected Set<LexerRegex> getLexingStartingRegexes() {
+		return ROOT_REGEXES;
+	}
+
+	/**
 	 * Returns whether or not this lexer has reached the end of
 	 * the text being analysed.
 	 *
@@ -445,7 +458,7 @@ abstract class Lexer extends LexerBase {
 		int rollBackOffset = 0;
 
 		// The set of regexes that successfully advanced so far
-		Set<LexerRegex> regexes = new HashSet<>(ROOT_REGEXES);
+		Set<LexerRegex> regexes = new HashSet<>(getLexingStartingRegexes());
 
 		// The last set of regexes, resulting from an iteration of
 		// characterLoop, that contained at least one nullable regex
