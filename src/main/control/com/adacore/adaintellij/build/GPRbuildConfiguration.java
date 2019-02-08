@@ -2,7 +2,7 @@ package com.adacore.adaintellij.build;
 
 import java.util.*;
 import java.util.regex.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
@@ -14,6 +14,7 @@ import com.intellij.notification.*;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
+import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.*;
 
 import org.jdom.Element;
@@ -157,8 +158,16 @@ public final class GPRbuildConfiguration extends RunConfigurationBase {
 
 				// Construct the gprbuild command to run
 
+				String[] baseCommand = { gprbuildPath , "-P" + gprFilePath };
+
+				String[] arguments =
+					Stream.of(gprbuildArguments.split(" "))
+						.map(String::trim)
+						.filter(argument -> argument.length() > 0)
+						.toArray(String[]::new);
+
 				GeneralCommandLine commandLine =
-					new GeneralCommandLine(gprbuildPath, "-P" + gprFilePath, gprbuildArguments);
+					new GeneralCommandLine(ArrayUtil.mergeArrays(baseCommand, arguments));
 
 				commandLine.addParameters(commandLineScenarioVariables);
 

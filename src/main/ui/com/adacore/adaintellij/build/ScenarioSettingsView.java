@@ -92,9 +92,9 @@ public final class ScenarioSettingsView extends AdaIntelliJUI {
 
 			for (int i = 0 ; i < components.length ; i += 3) {
 
-				JTextField rowVariableField     = (JTextField)components[i];
-				JTextField rowValueField        = (JTextField)components[i + 1];
-				JButton    rowRemoveButton      = (JButton)components[i + 2];
+				JTextField rowVariableField = (JTextField)components[i];
+				JTextField rowValueField    = (JTextField)components[i + 1];
+				JButton    rowRemoveButton  = (JButton)components[i + 2];
 
 				// If this is the last row, then remove it
 
