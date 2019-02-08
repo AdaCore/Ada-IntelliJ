@@ -1,8 +1,6 @@
-package com.adacore.adaintellij.analysis.semantic;
+package com.adacore.adaintellij.analysis.syntactic;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.PsiParser;
+import com.intellij.lang.*;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 

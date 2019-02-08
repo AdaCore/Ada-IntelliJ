@@ -1,11 +1,10 @@
-package com.adacore.adaintellij.analysis.semantic.structure;
+package com.adacore.adaintellij.analysis.syntactic.structure;
 
 import com.intellij.ide.structureView.*;
 import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.*;
 
-import com.adacore.adaintellij.analysis.semantic.AdaPsiFile;
-import com.adacore.adaintellij.analysis.semantic.AdaPsiStructureManager;
+import com.adacore.adaintellij.analysis.syntactic.*;
 
 /**
  * Structure view builder for Ada files.

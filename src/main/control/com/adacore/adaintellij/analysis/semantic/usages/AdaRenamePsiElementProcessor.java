@@ -6,8 +6,7 @@ import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.intellij.usageView.UsageInfo;
 import org.jetbrains.annotations.*;
 
-import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
-import com.adacore.adaintellij.analysis.semantic.AdaPsiReference;
+import com.adacore.adaintellij.analysis.syntactic.*;
 
 /**
  * Processor of renaming operations over Ada PSI elements.

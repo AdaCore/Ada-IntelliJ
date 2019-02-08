@@ -1,4 +1,4 @@
-package com.adacore.adaintellij.analysis.semantic;
+package com.adacore.adaintellij.analysis.syntactic;
 
 import com.intellij.psi.tree.IFileElementType;
 

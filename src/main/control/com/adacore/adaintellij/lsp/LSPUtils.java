@@ -9,7 +9,7 @@ import org.jetbrains.annotations.*;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.Range;
 
-import static com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElementType;
+import static com.adacore.adaintellij.analysis.syntactic.AdaPsiElement.AdaElementType;
 
 /**
  * LSP-specific utilities.
@@ -105,7 +105,7 @@ public final class LSPUtils {
 	/**
 	 * Translates the given symbol kind, defined in the LSP standard,
 	 * to the Ada element type defined for Ada PSI elements.
-	 * @see com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElementType
+	 * @see com.adacore.adaintellij.analysis.syntactic.AdaPsiElement.AdaElementType
 	 *
 	 * @param kind The symbol kind to translate.
 	 * @return The corresponding Ada element type.

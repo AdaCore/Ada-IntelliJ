@@ -1,4 +1,4 @@
-package com.adacore.adaintellij.analysis.semantic;
+package com.adacore.adaintellij.analysis.syntactic;
 
 import java.util.List;
 
@@ -13,25 +13,25 @@ import com.adacore.adaintellij.lsp.*;
 import com.adacore.adaintellij.misc.cache.Marker;
 import com.adacore.adaintellij.Utils;
 
-import static com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElementType;
+import static com.adacore.adaintellij.analysis.syntactic.AdaPsiElement.AdaElementType;
 
 /**
  * Ada program structure manager.
  *
  * Due to the way Ada source code is parsed by the Ada-IntelliJ
- * plugin, additional semantic information can only be added to the
+ * plugin, additional syntax information can only be added to the
  * PSI tree elements after the tree has been constructed.
  *
  * This class provides an API that can be used to query additional
- * semantic information about a given PSI file from the ALS (Ada
+ * syntax information about a given PSI file from the ALS (Ada
  * Language Server) and patch the underlying PSI tree with the
  * collected information.
  * Any component that requires specific structure information for a
  * certain file must therefore first call the corresponding patcher
  * from this class before reading that information from that file.
  *
- * @see com.adacore.adaintellij.analysis.semantic.AdaParser
- * @see com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElementType
+ * @see AdaParser
+ * @see AdaPsiElement.AdaElementType
  */
 public class AdaPsiStructureManager {
 

@@ -1,12 +1,10 @@
-package com.adacore.adaintellij.analysis.semantic.structure;
+package com.adacore.adaintellij.analysis.syntactic.structure;
 
-import com.intellij.ide.structureView.StructureViewModel;
-import com.intellij.ide.structureView.StructureViewModelBase;
-import com.intellij.ide.structureView.StructureViewTreeElement;
+import com.intellij.ide.structureView.*;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
-import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
+import com.adacore.adaintellij.analysis.syntactic.AdaPsiElement;
 
 /**
  * Structure view model of an Ada file.

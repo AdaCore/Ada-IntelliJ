@@ -1,4 +1,4 @@
-package com.adacore.adaintellij.analysis.semantic;
+package com.adacore.adaintellij.analysis.syntactic;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Document;
@@ -24,7 +24,7 @@ import static com.adacore.adaintellij.Utils.*;
  *
  * For detailed information about the structure of ASTs built by the
  * Ada-IntelliJ Ada parser:
- * @see com.adacore.adaintellij.analysis.semantic.AdaParser
+ * @see AdaParser
  */
 public final class AdaPsiReference extends AdaPsiElement
 	implements PsiReference, PsiNameIdentifierOwner, Cacher
