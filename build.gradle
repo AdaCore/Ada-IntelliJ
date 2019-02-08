@@ -27,10 +27,18 @@ intellij {
 }
 
 publishPlugin {
-	// Put publish token as `publishToken` in `gradle.properties`
-	// and run the `publishPlugin` gradle task to publish a new
-	// version of the plugin
-	token publishToken
+
+	// TODO: Find a permanent solution that does not require
+	//       commenting/uncommenting the token assignment line
+	//       below every time
+
+	// To publish a new version of the plugin:
+	// - Put publish token as `publishToken` in `gradle.properties`
+	// - Uncomment the line below
+	// - Run the `publishPlugin` gradle task
+
+	// token publishToken
+
 }
 
 sourceSets {
