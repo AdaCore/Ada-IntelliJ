@@ -1,16 +1,12 @@
 package com.adacore.adaintellij.analysis.semantic.usages;
 
-import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
-import com.intellij.lang.cacheBuilder.WordsScanner;
+import com.intellij.lang.cacheBuilder.*;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
-import com.adacore.adaintellij.analysis.lexical.AdaLexer;
-import com.adacore.adaintellij.analysis.lexical.AdaTokenTypes;
-import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
-import com.adacore.adaintellij.analysis.semantic.AdaPsiReference;
+import com.adacore.adaintellij.analysis.lexical.*;
+import com.adacore.adaintellij.analysis.syntactic.*;
 
 /**
  * Find-usages provider for Ada.

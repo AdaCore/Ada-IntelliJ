@@ -1,14 +1,12 @@
-package com.adacore.adaintellij.analysis.semantic.structure;
+package com.adacore.adaintellij.analysis.syntactic.structure;
 
 import javax.swing.*;
 
 import com.intellij.navigation.ItemPresentation;
-import com.intellij.psi.NavigatablePsiElement;
-import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.*;
+import org.jetbrains.annotations.*;
 
-import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
+import com.adacore.adaintellij.analysis.syntactic.AdaPsiElement;
 
 /**
  * The presentation of an item in the structure view of an Ada file.

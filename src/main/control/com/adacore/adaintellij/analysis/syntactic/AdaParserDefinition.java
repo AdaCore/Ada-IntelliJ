@@ -1,25 +1,19 @@
-package com.adacore.adaintellij.analysis.semantic;
+package com.adacore.adaintellij.analysis.syntactic;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.ParserDefinition;
-import com.intellij.lang.PsiParser;
+import com.intellij.lang.*;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.tree.IFileElementType;
-import com.intellij.psi.tree.TokenSet;
+import com.intellij.psi.*;
+import com.intellij.psi.tree.*;
 import org.jetbrains.annotations.NotNull;
 
-import com.adacore.adaintellij.analysis.lexical.AdaLexer;
-import com.adacore.adaintellij.analysis.lexical.AdaTokenTypes;
+import com.adacore.adaintellij.analysis.lexical.*;
 
 /**
  * Definition of the parser implementation for Ada.
  *
  * For the actual implementation of the Ada parser:
- * @see com.adacore.adaintellij.analysis.semantic.AdaParser
+ * @see AdaParser
  */
 public final class AdaParserDefinition implements ParserDefinition {
 

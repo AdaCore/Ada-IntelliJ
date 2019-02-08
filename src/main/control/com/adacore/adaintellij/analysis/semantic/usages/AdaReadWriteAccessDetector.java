@@ -1,12 +1,10 @@
 package com.adacore.adaintellij.analysis.semantic.usages;
 
 import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 
-import com.adacore.adaintellij.analysis.semantic.AdaPsiElement;
-import com.adacore.adaintellij.analysis.semantic.AdaPsiReference;
+import com.adacore.adaintellij.analysis.syntactic.*;
 
 /**
  * Read/write access detector for Ada.

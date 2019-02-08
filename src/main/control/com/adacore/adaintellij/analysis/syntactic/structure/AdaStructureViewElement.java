@@ -1,4 +1,4 @@
-package com.adacore.adaintellij.analysis.semantic.structure;
+package com.adacore.adaintellij.analysis.syntactic.structure;
 
 import java.util.stream.Stream;
 
@@ -8,9 +8,9 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.NavigatablePsiElement;
 import org.jetbrains.annotations.NotNull;
 
-import com.adacore.adaintellij.analysis.semantic.*;
+import com.adacore.adaintellij.analysis.syntactic.*;
 
-import static com.adacore.adaintellij.analysis.semantic.AdaPsiElement.AdaElementType;
+import static com.adacore.adaintellij.analysis.syntactic.AdaPsiElement.AdaElementType;
 
 /**
  * Element in the structure view of an Ada file.

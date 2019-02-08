@@ -1,4 +1,4 @@
-package com.adacore.adaintellij.analysis.semantic;
+package com.adacore.adaintellij.analysis.syntactic;
 
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
@@ -17,7 +17,7 @@ import com.adacore.adaintellij.AdaLanguage;
  *
  * For detailed information about the structure of ASTs built by the
  * Ada-IntelliJ Ada parser:
- * @see com.adacore.adaintellij.analysis.semantic.AdaParser
+ * @see AdaParser
  */
 public final class AdaPsiFile extends PsiFileBase implements Markable {
 

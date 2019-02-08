@@ -1,4 +1,4 @@
-package com.adacore.adaintellij.analysis.semantic;
+package com.adacore.adaintellij.analysis.syntactic;
 
 import javax.swing.*;
 
@@ -21,7 +21,7 @@ import com.adacore.adaintellij.Utils;
  *
  * For detailed information about the structure of ASTs built by the
  * Ada-IntelliJ Ada parser:
- * @see com.adacore.adaintellij.analysis.semantic.AdaParser
+ * @see AdaParser
  */
 public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiElement {
 
@@ -29,7 +29,7 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	 * Represents the various types of elements that an `AdaPsiElement`
 	 * can represent.
 	 *
-	 * @see com.adacore.adaintellij.analysis.semantic.AdaPsiStructureManager
+	 * @see AdaPsiStructureManager
 	 *
 	 * Possible values are:
 	 *
@@ -244,7 +244,7 @@ public class AdaPsiElement extends LeafPsiElement implements NavigatablePsiEleme
 	 * Returns the `AdaPsiElement` corresponding to the given element,
 	 * or null if the latter has no such corresponding element.
 	 * For more information:
-	 * @see com.adacore.adaintellij.analysis.semantic.AdaParser
+	 * @see AdaParser
 	 *
 	 * @param element The element for which to get the corresponding
 	 *                Ada PSI element.

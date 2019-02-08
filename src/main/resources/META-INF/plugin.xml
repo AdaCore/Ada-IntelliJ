@@ -90,7 +90,7 @@
 		<lang.syntaxHighlighterFactory language="GPR File" implementationClass="com.adacore.adaintellij.analysis.lexical.GPRFileSyntaxHighlighterFactory"/>
 
 		<!-- Ada parser definition -->
-		<lang.parserDefinition language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.AdaParserDefinition"/>
+		<lang.parserDefinition language="Ada" implementationClass="com.adacore.adaintellij.analysis.syntactic.AdaParserDefinition"/>
 		<!-- Ada find-usages provider -->
 		<lang.findUsagesProvider language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.usages.AdaFindUsagesProvider"/>
 		<!-- Ada find-usages handler factory -->
@@ -100,9 +100,9 @@
 		<!-- Ada completion contributor -->
 		<completion.contributor language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.completion.AdaCompletionContributor"/>
 		<!-- Ada structure view factory -->
-		<lang.psiStructureViewFactory language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.structure.AdaStructureViewFactory"/>
+		<lang.psiStructureViewFactory language="Ada" implementationClass="com.adacore.adaintellij.analysis.syntactic.structure.AdaStructureViewFactory"/>
 		<!-- Ada code annotator -->
-		<externalAnnotator language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.diagnostics.AdaAnnotator"/>
+		<externalAnnotator language="Ada" implementationClass="com.adacore.adaintellij.analysis.syntactic.diagnostics.AdaAnnotator"/>
 
 		<!-- Ada names validator -->
 		<lang.namesValidator language="Ada" implementationClass="com.adacore.adaintellij.analysis.lexical.AdaNamesValidator"/>

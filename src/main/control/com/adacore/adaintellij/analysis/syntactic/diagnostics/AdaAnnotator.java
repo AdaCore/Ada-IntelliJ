@@ -1,4 +1,4 @@
-package com.adacore.adaintellij.analysis.semantic.diagnostics;
+package com.adacore.adaintellij.analysis.syntactic.diagnostics;
 
 import java.util.List;
 
