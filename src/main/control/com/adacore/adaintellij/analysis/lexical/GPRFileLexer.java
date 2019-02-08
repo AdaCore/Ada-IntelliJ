@@ -10,7 +10,7 @@ import com.adacore.adaintellij.analysis.lexical.regex.*;
 import static com.adacore.adaintellij.analysis.lexical.GPRFileTokenTypes.*;
 
 /**
- * Lexical Analyser for GPR files.
+ * Lexical analyser for GPR files.
  */
 public final class GPRFileLexer extends Lexer {
 

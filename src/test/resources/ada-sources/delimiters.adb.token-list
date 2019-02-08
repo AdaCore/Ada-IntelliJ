@@ -122,10 +122,16 @@ IDENTIFIER          180 189 --            delimiter
 
 WHITE_SPACE         189 190
 
-IDENTIFIER          190 199 -- Character
-APOSTROPHE          199 200 --          '
-LEFT_PARENTHESIS    200 201 --           (
-CHARACTER_LITERAL   201 204 --            'a'
-RIGHT_PARENTHESIS   204 205 --               )
+IDENTIFIER          190 198 -- Variable
+APOSTROPHE          198 199 --         '
+IDENTIFIER          199 205 --          Access
 
 WHITE_SPACE         205 206
+
+IDENTIFIER          206 215 -- Character
+APOSTROPHE          215 216 --          '
+LEFT_PARENTHESIS    216 217 --           (
+CHARACTER_LITERAL   217 220 --            'a'
+RIGHT_PARENTHESIS   220 221 --               )
+
+WHITE_SPACE         221 222
