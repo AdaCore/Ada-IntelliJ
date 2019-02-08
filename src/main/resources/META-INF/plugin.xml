@@ -15,10 +15,13 @@
 	<!-- Change-notes -->
 
 	<change-notes><![CDATA[
-		<strong>0.5-dev</strong>
+		<strong>0.6-dev</strong>
 		<ul>
-			<li>Fixed minor bugs in project wizard and project templates (#54)</li>
-			<li>Fixed GPR file selection dialog sometimes causing IDE to freeze (#54)</li>
+			<li>Updated "until-build" IDEA version to support future versions of IDEs</li>
+			<li>Fixed bug related to finding files in windows (#57)</li>
+			<li>Fixed null-related bug in Ada PSI element comparison (#59)</li>
+			<li>Fixed bugs in GPRbuild tool window and GPRbuild configurations (#64)</li>
+			<li>Fixed lexer bug generating keyword tokens after apostrophe tokens (#65)</li>
 		</ul>
 	]]></change-notes>
 
