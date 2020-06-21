@@ -4,7 +4,7 @@ import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.util.FileContentUtil;
+import com.intellij.util.FileContentUtilCore;
 import org.jetbrains.annotations.NotNull;
 
 import com.adacore.adaintellij.analysis.lexical.AdaTokenTypes;
@@ -57,7 +57,7 @@ public final class AdaPsiFile extends PsiFileBase implements Markable {
 		VirtualFile file = getVirtualFile();
 
 		if (file != null) {
-			FileContentUtil.reparseFiles(file);
+			FileContentUtilCore.reparseFiles(file);
 		}
 
 	}

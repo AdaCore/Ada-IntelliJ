@@ -11,6 +11,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.progress.*;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.eclipse.lsp4j.services.TextDocumentService;
 import org.jetbrains.annotations.*;
 
 import org.eclipse.lsp4j.*;
@@ -43,6 +44,7 @@ public final class AdaLSPServer {
 	private static final List<CompletionItem> EMPTY_COMPLETION_ITEM_LIST = Collections.emptyList();
 	private static final List<Location>       EMPTY_LOCATION_LIST        = Collections.emptyList();
 	private static final List<DocumentSymbol> EMPTY_DOCUMENT_SYMBOL_LIST = Collections.emptyList();
+	private static final List<FoldingRange>   EMPTY_FOLDING_RANGE_LIST   = Collections.emptyList();
 
 	/**
 	 * The LSP driver to which this server belongs.
@@ -765,6 +767,18 @@ public final class AdaLSPServer {
 			.filter(Objects::nonNull)
 			.collect(Collectors.toList());
 
+	}
+
+	public List<FoldingRange> foldingRange(@NotNull String documentUri) {
+
+		final FoldingRangeRequestParams params = new FoldingRangeRequestParams(new TextDocumentIdentifier(documentUri));
+
+		List<FoldingRange> ranges = documentRequest("textDocument/foldingRange", documentUri,
+			() -> server.getTextDocumentService().foldingRange(params));
+
+		if (ranges == null) { return EMPTY_FOLDING_RANGE_LIST; }
+
+		return ranges;
 	}
 
 }

@@ -3,8 +3,12 @@ package com.adacore.adaintellij.editor;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.intellij.codeInsight.folding.impl.CodeFoldingManagerImpl;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.event.*;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.util.ui.update.MergingUpdateQueue;
 import org.jetbrains.annotations.NotNull;
 
 import com.adacore.adaintellij.Utils;
@@ -56,8 +60,21 @@ public final class DocumentChangeConsumerOperation
 		@NotNull BusyEditorAwareScheduler      scheduler,
 		@NotNull Consumer<List<DocumentEvent>> consumer
 	) {
+		super(scheduler, consumer.andThen(new Consumer<List<DocumentEvent>>() {
+			@Override
+			public void accept(List<DocumentEvent> documentEvents) {
 
-		super(scheduler, consumer);
+				Editor editor = FileEditorManager
+					.getInstance(
+						scheduler.getProject()
+					).getSelectedTextEditor();
+
+				CodeFoldingManagerImpl
+					.getInstance(scheduler.getProject())
+					.scheduleAsyncFoldingUpdate(editor);
+			}
+		}));
+		
 
 		EVENT_MULTICASTER.addDocumentListener(documentListener);
 
@@ -101,6 +118,12 @@ public final class DocumentChangeConsumerOperation
 	@Override
 	void cleanUp() {
 		EVENT_MULTICASTER.removeDocumentListener(documentListener);
+	}
+
+
+	public MergingUpdateQueue getQueue()
+	{
+		return this.queue;
 	}
 
 }

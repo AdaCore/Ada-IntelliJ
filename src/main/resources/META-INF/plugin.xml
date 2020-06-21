@@ -6,7 +6,7 @@
 	<name>Ada</name>
 	<vendor email="jetbrains@adacore.com" url="https://www.adacore.com">AdaCore</vendor>
 
-	<idea-version since-build="182"/>
+	<idea-version since-build="201.3803.71"/>
 
 	<description><![CDATA[
 		Support for the Ada and SPARK languages, and GPR project files.
@@ -105,7 +105,11 @@
 		<!-- Ada structure view factory -->
 		<lang.psiStructureViewFactory language="Ada" implementationClass="com.adacore.adaintellij.analysis.syntactic.structure.AdaStructureViewFactory"/>
 		<!-- Ada code annotator -->
-		<externalAnnotator language="Ada" implementationClass="com.adacore.adaintellij.analysis.syntactic.diagnostics.AdaAnnotator"/>
+		<externalAnnotator
+			id="com.adacore.adaintellij.analysis.syntactic.diagnostics.AdaAnnotator"
+			language="Ada"
+			implementationClass="com.adacore.adaintellij.analysis.syntactic.diagnostics.AdaAnnotator"
+		/>
 
 		<!-- Ada names validator -->
 		<lang.namesValidator language="Ada" implementationClass="com.adacore.adaintellij.analysis.lexical.AdaNamesValidator"/>
@@ -116,6 +120,25 @@
 
 		<!-- Ada code commenter -->
 		<lang.commenter language="Ada" implementationClass="com.adacore.adaintellij.misc.AdaCommenter"/>
+
+		<lang.foldingBuilder
+			implementationClass="com.adacore.adaintellij.misc.AdaFoldingBuilder"
+			language="Ada"
+			id="com.adacore.adaintellij.misc.AdaFoldingBuilder" />
+
+		<lang.quoteHandler
+			implementationClass="com.adacore.adaintellij.misc.AdaSpeechMarkHandler"
+			language="Ada"
+			id="com.adacore.adaintellij.misc.AdaSpeechMarkHandler" />
+
+		<backspaceHandlerDelegate
+			implementation="com.adacore.adaintellij.misc.AdaBackspaceHandler"
+			id="com.adacore.adaintellij.misc.AdaBackspaceHandler" />
+
+		<lang.braceMatcher
+			implementationClass="com.adacore.adaintellij.misc.AdaBraceMatcher"
+			language="Ada"
+			id="com.adacore.adaintellij.misc.AdaBraceMatcher" />
 
 		<!-- GPRbuild run configuration type -->
 		<configurationType implementation="com.adacore.adaintellij.build.GPRbuildConfigurationType"/>

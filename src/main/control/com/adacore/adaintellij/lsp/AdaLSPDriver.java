@@ -776,4 +776,9 @@ public final class AdaLSPDriver implements ProjectComponent {
 
 	}
 
+	public DocumentChangeConsumerOperation  getDocumentChangeConsumerOperation()
+	{
+		return documentChangeOperation;
+	}
+
 }
