@@ -33,8 +33,8 @@ public final class AdaTokenTypes {
 	 */
 	static final AdaFixedTokenType AMPERSAND            = new AdaFixedTokenType("AMPERSAND"          , "&");
 	static final AdaFixedTokenType APOSTROPHE           = new AdaFixedTokenType("APOSTROPHE"         , "'");
-	static final AdaFixedTokenType LEFT_PARENTHESIS     = new AdaFixedTokenType("LEFT_PARENTHESIS"   , "(");
-	static final AdaFixedTokenType RIGHT_PARENTHESIS    = new AdaFixedTokenType("RIGHT_PARENTHESIS"  , ")");
+	public static final AdaFixedTokenType LEFT_PARENTHESIS     	= new AdaFixedTokenType("LEFT_PARENTHESIS"   , "(");
+	public static final AdaFixedTokenType RIGHT_PARENTHESIS    	= new AdaFixedTokenType("RIGHT_PARENTHESIS"  , ")");
 	static final AdaFixedTokenType ASTERISK             = new AdaFixedTokenType("ASTERISK"           , "*");
 	static final AdaFixedTokenType PLUS_SIGN            = new AdaFixedTokenType("PLUS_SIGN"          , "+");
 	static final AdaFixedTokenType COMMA                = new AdaFixedTokenType("COMMA"              , ",");

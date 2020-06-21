@@ -55,7 +55,7 @@ public final class AdaFindUsagesHandler extends FindUsagesHandler {
 	@Override
 	public boolean processElementUsages(
 		@NotNull PsiElement           element,
-		@NotNull Processor<UsageInfo> processor,
+		@NotNull Processor<? super UsageInfo> processor,
 		@NotNull FindUsagesOptions    options
 	) {
 
