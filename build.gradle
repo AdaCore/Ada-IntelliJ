@@ -3,7 +3,7 @@ import org.apache.tools.ant.DirectoryScanner
 
 plugins {
 	id 'java'
-	id 'org.jetbrains.intellij' version '0.4.2'
+	id 'org.jetbrains.intellij' version '0.4.18'
 }
 
 group 'com.adacore'
@@ -22,7 +22,7 @@ dependencies {
 }
 
 intellij {
-	version '2018.2'
+	version '2020.1'
 	updateSinceUntilBuild false
 }
 
