@@ -13,7 +13,7 @@ import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class AdaQuoteHandler extends SimpleTokenSetQuoteHandler implements MultiCharQuoteHandler {
+public class AdaSpeechMarkHandler extends SimpleTokenSetQuoteHandler implements MultiCharQuoteHandler {
 
     @Override
     public boolean hasNonClosedLiteral(Editor editor, HighlighterIterator iterator, int offset) {
