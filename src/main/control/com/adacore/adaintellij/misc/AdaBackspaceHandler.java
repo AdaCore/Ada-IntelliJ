@@ -14,7 +14,6 @@ public class AdaBackspaceHandler extends BackspaceHandlerDelegate {
             int currentCaretOffset = editor.getCaretModel().getCurrentCaret().getOffset();
             String nextLetter = editor.getDocument().getText(new TextRange(currentCaretOffset, currentCaretOffset + 1));
             if (nextLetter.equals("\"")) {
-                System.out.println("Deleting a speech mark");
                 editor.getDocument().deleteString(currentCaretOffset, currentCaretOffset + 1);
             }
 
