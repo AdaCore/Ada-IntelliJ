@@ -117,6 +117,10 @@
 		<!-- Ada code commenter -->
 		<lang.commenter language="Ada" implementationClass="com.adacore.adaintellij.misc.AdaCommenter"/>
 
+		<!-- Ada quote handler -->
+		<lang.quoteHandler implementationClass="com.adacore.adaintellij.misc.AdaSpeechMarkHandler" language="Ada" id="com.adacore.adaintellij.misc.AdaSpeechMarkHandler" />
+		<backspaceHandlerDelegate implementation="com.adacore.adaintellij.misc.AdaBackspaceHandler" id="com.adacore.adaintellij.misc.AdaBackspaceHandler" />
+
 		<!-- Ada brace matcher -->
 		<lang.braceMatcher implementationClass="com.adacore.adaintellij.misc.AdaBraceMatcher" language="Ada" id="com.adacore.adaintellij.misc.AdaBraceMatcher" />
 		<!-- GPRbuild run configuration type -->

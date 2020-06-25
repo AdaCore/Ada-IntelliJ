@@ -33,6 +33,7 @@ public final class AdaTokenTypes {
 	 */
 	static final AdaFixedTokenType AMPERSAND            = new AdaFixedTokenType("AMPERSAND"          , "&");
 	static final AdaFixedTokenType APOSTROPHE           = new AdaFixedTokenType("APOSTROPHE"         , "'");
+	public static final AdaFixedTokenType SPEECH_MARK   = new AdaFixedTokenType("SPEECH_MARK"		, "\"");
 	public static final AdaFixedTokenType LEFT_PARENTHESIS     	= new AdaFixedTokenType("LEFT_PARENTHESIS"   , "(");
 	public static final AdaFixedTokenType RIGHT_PARENTHESIS    	= new AdaFixedTokenType("RIGHT_PARENTHESIS"  , ")");
 	static final AdaFixedTokenType ASTERISK             = new AdaFixedTokenType("ASTERISK"           , "*");
@@ -185,7 +186,7 @@ public final class AdaTokenTypes {
 	 */
 	public static final TokenSet DELIMITER_TOKEN_SET = TokenSet.create(
 
-		AMPERSAND, APOSTROPHE, LEFT_PARENTHESIS, RIGHT_PARENTHESIS, ASTERISK, PLUS_SIGN,
+		AMPERSAND, APOSTROPHE, LEFT_PARENTHESIS, RIGHT_PARENTHESIS, SPEECH_MARK, ASTERISK, PLUS_SIGN,
 		COMMA, HYPHEN_MINUS, FULL_STOP, SOLIDUS, COLON, SEMICOLON, LESS_THAN_SIGN,
 		EQUALS_SIGN, GREATER_THAN_SIGN, VERTICAL_LINE,
 

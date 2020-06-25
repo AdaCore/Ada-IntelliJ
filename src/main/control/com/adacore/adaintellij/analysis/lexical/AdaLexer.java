@@ -28,6 +28,7 @@ public final class AdaLexer extends Lexer {
 	private static final LexerRegex APOSTROPHE_REGEX        = new UnitRegex(APOSTROPHE.TOKEN_TEXT);
 	private static final LexerRegex LEFT_PARENTHESIS_REGEX  = new UnitRegex(LEFT_PARENTHESIS.TOKEN_TEXT);
 	private static final LexerRegex RIGHT_PARENTHESIS_REGEX = new UnitRegex(RIGHT_PARENTHESIS.TOKEN_TEXT);
+	private static final LexerRegex SPEECH_MARK_REGEX 		= new UnitRegex(SPEECH_MARK.TOKEN_TEXT);
 	private static final LexerRegex ASTERISK_REGEX          = new UnitRegex(ASTERISK.TOKEN_TEXT);
 	private static final LexerRegex PLUS_SIGN_REGEX         = new UnitRegex(PLUS_SIGN.TOKEN_TEXT);
 	private static final LexerRegex COMMA_REGEX             = new UnitRegex(COMMA.TOKEN_TEXT);
@@ -315,6 +316,7 @@ public final class AdaLexer extends Lexer {
 
 		regexTokenTypes.put(AMPERSAND_REGEX           , AMPERSAND);
 		regexTokenTypes.put(APOSTROPHE_REGEX          , APOSTROPHE);
+		regexTokenTypes.put(SPEECH_MARK_REGEX         , SPEECH_MARK);
 		regexTokenTypes.put(LEFT_PARENTHESIS_REGEX    , LEFT_PARENTHESIS);
 		regexTokenTypes.put(RIGHT_PARENTHESIS_REGEX   , RIGHT_PARENTHESIS);
 		regexTokenTypes.put(ASTERISK_REGEX            , ASTERISK);
