@@ -4,12 +4,8 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
 
-import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
-import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerImpl;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
@@ -256,20 +252,10 @@ public final class AdaLSPClient implements LanguageClient {
 
 		if (document == null) { return; }
 
-		WriteCommandAction.runWriteCommandAction(this.project,() -> {
+		// Store the diagnostics in the document
 
-			Cacher.cacheData(
-				document,
-				DIAGNOSTICS_CACHE_KEY,
-				diagnostics.getDiagnostics()
-			);
+		Cacher.cacheData(document, DIAGNOSTICS_CACHE_KEY, diagnostics.getDiagnostics());
 
-			DaemonCodeAnalyzer.getInstance(this.project).restart(
-				Utils.getVirtualFilePsiFile(
-					this.project, virtualFile
-				)
-			);
-		});
 	}
 
 }

@@ -23,6 +23,16 @@ import static com.adacore.adaintellij.lsp.LSPUtils.diagnosticSeverityToHighlight
  */
 public class AdaAnnotator extends ExternalAnnotator<List<Diagnostic>, List<Diagnostic>> {
 
+	/**
+	 * Maximum number of attempts to get a document's diagnostics.
+	 */
+	private static final int MAXIMUM_GET_DIAGNOSTICS_ATTEMPTS = 7;
+
+	/**
+	 * The interval duration, in milliseconds, before trying to get
+	 * a document's internally stored diagnostics.
+	 */
+	private static final long GET_DIAGNOSTICS_INTERVAL = 100;
 
 	/**
 	 * @see com.intellij.lang.annotation.ExternalAnnotator#collectInformation(PsiFile)
@@ -44,10 +54,27 @@ public class AdaAnnotator extends ExternalAnnotator<List<Diagnostic>, List<Diagn
 		CacheResult<List<Diagnostic>> cacheResult =
 			Cacher.getCachedData(document, AdaLSPClient.DIAGNOSTICS_CACHE_KEY);
 
+		int attempts = MAXIMUM_GET_DIAGNOSTICS_ATTEMPTS;
 
-		if (! cacheResult.hit) {
-			return null;
+		// While the cache read was a miss and the number of attempts
+		// has not reached the maximum number of attempts, sleep for
+		// a short duration of time and try again
+
+		while (!cacheResult.hit) {
+
+			try {
+				Thread.sleep(GET_DIAGNOSTICS_INTERVAL);
+			} catch (InterruptedException exception) {}
+
+			cacheResult = Cacher.getCachedData(document, AdaLSPClient.DIAGNOSTICS_CACHE_KEY);
+
+			attempts--;
+
+			if (attempts == 0) { break; }
+
 		}
+
+		// Return the last cache read result
 
 		return cacheResult.data;
 
@@ -121,12 +148,11 @@ public class AdaAnnotator extends ExternalAnnotator<List<Diagnostic>, List<Diagn
 
 			// Create an annotation based on the diagnostic data
 
-			holder.newAnnotation(
+			holder.createAnnotation(
 				diagnosticSeverityToHighlightSeverity(severity),
+				new TextRange(startOffset, endOffset),
 				message == null ? severity.name() : message
-			).range(
-				new TextRange(startOffset, endOffset)
-			).create();
+			);
 
 		}
 
