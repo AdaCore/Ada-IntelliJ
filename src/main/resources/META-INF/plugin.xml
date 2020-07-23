@@ -6,7 +6,7 @@
 	<name>Ada</name>
 	<vendor email="jetbrains@adacore.com" url="https://www.adacore.com">AdaCore</vendor>
 
-	<idea-version since-build="183.2153.8"/>
+	<idea-version since-build="201.3803.71"/>
 
 	<description><![CDATA[
 		Support for the Ada and SPARK languages, and GPR project files.
@@ -105,7 +105,11 @@
 		<!-- Ada structure view factory -->
 		<lang.psiStructureViewFactory language="Ada" implementationClass="com.adacore.adaintellij.analysis.syntactic.structure.AdaStructureViewFactory"/>
 		<!-- Ada code annotator -->
-		<externalAnnotator language="Ada" implementationClass="com.adacore.adaintellij.analysis.syntactic.diagnostics.AdaAnnotator"/>
+		<externalAnnotator
+			id="com.adacore.adaintellij.analysis.syntactic.diagnostics.AdaAnnotator"
+			language="Ada"
+			implementationClass="com.adacore.adaintellij.analysis.syntactic.diagnostics.AdaAnnotator"
+		/>
 
 		<!-- Ada names validator -->
 		<lang.namesValidator language="Ada" implementationClass="com.adacore.adaintellij.analysis.lexical.AdaNamesValidator"/>
