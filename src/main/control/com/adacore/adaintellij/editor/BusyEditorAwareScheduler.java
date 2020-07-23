@@ -221,4 +221,8 @@ public final class BusyEditorAwareScheduler implements ProjectComponent {
 
 	}
 
+	public Project getProject()
+	{
+		return this.project;
+	}
 }

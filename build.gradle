@@ -24,6 +24,7 @@ dependencies {
 intellij {
 	version '2020.1'
 	updateSinceUntilBuild false
+	plugins = ['java']
 }
 
 publishPlugin {
@@ -48,6 +49,7 @@ sourceSets {
 
 test {
 	useJUnitPlatform()
+	systemProperty("idea.test.execution.policy", "com.adacore.adaintellij.AdaTempDirTestFixture")
 }
 
 // Removes default `.gitignore` file exclusion rule for the `processResources`
