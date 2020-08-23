@@ -7,11 +7,14 @@ import javax.swing.*;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerImpl;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
+import com.intellij.codeInsight.folding.impl.CodeFoldingManagerImpl;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -257,6 +260,15 @@ public final class AdaLSPClient implements LanguageClient {
 		if (document == null) { return; }
 
 		WriteCommandAction.runWriteCommandAction(this.project,() -> {
+
+			Editor editor = FileEditorManager
+				.getInstance(
+					this.project
+				).getSelectedTextEditor();
+
+			CodeFoldingManagerImpl
+				.getInstance(this.project)
+				.scheduleAsyncFoldingUpdate(editor);
 
 			Cacher.cacheData(
 				document,

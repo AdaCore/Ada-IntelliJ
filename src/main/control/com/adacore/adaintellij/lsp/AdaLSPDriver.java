@@ -3,6 +3,7 @@ package com.adacore.adaintellij.lsp;
 import java.io.IOException;
 import java.util.*;
 
+import com.adacore.adaintellij.misc.cache.CacheKey;
 import com.intellij.execution.*;
 import com.intellij.notification.*;
 import com.intellij.openapi.components.ProjectComponent;
@@ -56,6 +57,8 @@ public final class AdaLSPDriver implements ProjectComponent {
 	private static final String GPR_FILE_CHANGE_LISTENER_KEY =
 		"com.adacore.adaintellij.lsp.AdaLSPDriver@gprFileChangeListener";
 
+	public static final CacheKey<String> PREVIOUS_DOCUMENT_CONTENT_KEY = CacheKey.getNewKey();
+
 	/**
 	 * The project to which this component belongs.
 	 */
@@ -95,12 +98,6 @@ public final class AdaLSPDriver implements ProjectComponent {
 	 * `initialized` notification.
 	 */
 	private boolean initialized = false;
-
-	/**
-	 * Aggregate document change consumer operation that makes `textDocument/didChange`
-	 * requests to the ALS on document change events.
-	 */
-	private DocumentChangeConsumerOperation documentChangeOperation;
 
 	/**
 	 * Constructs a new AdaLSPDriver given a project and other project components.
@@ -309,10 +306,6 @@ public final class AdaLSPDriver implements ProjectComponent {
 
 		initialized = false;
 
-		// Stop the document change operation
-
-		documentChangeOperation.stop();
-
 		// Send the shutdown request
 
 		server.shutdown();
@@ -467,15 +460,26 @@ public final class AdaLSPDriver implements ProjectComponent {
 			@Override
 			public void beforeAdaDocumentChanged(@NotNull DocumentEvent event) {
 				Cacher.clearCachedData(event.getDocument(), AdaLSPClient.DIAGNOSTICS_CACHE_KEY);
+
+				Cacher.cacheData(
+					event.getDocument(),
+					PREVIOUS_DOCUMENT_CONTENT_KEY,
+					event.getDocument().getText()
+				);
 			}
 
+			@Override
+			public void adaDocumentChanged(@NotNull DocumentEvent event) {
+				server.didChange(
+					new AdaDocumentEvent(
+						event,
+						Cacher.getCachedData(
+							event.getDocument(),
+							PREVIOUS_DOCUMENT_CONTENT_KEY
+						).data
+				));
+			}
 		});
-
-		// Initialize document change operation
-
-		documentChangeOperation = BusyEditorAwareScheduler.getInstance(project)
-			.createDocumentChangeOperation(server::didChange);
-
 	}
 
 	/**
@@ -775,10 +779,4 @@ public final class AdaLSPDriver implements ProjectComponent {
 		return textDocumentCapabilities;
 
 	}
-
-	public DocumentChangeConsumerOperation  getDocumentChangeConsumerOperation()
-	{
-		return documentChangeOperation;
-	}
-
 }

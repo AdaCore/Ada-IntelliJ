@@ -1,14 +1,16 @@
 package com.adacore.adaintellij.analysis.semantic.completion;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
@@ -66,6 +68,19 @@ public final class AdaCompletionContributor extends CompletionContributor {
 
 					LookupElementBuilder element =
 						LookupElementBuilder.create(completionItem.getLabel())
+							.withCaseSensitivity(false)
+							.withInsertHandler(new InsertHandler<LookupElement>() {
+								@Override
+								public void handleInsert(@NotNull InsertionContext context, @NotNull LookupElement item) {
+
+									// Ensure the insertion uses the exact text provided from the ALS, including letter casing.
+									context.getDocument().replaceString(
+										context.getStartOffset(),
+										context.getTailOffset(),
+										item.getLookupString()
+									);
+								}
+							})
 							.bold();
 
 					Boolean deprecated = completionItem.getDeprecated();
