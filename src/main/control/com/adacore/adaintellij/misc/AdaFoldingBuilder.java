@@ -1,6 +1,7 @@
 package com.adacore.adaintellij.misc;
 
 import com.adacore.adaintellij.lsp.AdaLSPDriver;
+import com.adacore.adaintellij.lsp.AdaLSPServer;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.FoldingBuilderEx;
 import com.intellij.lang.folding.FoldingDescriptor;
@@ -26,29 +27,6 @@ public class AdaFoldingBuilder extends FoldingBuilderEx implements DumbAware {
         Project project = root.getProject();
         PsiFile psiFile = root.getContainingFile();
 
-        AdaLSPDriver driver = project.getComponent(AdaLSPDriver.class);
-
-        MergingUpdateQueue queue = project
-            .getComponent(AdaLSPDriver.class)
-            .getDocumentChangeConsumerOperation()
-            .getQueue();
-
-        if (! queue.isEmpty() || queue.isFlushing()) {
-            Editor editor = EditorFactory.getInstance().getEditors(document, project)[0];
-            FoldingModel foldingModel = editor.getFoldingModel();
-            FoldRegion[] foldRegions = foldingModel.getAllFoldRegions();
-            List<FoldingDescriptor> descriptors =  this.buildFoldingDescriptorsFromExistingFoldRegions(
-                foldRegions,
-                document,
-                root
-            );
-
-            return descriptors.toArray(
-                new FoldingDescriptor[descriptors.size()]
-            );
-
-        }
-
         List<FoldingRange> foldingRanges = AdaLSPDriver.getServer(project)
             .foldingRange(
                 psiFile.getVirtualFile().getUrl()
@@ -63,42 +41,6 @@ public class AdaFoldingBuilder extends FoldingBuilderEx implements DumbAware {
         return descriptors.toArray(
             new FoldingDescriptor[descriptors.size()]
         );
-    }
-
-    private List<FoldingDescriptor> buildFoldingDescriptorsFromExistingFoldRegions(FoldRegion[] foldRegions, Document document, PsiElement root)
-    {
-        List<FoldingDescriptor> descriptors = new ArrayList<>();
-
-        for (FoldRegion foldRegion :  foldRegions) {
-            int foldStartOffset;
-            int foldEndOffset;
-
-            try {
-                foldStartOffset = foldRegion.getStartOffset();
-                foldEndOffset = foldRegion.getEndOffset();
-            } catch (IndexOutOfBoundsException e) {
-                continue;
-            }
-
-            if (foldStartOffset < foldEndOffset) {
-
-                Set<Object> dependencies = new HashSet<>();
-
-                descriptors.add(new FoldingDescriptor(
-                    root.getNode(),
-                    new TextRange(
-                        foldStartOffset,
-                        foldEndOffset
-                    ),
-                    null,
-                    foldRegion.getPlaceholderText(),
-                    ! foldRegion.isExpanded(),
-                    dependencies
-                ));
-            }
-        }
-
-        return descriptors;
     }
 
     private List<FoldingDescriptor> buildFoldingDescriptorsFromFoldingRanges(

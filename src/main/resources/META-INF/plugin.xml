@@ -65,11 +65,6 @@
 			<implementation-class>com.adacore.adaintellij.lsp.AdaLSPDriver</implementation-class>
 		</component>
 
-		<!-- Busy-editor-aware operation scheduler -->
-		<component>
-			<implementation-class>com.adacore.adaintellij.editor.BusyEditorAwareScheduler</implementation-class>
-		</component>
-
 	</project-components>
 
 	<!-- Platform extensions -->
@@ -100,8 +95,12 @@
 		<findUsagesHandlerFactory implementation="com.adacore.adaintellij.analysis.semantic.usages.AdaFindUsagesHandlerFactory"/>
 		<!-- Ada read/write access detector -->
 		<readWriteAccessDetector implementation="com.adacore.adaintellij.analysis.semantic.usages.AdaReadWriteAccessDetector"/>
-		<!-- Ada completion contributor -->
-		<completion.contributor language="Ada" implementationClass="com.adacore.adaintellij.analysis.semantic.completion.AdaCompletionContributor"/>
+
+		<completion.contributor
+			language="Ada"
+			id="com.adacore.adaintellij.analysis.semantic.completion.AdaCompletionContributor"
+			implementationClass="com.adacore.adaintellij.analysis.semantic.completion.AdaCompletionContributor"/>
+
 		<!-- Ada structure view factory -->
 		<lang.psiStructureViewFactory language="Ada" implementationClass="com.adacore.adaintellij.analysis.syntactic.structure.AdaStructureViewFactory"/>
 		<!-- Ada code annotator -->

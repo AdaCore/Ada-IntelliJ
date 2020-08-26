@@ -5,13 +5,12 @@ import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import com.adacore.adaintellij.editor.AdaDocumentEvent;
 import com.intellij.notification.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.progress.*;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.eclipse.lsp4j.services.TextDocumentService;
 import org.jetbrains.annotations.*;
 
 import org.eclipse.lsp4j.*;
@@ -427,7 +426,7 @@ public final class AdaLSPServer {
 	/**
 	 * @see org.eclipse.lsp4j.services.TextDocumentService#didChange(DidChangeTextDocumentParams)
 	 */
-	void didChange(@NotNull List<DocumentEvent> events) {
+	void didChange(@NotNull AdaDocumentEvent event) {
 
 		TextDocumentSyncKind changePolicy = serverSyncPolicy.getChange();
 
@@ -436,21 +435,13 @@ public final class AdaLSPServer {
 
 		if (
 			changePolicy == TextDocumentSyncKind.None ||
-			events.size() == 0
+			event == null
 		) { return; }
 
 		// Get the changed document from the first event and
 		// check that all events are for the same document
 
-		final Document changedDocument = events.get(0).getDocument();
-
-		if (events.stream()
-			.map(DocumentEvent::getDocument)
-			.anyMatch(document -> !documentsRepresentSameFile(document, changedDocument)))
-		{
-			LOGGER.error("Trying to send a `textDocument/didChange` notification " +
-				"with change events from different documents");
-		}
+		final Document changedDocument = event.getDocumentEvent().getDocument();
 
 		// Get the changed document's corresponding file
 		// and check that it is an Ada file
@@ -459,16 +450,14 @@ public final class AdaLSPServer {
 
 		if (changedFile == null || !AdaFileType.isAdaFile(changedFile)) { return; }
 
-		List<TextDocumentContentChangeEvent> changeEvents;
-
 		// If the server's sync change policy is "Incremental",
 		// then map the given document events to LSP change events
 
+		TextDocumentContentChangeEvent changeEvent = null;
+
 		if (changePolicy == TextDocumentSyncKind.Incremental) {
 
-			changeEvents = events.stream()
-				.map(LSPUtils::documentEventToContentChangeEvent)
-				.collect(Collectors.toList());
+			changeEvent = LSPUtils.documentEventToContentChangeEvent(event);
 
 		}
 
@@ -478,13 +467,13 @@ public final class AdaLSPServer {
 
 		else if (changePolicy == TextDocumentSyncKind.Full) {
 
-			changeEvents = Collections.singletonList(
-				new TextDocumentContentChangeEvent(changedDocument.getText()));
-
+			changeEvent = new TextDocumentContentChangeEvent(changedDocument.getText());
 		}
 
 		// Will never execute
 		else { return; }
+
+		List<TextDocumentContentChangeEvent> changeEvents = Arrays.asList(changeEvent);
 
 		// Send the notification with the computed changes and
 		// and the changed document's virtual file modification
