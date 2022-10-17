@@ -2,7 +2,7 @@
 with Ada.Text_IO;
 with Pattern_Control;</fold>
 
-<fold text='package Bens_New_Packge is ...' expand='true'>package Bens_New_Packge is
+<fold text='package Bens_New_Package is ...' expand='true'>package Bens_New_Package is
 <fold text='    function test_1 return Integer is ...' expand='true'>    function test_1 return Integer is
     begin
          return  1;
@@ -12,4 +12,4 @@ with Pattern_Control;</fold>
     begin
          return  2;
     End Test_2;</fold>
-end Bens_New_Package</fold>
+end Bens_New_Package;</fold>

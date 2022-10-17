@@ -40,7 +40,7 @@ public class AdaFoldingBuilderTest extends LightJavaCodeInsightFixtureTestCase {
     @Test
     public void testFolds()
     {
-        myFixture.copyFileToProject( "/project.gpr");
+        myFixture.copyFileToProject( "/test_project.gpr");
 
         myFixture.getProject().getComponent(AdaProject.class).projectOpened();
         myFixture.getProject().getComponent(AdaLSPDriver.class).projectOpened();
